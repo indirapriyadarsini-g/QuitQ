@@ -5,13 +5,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.MessageDto;
+import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.Customer;
-import com.quitq.ECom.model.*;
+import com.quitq.ECom.model.User;
+import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.service.CustomerService;
 
 @RestController
@@ -21,7 +24,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 	
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<?> customerLogin(@RequestBody User user, MessageDto dto){
 		try {
 			customerService.login(user);
@@ -32,7 +35,7 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping("/register")
+	@PostMapping("/register")
 	public ResponseEntity<?> customerRegister(@RequestBody Customer customer, MessageDto dto){
 		try {
 			customerService.register(customer);
@@ -65,10 +68,11 @@ public class CustomerController {
 			else {
 				dto.setMsg("Customer not registered");
 				return ResponseEntity.badRequest().body(dto);
-			}
-			
-		customer order api 
-		check prod availability
+			}		
 	}
+	
+	
+//	customer order api 
+//	check prod availability
 	
 }
