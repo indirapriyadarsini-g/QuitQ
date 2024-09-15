@@ -1,10 +1,14 @@
 package com.quitq.ECom.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -21,6 +25,15 @@ public class Vendor {
 	private String buisnessName;
 	@OneToOne
 	private User user;
+	
+	@ManyToOne
+	private Warehouse warehouse;
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
 	public Vendor(int id, String name, String buisnessName, User user) {
 		super();
 		this.id = id;
@@ -28,6 +41,18 @@ public class Vendor {
 		this.buisnessName = buisnessName;
 		this.user = user;
 	}
+    @OneToMany(mappedBy = "vendor")
+    private List<Product> products;
+
+    // ... other methods ...
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 	@Override
 	public String toString() {
 		return "Vendor [id=" + id + ", name=" + name + ", buisnessName=" + buisnessName + ", user=" + user + "]";

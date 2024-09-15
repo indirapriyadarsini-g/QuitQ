@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Warehouse;
 import com.quitq.ECom.repository.VendorRepository;
 import com.quitq.ECom.repository.WarehouseRepository;
@@ -50,7 +51,7 @@ public class WarehouseService {
         warehouseRepository.deleteById(id);
     }
     
- // Method to fetch products of vendors in a warehouse
+    // Method to fetch products of vendors in a warehouse
     public List<Product> getProductsByWarehouse(Integer warehouseId) {
         return vendorRepository.findProductsByWarehouseId(warehouseId);
     }

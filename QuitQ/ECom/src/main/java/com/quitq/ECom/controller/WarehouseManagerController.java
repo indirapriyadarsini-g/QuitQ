@@ -1,12 +1,22 @@
 package com.quitq.ECom.controller;
 
-import com.quitq.ECom.model.WarehouseManager;
-import com.quitq.ECom.service.WarehouseManagerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.WarehouseManager;
+import com.quitq.ECom.repository.VendorRepository;
+import com.quitq.ECom.service.WarehouseManagerService;
 
 @RestController
 @RequestMapping("/api/warehouse-managers")
@@ -14,6 +24,8 @@ public class WarehouseManagerController {
 
     @Autowired
     private WarehouseManagerService warehouseManagerService;
+    @Autowired
+	private VendorRepository vendorRepository;
 
     // Get all warehouse managers
     @GetMapping("/list")
@@ -43,5 +55,11 @@ public class WarehouseManagerController {
     @DeleteMapping("/delete/{id}")
     public void deleteWarehouseManager(@PathVariable Integer id) {
         warehouseManagerService.deleteWarehouseManager(id);
+    }
+    
+    // Endpoint to assign a product to a warehouse
+    @PutMapping("/add-product-to-warehouse/{productId}/{warehouseId}")
+    public Product addProductToWarehouse(@PathVariable Integer productId, @PathVariable Integer warehouseId) {
+        return warehouseManagerService.addProductToWarehouse(productId, warehouseId);
     }
 }

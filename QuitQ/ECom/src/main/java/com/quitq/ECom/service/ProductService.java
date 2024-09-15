@@ -6,13 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quitq.ECom.exception.InputValidateionException;
+import com.quitq.ECom.exception.InputValidationException;
 import com.quitq.ECom.exception.InvalidIdException;
-import com.quitq.ECom.model.Category;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.model.Warehouse;
-import com.quitq.ECom.repository.CategoryRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.repository.VendorRepository;
@@ -23,8 +21,6 @@ import com.quitq.ECom.repository.WarehouseRepository;
 public class ProductService {
 	@Autowired
 	ProductRepository productRepository;
-	@Autowired
-	CategoryRepository categoryRepository;
 	@Autowired
 	WarehouseRepository warehouseRepository;
 	@Autowired
@@ -42,12 +38,7 @@ public class ProductService {
 
 			
 		}
-Optional<Category> optional=categoryRepository.findById(p.getC().getId());		
-if(optional.isEmpty())
-{
-	throw new InvalidIdException("Category id not present");
-}
-p.setC(optional.get());
+
 Optional<Vendor> optionalV=vendorRepository.findById(p.getV().getId());		
 
 if(optionalV.isEmpty())
@@ -100,13 +91,7 @@ p.setV(optionalV.get());
 		}
 		newProduct.setWarehouse(newProduct.getWarehouse());
 		warehouseRepository.save(newProduct.getWarehouse());
-Optional<Category> optionalC=categoryRepository.findById(newProduct.getC().getId());		
-if(optionalC.isEmpty())
-{
-	throw new InvalidIdException("Category id not present");
-}
-newProduct.setC(newProduct.getC());
-categoryRepository.save(newProduct.getC());
+
 Optional<Vendor> optionalV=vendorRepository.findById(newProduct.getV().getId());		
 
 if(optionalV.isEmpty())
@@ -125,45 +110,55 @@ vendorRepository.save(newProduct.getV());
 
 	}
 
-	public List<Product> findByVendorName(String vName) throws InputValidateionException
+	public List<Product> findByVendorName(String vName) throws InputValidationException
 	{
 		List<Product> p=productRepository.getByVendorName(vName);
 		if(p==null||p.isEmpty())
 		{
-			throw new InputValidateionException("No product exist by this  vendor name");
+			throw new InputValidationException("No product exist by this  vendor name");
 		}
 		return p;
 	}
-	public List<Product> findByCategoryName(String cName) throws InputValidateionException
+	public List<Product> findByCategoryName(String cName) throws InputValidationException
 	{
 		List<Product> p=productRepository.getByCategoryName(cName);
 		if(p==null||p.isEmpty())
 		{
-			throw new InputValidateionException("No product exist by this category name");
+			throw new InputValidationException("No product exist by this category name");
 		}
 		return p;
 	}
-	public List<Product> findByStatus(String status) throws InputValidateionException
+	public List<Product> findByStatus(String status) throws InputValidationException
 	{
 		List<Product> p=productRepository.findByStatus(status);
 		if(p==null||p.isEmpty())
 		{
-			throw new InputValidateionException("No product exist by this status");
+			throw new InputValidationException("No product exist by this status");
 		}
 		return p;
 	}
-	public List<Product> findByWarehouseId(int id) throws InputValidateionException
+	public List<Product> findByWarehouseId(int id) throws InputValidationException
 	{
 		List<Product> p=productRepository.getByWarehouseId(id);
 		if(p==null||p.isEmpty())
 		{
-			throw new InputValidateionException("No product exist in your warehouse");
+			throw new InputValidationException("No product exist in your warehouse");
 		}
 		return p;
 	}
+	public List<Product> getProductsByVendor(int vendorId) {
+        return productRepository.findByVendorId(vendorId);
+    }
 	
-	
-
-	
+	public boolean checkStockLevelAndSendNotification(Product product) {
+        int stockLevel = product.getStockQuantity();
+        if (stockLevel < 10) {
+        	return false;
+            // Send notification to the vendor
+            //notificationService.sendNotification(product.getV().getId(), product.getId(), stockLevel);
+        }
+        return true;
+    }
+		
 
 }

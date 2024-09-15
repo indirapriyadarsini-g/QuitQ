@@ -1,15 +1,24 @@
 package com.quitq.ECom.controller;
 
-import com.quitq.ECom.model.Warehouse;
-import com.quitq.ECom.service.WarehouseService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.Warehouse;
+import com.quitq.ECom.service.WarehouseService;
+
 @RestController
-@RequestMapping("/api/warehouses")
+@RequestMapping("/warehouses")
 public class WarehouseController {
 
     @Autowired
@@ -49,5 +58,10 @@ public class WarehouseController {
     public List<Product> getProductsByWarehouse(@PathVariable Integer warehouseId) {
         return warehouseService.getProductsByWarehouse(warehouseId);
     }
+    
+//    @GetMapping("/send-alerts")
+//    public ResponseEntity <?> sendStockAlerts(){
+//    	
+//    }
 }
 	

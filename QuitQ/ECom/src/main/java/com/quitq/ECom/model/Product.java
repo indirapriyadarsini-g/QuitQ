@@ -25,6 +25,9 @@ public class Product {
 	private double discount;
 	@Column(nullable = false)
 	private String status="active";
+	@Column(nullable = true)
+    private Integer stockQuantity;
+
 	public String getStatus() {
 		return status;
 	}
@@ -35,6 +38,7 @@ public class Product {
 	private Vendor v;
 	@ManyToOne
 	private Category c;
+	
 	@ManyToOne
 	private Warehouse warehouse;	
 	public Warehouse getWarehouse() {
@@ -78,6 +82,12 @@ public class Product {
 	}
 	public void setC(Category c) {
 		this.c = c;
+	}
+	public Integer getStockQuantity() {
+		return stockQuantity;
+	}
+	public void setStockQuantity(Integer stockQuantity) {
+		this.stockQuantity = stockQuantity;
 	}
 	
 

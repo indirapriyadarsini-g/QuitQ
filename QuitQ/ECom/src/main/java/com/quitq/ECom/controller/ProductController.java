@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.MessageDto;
-import com.quitq.ECom.exception.InputValidateionException;
+import com.quitq.ECom.exception.InputValidationException;
 import com.quitq.ECom.exception.InvalidIdException;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.service.ProductService;
@@ -90,7 +90,7 @@ public ResponseEntity<?> getProductByCategoryName(@PathVariable String name,Mess
 	try {
 		List<Product> p=productService.findByCategoryName(name);
 		return ResponseEntity.ok(p);
-	} catch (InputValidateionException e) {
+	} catch (InputValidationException e) {
 		// TODO Auto-generated catch block
 		messageDto.setMsg(e.getMessage());
 		e.printStackTrace();
@@ -105,7 +105,7 @@ public ResponseEntity<?> getProductByVendorName(@PathVariable String name,Messag
 	try {
 		List<Product> p=productService.findByVendorName(name);
 		return ResponseEntity.ok(p);
-	} catch (InputValidateionException e) {
+	} catch (InputValidationException e) {
 		// TODO Auto-generated catch block
 		messageDto.setMsg(e.getMessage());
 		e.printStackTrace();
@@ -120,7 +120,7 @@ public ResponseEntity<?> getProductByStatus(@PathVariable String status,MessageD
 	try {
 		List<Product> p=productService.findByStatus(status);
 		return ResponseEntity.ok(p);
-	} catch (InputValidateionException e) {
+	} catch (InputValidationException e) {
 		// TODO Auto-generated catch block
 		messageDto.setMsg(e.getMessage());
 		e.printStackTrace();
@@ -135,7 +135,7 @@ public ResponseEntity<?> getProductByWarehouseIId(@PathVariable int id,MessageDt
 	try {
 		List<Product> p=productService.findByWarehouseId(id);
 		return ResponseEntity.ok(p);
-	} catch (InputValidateionException e) {
+	} catch (InputValidationException e) {
 		// TODO Auto-generated catch block
 		messageDto.setMsg(e.getMessage());
 		e.printStackTrace();
