@@ -12,6 +12,6 @@ import com.quitq.ECom.model.Cart;
 public interface CartRepository extends JpaRepository<Cart,Integer>{
 
 	@Query("select c from Cart c where customer_id = ?1")
-	Optional<Cart> getProductByCustomerId(int id);
+	Optional<Cart> getCartByCustomerId(int id);
 
 }
