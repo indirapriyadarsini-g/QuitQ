@@ -48,12 +48,10 @@ public class VendorAddressController {
 		Address a;
 		if(optionalAddress.isEmpty())
 		{
-			System.out.println("Hiii");
 			a=addressService.saveAddress(address);
 		}
 		else
 		{
-			System.out.println("Hello");
 			a=optionalAddress.get();
 		}
 	try {
