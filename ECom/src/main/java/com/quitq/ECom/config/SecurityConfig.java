@@ -42,6 +42,16 @@ public class SecurityConfig {
 .requestMatchers("/product/vendor/status/{name}").hasRole("VENDOR")
 .requestMatchers("/product/vendor/changeStatus/{id}").hasRole("VENDOR")
 .requestMatchers("/product/vendor/product/outOfStock").hasRole("VENDOR")
+.requestMatchers("/image/add/{id}").hasRole("VENDOR")
+.requestMatchers("/image/getAll/{id}").hasRole("VENDOR")
+.requestMatchers("/image/getSpecificImage/{id}").hasRole("VENDOR")
+.requestMatchers("/image/deleteAllImage/{id}").hasRole("VENDOR")
+.requestMatchers("/image/deleteSpecificImage/{id}").hasRole("VENDOR")
+
+.requestMatchers("/image/update/{id}").hasRole("VENDOR")
+.requestMatchers("/image/coverImage/{id}").hasRole("VENDOR")
+
+
 
 .requestMatchers("/product/vendorName/{name}").permitAll()
 

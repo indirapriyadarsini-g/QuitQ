@@ -51,7 +51,7 @@ public class ImageService {
 	        return image;
 	    }
 	    */
-	 public void addImage(Image image,int pid,String  status) throws InvalidIdException
+	 public Image addImage(Image image,int pid,Vendor v) throws InvalidIdException
 	 {
 		 Optional<Product> optional=productRepository.findById(pid);
 		 try {
@@ -63,10 +63,14 @@ public class ImageService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		 if(v.getId()!=optional.get().getV().getId())
+		 {
+			 throw new InvalidIdException("You cannot add image to this product");
+		 }
 		 	image.setP(optional.get());
-		 	if(status.equals("cover"))
+		 	if(image.getStatus().equals("cover"))
 		 	{
-		 		Optional<Image> optionalImage=imageRepository.findCoverImage("cover");
+		 		Optional<Image> optionalImage=imageRepository.getImageWithProductIdAndCover(pid,"cover");
 		 		if(optionalImage.isEmpty())
 		 		{
 		 			image.setStatus("cover");
@@ -83,7 +87,7 @@ public class ImageService {
 		 		}
 		 	}
 		 
-		 	imageRepository.save(image);
+		 	return imageRepository.save(image);
 	 }
 	 public List<Image> getAllImageOfProduct(int pid,Vendor v) throws InvalidIdException
 	 {
@@ -113,7 +117,7 @@ public class ImageService {
 			 throw new InvalidIdException("not a valid image");
 		 }
 		 Image image=optionalImage.get();
-		 if(v.getId()==image.getP().getId())
+		 if(v.getId()==image.getP().getV().getId())
 		 {
 			 return image;
 		 }
@@ -123,6 +127,7 @@ public class ImageService {
 	 
 public void deleteAllImageOfProduct(int pid,Vendor v) throws InvalidIdException
 {
+	
 	 Optional<Product> optionalProduct=productRepository.findById(pid);
 	 if(optionalProduct.isEmpty())
 	 {
@@ -149,15 +154,15 @@ public void deleteAllImageOfProduct(int pid,Vendor v) throws InvalidIdException
 	 }
 }
 
-public void deleteSpecificImageOfProduct(int pid,Vendor v,int imageId) throws InvalidIdException
+public void deleteSpecificImageOfProduct(int imageId,Vendor v) throws InvalidIdException
 {
-	 Optional<Product> optionalProduct=productRepository.findById(pid);
-	 if(optionalProduct.isEmpty())
+	 Optional<Image> optionalImage=imageRepository.findById(imageId);
+	 if(optionalImage.isEmpty())
 	 {
-		throw new InvalidIdException("Product with this id not available");
+		throw new InvalidIdException("Image with this id not available");
 		
 	 }
-	 Product p=optionalProduct.get();
+	 Product p=optionalImage.get().getP();
 	 if(v.getId()==p.getV().getId())
 	 {
 		 
@@ -191,7 +196,7 @@ public void updateImage(Image newImage,int imageId,Vendor v) throws InvalidIdExc
 	{
 		if(newImage.getStatus().equals("cover"))
 		{
-			List<Image> imageCover=imageRepository.getImageWithProductIdAndCover(image.getP().getId(),"cover");
+			Optional<Image> imageCover=imageRepository.getImageWithProductIdAndCover(image.getP().getId(),"cover");
 			if(imageCover.isEmpty())
 			{
 				image.setStatus(newImage.getStatus());
@@ -207,6 +212,17 @@ public void updateImage(Image newImage,int imageId,Vendor v) throws InvalidIdExc
 	imageRepository.save(image);
 	
 	
+}
+public Image giveCoverImage(Vendor v,int pid) throws InvalidIdException
+{
+	Optional<Image> optionalImage=imageRepository.getImageWithProductIdAndCover(pid,"cover");
+	if(optionalImage.isEmpty())
+	{
+		throw new InvalidIdException("No cover image for this product");
+		
+	}
+	return optionalImage.get();
+			
 }
 
 

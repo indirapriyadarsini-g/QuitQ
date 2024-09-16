@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.config.Exception.InvalidIdException;
-import com.quitq.ECom.enums.RoleType;
 
-import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.repository.VendorRepository;
