@@ -50,6 +50,8 @@ public class SecurityConfig {
 
 .requestMatchers("/image/update/{id}").hasRole("VENDOR")
 .requestMatchers("/image/coverImage/{id}").hasRole("VENDOR")
+.requestMatchers("/address/vendor/add").hasRole("VENDOR")
+.requestMatchers("/address/vendor/all").hasRole("VENDOR")
 
 
 
