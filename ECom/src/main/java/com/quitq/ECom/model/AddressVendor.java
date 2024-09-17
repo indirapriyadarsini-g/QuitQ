@@ -14,7 +14,7 @@ public class AddressVendor {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private int id;
-	private String status;
+	private String status="inactive";
 	@ManyToOne
 	private Address address;
 	@ManyToOne

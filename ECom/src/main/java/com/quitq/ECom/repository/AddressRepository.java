@@ -13,5 +13,9 @@ public interface AddressRepository extends JpaRepository<Address,Integer> {
 	Optional<Address> findByAll(String city, String landmark, int pincode, String state, String streetdetails);
 @Query("select  av.status,a.city,a.state,a.landmark,a.streetdetails,a.pincode from AddressVendor av join av.address a join av.vendor v where v.id=?1")
 List<Object[]> findAddressOfParticularVendor(int id);
+@Query("select a from AddressVendor av join av.address a join av.vendor v where v.id=?2 and av.status=?1")
+Optional<Address> findActiveStatusOfVendor(String string, int id);
+@Query("select  av.status,a.city,a.state,a.landmark,a.streetdetails,a.pincode from AddressVendor av join av.address a join av.vendor v where v.id=?1 and a.id=?2")
+List<Object[]> findParticularAddressOfParticularVendor(int vid, int aid);
 
 }

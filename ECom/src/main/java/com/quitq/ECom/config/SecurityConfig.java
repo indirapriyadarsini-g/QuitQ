@@ -52,7 +52,11 @@ public class SecurityConfig {
 .requestMatchers("/image/coverImage/{id}").hasRole("VENDOR")
 .requestMatchers("/address/vendor/add").hasRole("VENDOR")
 .requestMatchers("/address/vendor/all").hasRole("VENDOR")
+.requestMatchers("/address/vendor/update/{aid}").hasRole("VENDOR")
 
+.requestMatchers("/address/vendor/activeAddress").hasRole("VENDOR")
+.requestMatchers("/address/vendor/chanegStatus/{aid}/{status}").hasRole("VENDOR")
+.requestMatchers("/address/vendor/get/{aid}").hasRole("VENDOR")
 
 
 .requestMatchers("/product/vendorName/{name}").permitAll()
