@@ -35,10 +35,20 @@ public class SecurityConfig {
             		   .requestMatchers("/auth/login").permitAll()
                        .requestMatchers("/vendor/get/{id}").hasRole("VENDOR")
 .requestMatchers("/vendor/getAll").hasRole("EXECUTIVE")
+.requestMatchers("/vendor/delete").hasRole("VENDOR")
+.requestMatchers("/vendor/update").hasRole("VENDOR")
+
 .requestMatchers("/product/add").hasRole("VENDOR")
 .requestMatchers("/product/delete/{id}").hasRole("VENDOR")
 .requestMatchers("/product/update/{id}").hasRole("VENDOR")
 .requestMatchers("/product/vendor").hasRole("VENDOR")
+.requestMatchers("/product/vendor/categorySold").hasRole("VENDOR")
+.requestMatchers("/product/vendor/productName/{name}").hasRole("VENDOR")
+.requestMatchers("/product/vendor/addAll/upload").hasRole("VENDOR")
+.requestMatchers("/product/vendor/orderBy/{order}/asc").hasRole("VENDOR")
+.requestMatchers("/product/vendor/orderBy/{order}/desc").hasRole("VENDOR")
+
+
 .requestMatchers("/product/vendor/status/{name}").hasRole("VENDOR")
 .requestMatchers("/product/vendor/changeStatus/{id}").hasRole("VENDOR")
 .requestMatchers("/product/vendor/product/outOfStock").hasRole("VENDOR")
@@ -57,11 +67,25 @@ public class SecurityConfig {
 .requestMatchers("/address/vendor/activeAddress").hasRole("VENDOR")
 .requestMatchers("/address/vendor/chanegStatus/{aid}/{status}").hasRole("VENDOR")
 .requestMatchers("/address/vendor/get/{aid}").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/getAll").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/getAllUnordered").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/product/details").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/product/details/{status}").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/orderReceive/{month}").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/orderReceiveDate/{date}").hasRole("VENDOR")
+.requestMatchers("/orderproduct/vendor/noOfProductOrdered/{month}").hasRole("VENDOR")
 
+               .requestMatchers("/orderproduct/vendor/productOrdered/{date}").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/topSellingProduct/{month}").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/topOrdered/{month}").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/productStats/{month}").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/returnOrder").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/exchangeOrder").hasRole("VENDOR")
 
 .requestMatchers("/product/vendorName/{name}").permitAll()
 
 .requestMatchers("/product/category/{name}").permitAll()
+.requestMatchers("/review/getAll/{pid}").permitAll()
 
 
 

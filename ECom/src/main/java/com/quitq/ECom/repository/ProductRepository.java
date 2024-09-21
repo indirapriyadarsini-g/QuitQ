@@ -2,6 +2,7 @@ package com.quitq.ECom.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,11 +19,18 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
 List<Product> getAllProductOfVendor(int vid);
 @Query("select p from Product p where p.status=?1")
 List<Product> findByStatus(String status);
-@Query("select p from Product p join p.v where p.status=?1 and v.id=?2")
-List<Product> findByStatusAndVendor(String status, int id);
+@Query("select p from Product p join p.v vendor where p.status=?1 and vendor.user.username=?2")
+List<Product> findByStatusAndUsername(String status,String username);
 @Query("select p from Product p join p.warehouse w where w.id=?1")
 List<Product> getByWarehouseId(int id);
-@Query("select p from Product p join p.v where v.id=?1 and p.isOutOfStock=?2")
-List<Product> findOutOfStockProduct(int id,boolean value);
+@Query("select p from Product p join p.v where v.user.username=?1 and p.isOutOfStock=?2")
+List<Product> findOutOfStockProduct(String username,boolean value);
+@Query("select p  from Product p join p.v vendor where vendor.user.username=?1")
+List<Product> findByVendorUsrname(String username);
+@Query("select distinct p.c from Product p join p.v vendor where vendor.user.username=?1")
+List<Object[]> findCategorySoldByVendor(String username);
+@Query("select p from Product p join p.v vendor where vendor.user.username=?1 and p.title like %?2%")
+List<Product> findProductByNameAndUsername(String username, String name);
+
 
 }

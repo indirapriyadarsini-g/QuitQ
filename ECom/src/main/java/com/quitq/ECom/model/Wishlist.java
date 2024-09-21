@@ -19,6 +19,12 @@ public class Wishlist {
 	@OneToOne
 	private Customer customer;
 
+	public Wishlist(int id, Customer customer) {
+		super();
+		this.id = id;
+		this.customer = customer;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -34,6 +40,7 @@ public class Wishlist {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-
-
+	
+	
+	
 }

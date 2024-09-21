@@ -18,5 +18,7 @@ public interface ImageRepository extends JpaRepository<Image,Integer> {
 List<Image> getAllImageOfProduct(int pid);
 @Query("select i from Image i join i.p product where product.id=?1 and i.status=?2")
 Optional<Image> getImageWithProductIdAndCover(int id, String string);
+@Query("select i from Image i join i.p product where product.v.user.username=?1")
+List<Image> findImageByUsername(String username);
 
 }

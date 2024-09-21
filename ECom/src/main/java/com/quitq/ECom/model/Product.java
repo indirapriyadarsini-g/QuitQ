@@ -49,10 +49,10 @@ private Vendor v;
 private Category c;
 @ManyToOne
 private Warehouse warehouse;
-public Product(int id, String title, double price, double discount, String status, boolean isOutOfStock,
-		double quantity, Vendor v, Category c, Warehouse warehouse) {
+
+public Product(String title, double price, double discount, String status, boolean isOutOfStock, double quantity,
+		 Category c,Vendor v) {
 	super();
-	this.id = id;
 	this.title = title;
 	this.price = price;
 	this.discount = discount;
@@ -61,7 +61,6 @@ public Product(int id, String title, double price, double discount, String statu
 	this.quantity = quantity;
 	this.v = v;
 	this.c = c;
-	this.warehouse = warehouse;
 }
 public Product() {
 	super();

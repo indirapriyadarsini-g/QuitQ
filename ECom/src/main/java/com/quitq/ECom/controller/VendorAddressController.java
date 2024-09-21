@@ -27,6 +27,8 @@ import com.quitq.ECom.service.AddressService;
 import com.quitq.ECom.service.AddressVendorService;
 import com.quitq.ECom.service.VendorService;
 
+import jakarta.transaction.Transactional;
+
 @RestController
 @RequestMapping("/vendor/address")
 public class VendorAddressController {

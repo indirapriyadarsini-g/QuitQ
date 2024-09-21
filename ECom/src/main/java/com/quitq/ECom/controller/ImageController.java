@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
@@ -33,14 +34,13 @@ public class ImageController {
 	@Autowired
 	VendorRepository vendorRepository;
 	@PostMapping("/add/{id}")
-	public ResponseEntity<?> addImage(@RequestBody Image image,@PathVariable int id,Principal pr,MessageDto dto)
+	public ResponseEntity<?> addImage(@RequestBody MultipartFile image,@PathVariable int id,Principal pr,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
+		
 		Image imageSave;
 		try {
-			imageSave = imageService.addImage(image, id, v);
+			imageSave = imageService.addImage(image, id,userName);
 			return ResponseEntity.ok(imageSave);
 
 		} catch (InvalidIdException e) {
@@ -55,10 +55,9 @@ public class ImageController {
 	public ResponseEntity<?> getAllImageOfProduct(Principal pr,@PathVariable int id,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
+		
 		try {
-			List<Image> image=imageService.getAllImageOfProduct(id, v);
+			List<Image> image=imageService.getAllImageOfProduct(id,userName);
 			return ResponseEntity.ok(image);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
@@ -71,10 +70,9 @@ public class ImageController {
 	public ResponseEntity<?> getSpecificImageOfProduct(Principal pr,@PathVariable int id,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
+		
 		try {
-			Image image=imageService.getSpecificImageOfProduct(id, v);
+			Image image=imageService.getSpecificImageOfProduct(id,userName);
 			return ResponseEntity.ok(image);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
@@ -89,10 +87,9 @@ public class ImageController {
 	public ResponseEntity<?> deleteAllImagesOfProduct(@PathVariable int id,Principal pr,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
+		
 try {
-	imageService.deleteAllImageOfProduct(id, v);
+	imageService.deleteAllImageOfProduct(id,userName);
 	return ResponseEntity.ok("All image deleted succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -105,10 +102,9 @@ try {
 	public ResponseEntity<?> deleteSpecificImagesOfProduct(@PathVariable int id,Principal pr,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
+		
 try {
-	imageService.deleteSpecificImageOfProduct(id, v);
+	imageService.deleteSpecificImageOfProduct(id,userName);
 	return ResponseEntity.ok("Image deleted succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -118,13 +114,12 @@ try {
 }
 	}
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateImage(@RequestBody Image image,@PathVariable int id,MessageDto dto,Principal pr)
+	public ResponseEntity<?> updateImage(@RequestBody MultipartFile image,
+			@PathVariable int id,MessageDto dto,Principal pr)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
-		Vendor v=vendorRepository.findByUserId(u.getId());
-try {
-	imageService.updateImage(image, id, v);
+		try {
+	imageService.updateImage(id,userName);
 	return ResponseEntity.ok("Image updated succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -142,7 +137,7 @@ try {
 	
 			Image image;
 			try {
-				image = imageService.giveCoverImage(v, id);
+				image = imageService.giveCoverImage(userName, id);
 				return ResponseEntity.ok(image);
 
 			} catch (InvalidIdException e) {

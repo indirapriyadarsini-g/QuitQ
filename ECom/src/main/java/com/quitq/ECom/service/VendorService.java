@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.config.Exception.InvalidIdException;
-
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.repository.VendorRepository;
@@ -20,6 +21,8 @@ public class VendorService {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	public Vendor addVendor(Vendor v)
 	{
 				return vendorRepository.save(v);
@@ -40,37 +43,47 @@ public class VendorService {
 		Vendor v=optional.get();
 		return v;
 	}
-	public void  delete(int vid) throws InvalidIdException
+	public void  delete(String userName) throws InvalidIdException
 	{
-		Optional<Vendor> optional=vendorRepository.findById(vid);
-		if(optional.isEmpty())
-		{
-			throw new InvalidIdException("Id not valid");
-		}
-		int uid=optional.get().getUser().getId();
-		vendorRepository.deleteById(vid);
+		Vendor vendor=vendorRepository.getVendorByUsername(userName);
+		
+		int uid=vendor.getUser().getId();
+		vendorRepository.deleteById(vendor.getId());
 		userRepository.deleteById(uid);
 		
 	}
-	public Vendor updateVendor(Vendor v,int vid) throws InvalidIdException
+	public Vendor updateVendor(String username,Vendor v) throws InvalidIdException
 	{
-		Optional<Vendor> optional=vendorRepository.findById(vid);
-		if(optional.isEmpty())
+		Vendor vendor=vendorRepository.getVendorByUsername(username);
+		
+		
+		vendor.setBuisnessName(v.getBuisnessName());
+		vendor.setName(v.getName());
+		Optional<User> optionalUser=userRepository.findById(vendor.getUser().getId());
+		if(optionalUser.isEmpty())
 		{
-			throw new InvalidIdException("Id not valid");
+			throw new InvalidIdException("No user exist");
 		}
-		Vendor newVendor=optional.get();
-		newVendor.setBuisnessName(v.getBuisnessName());
-		newVendor.setName(v.getName());
-		newVendor.setUser(v.getUser());
-		userRepository.save(v.getUser());
-		return vendorRepository.save(newVendor);
+		User user=optionalUser.get();
+		user.setUsername(v.getUser().getUsername());
+		user.setPassword(passwordEncoder.encode(v.getUser().getPassword()));
+		userRepository.save(user);
+
+		vendor.setUser(user);
+
+		return vendorRepository.save(vendor);
 	}
 	public Vendor getVendorByUserId(int uid)
 	{
 		Vendor v=vendorRepository.findByUserId(uid);
 		return v;
 	}
+	public Vendor getVendorByUserName(String username)
+	{
+		Vendor v=vendorRepository.getVendorByUsername(username);
+		return v;
+	}
+
 	
 	
 }
