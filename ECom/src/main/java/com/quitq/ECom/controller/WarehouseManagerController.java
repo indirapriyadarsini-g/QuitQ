@@ -26,24 +26,23 @@ public class WarehouseManagerController {
     private WarehouseService warehouseService;
 
 
-    @GetMapping("/{warehouseId}")
+    @GetMapping("/getwmgr/{warehouseId}")
     public WarehouseManager getWarehouseManagerByWarehouseId(@PathVariable Integer id) {
-        // Retrieve warehouse based on warehouseId
         Warehouse warehouse = warehouseService.getWarehouseById(id);
         return warehouseManagerService.getWarehouseManagerByWarehouse(warehouse);
     }
-    @PostMapping
+    @PostMapping("/createmgr")
     public WarehouseManager createWarehouseManager(@RequestBody WarehouseManager warehouseManager) {
         return warehouseManagerService.createWarehouseManager(warehouseManager);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updatemgr/{id}")
     public WarehouseManager updateWarehouseManager(@PathVariable int id, @RequestBody WarehouseManager warehouseManager) {
         warehouseManager.setId(id);
         return warehouseManagerService.updateWarehouseManager(warehouseManager);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletemgr/{id}")
     public void deleteWarehouseManager(@PathVariable int id) {
         
     	warehouseManagerService.deleteWarehouseManager(id);

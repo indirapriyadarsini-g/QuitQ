@@ -27,30 +27,30 @@ public class WarehouseController {
     @Autowired
     private WarehouseManagerService warehouseManagerService;
 
-    @GetMapping("/{city}")
+    @GetMapping("/get/{city}")
     public Warehouse getWarehouseByCity(@PathVariable String city) {
         return warehouseService.getWarehouseByCity(city);
     }
-    @PostMapping
+    @PostMapping("/addwh")
     public Warehouse createWarehouse(@RequestBody Warehouse warehouse) {
         return warehouseService.createWarehouse(warehouse);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updatewh/{id}")
     public Warehouse updateWarehouse(@PathVariable int id, @RequestBody Warehouse warehouse) { 
     	warehouse.setId(id);
         return warehouseService.updateWarehouse(warehouse);
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletewh/{id}")
     public void deleteWarehouse(@PathVariable int id) {
         warehouseService.deleteWarehouse(id);
     }
     
-    @PostMapping("/warehouses/{warehouseId}/products/{productId}")
-    public ResponseEntity<Product> addProductToWarehouse(@PathVariable("warehouseId") int warehouseId,
-                                                          @PathVariable("productId") int productId) {
+    @PostMapping("/addp2w/{warehouseId}/products/{productId}")
+    public ResponseEntity<Product> addProductToWarehouse(@PathVariable int warehouseId,
+                                                          @PathVariable int productId) {
       Product product = warehouseManagerService.addProductToWarehouse(warehouseId, productId);
       if (product != null) {
         return ResponseEntity.ok(product);
@@ -59,14 +59,14 @@ public class WarehouseController {
       }
     }
     
-    @GetMapping("/warehouses/{warehouseId}/products/not-in")
-    public ResponseEntity<List<Product>> getProductsNotInWarehouse(@PathVariable("warehouseId") Integer warehouseId) {
+    @GetMapping("/getpnotinw/{warehouseId}/products/not-in")
+    public ResponseEntity<List<Product>> getProductsNotInWarehouse(@PathVariable Integer warehouseId) {
       List<Product> products = warehouseManagerService.getProductsNotInWarehouse(warehouseId);
       return ResponseEntity.ok(products);
     }
     
-    @GetMapping("/warehouses/{productName}/stock-quantity")
-    public ResponseEntity<Double> fetchStockQtyByProductName(@PathVariable("productName") String productName) {
+    @GetMapping("/getstockbyname/{productName}/stock-quantity")
+    public ResponseEntity<Double> fetchStockQtyByProductName(@PathVariable String productName) {
       Double quantity = warehouseManagerService.fetchStockQtyByProductName(productName);
       if (quantity != null) {
         return ResponseEntity.ok(quantity);
@@ -75,7 +75,7 @@ public class WarehouseController {
       }
     }
     
-    @GetMapping("/warehouses/zero-stock")
+    @GetMapping("/zero-stock")
     public ResponseEntity<List<Product>> getIsZeroStock() {
       List<Product> products = warehouseManagerService.getIsZeroStock();
       return ResponseEntity.ok(products);

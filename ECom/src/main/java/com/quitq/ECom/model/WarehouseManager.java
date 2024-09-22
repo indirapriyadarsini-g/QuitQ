@@ -22,8 +22,6 @@ public class WarehouseManager {
     @OneToOne
     private Warehouse warehouse;
     
-    @OneToMany(mappedBy = "warehouseManager", cascade = CascadeType.ALL)
-    private List<Vendor> vendors;
 
 	public int getId() {
 		return id;
@@ -31,14 +29,6 @@ public class WarehouseManager {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public List<Vendor> getVendors() {
-		return vendors;
-	}
-
-	public void setVendors(List<Vendor> vendors) {
-		this.vendors = vendors;
 	}
 
 	public String getName() {
