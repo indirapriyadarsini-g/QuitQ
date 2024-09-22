@@ -5,41 +5,26 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "customer")
-public class Customer {
-
+public class WarehouseManager {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy =GenerationType.AUTO)
+	private int id; 
 	
-	private String name;
+	private String name; 
 	
 	private String contact;
 	
 	@OneToOne
 	private User user;
 
-	public Customer(int id, String name, String contact, User user) {
+	public WarehouseManager(int id, String name, String contact, User user) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.contact = contact;
 		this.user = user;
-	}
-
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", user=" + user + "]";
 	}
 
 	public int getId() {
@@ -74,10 +59,4 @@ public class Customer {
 		this.user = user;
 	}
 
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	
 }

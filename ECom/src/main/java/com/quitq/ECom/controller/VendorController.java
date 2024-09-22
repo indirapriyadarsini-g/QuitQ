@@ -1,5 +1,7 @@
 package com.quitq.ECom.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,11 +63,12 @@ public class VendorController {
 			return ResponseEntity.badRequest().body(messageDto);
 		}
 	}
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteVendor(@PathVariable int id,MessageDto messageDto)
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteVendor(Principal p,MessageDto messageDto)
 	{
+		String userName=p.getName();
 	try {
-		vendorService.delete(id);
+		vendorService.delete(userName);
 		return ResponseEntity.ok("Vendor deleted Successfully");
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -74,11 +77,12 @@ public class VendorController {
 		return ResponseEntity.badRequest().body(messageDto);
 	}	
 	}
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateVendor(@PathVariable int id,@RequestBody Vendor v,MessageDto messageDto)
+	@PutMapping("/update")
+	public ResponseEntity<?> updateVendor(Principal p,@RequestBody Vendor v,MessageDto messageDto)
 	{
+		String username=p.getName();
 		try {
-			Vendor vendor=vendorService.updateVendor(v, id);
+			Vendor vendor=vendorService.updateVendor(username,v);
 			return ResponseEntity.ok(vendor);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block

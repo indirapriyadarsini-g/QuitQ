@@ -1,10 +1,15 @@
 package com.quitq.ECom.service;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.model.Image;
@@ -51,161 +56,134 @@ public class ImageService {
 	        return image;
 	    }
 	    */
-	 public void addImage(Image image,int pid,String  status) throws InvalidIdException
+	 public Image addImage(MultipartFile image,int pid,String usernme) throws InvalidIdException
 	 {
-		 Optional<Product> optional=productRepository.findById(pid);
-		 try {
-			if(optional.isEmpty())
-			 {
-				 throw new InvalidIdException("Product not available");
-			 }
-		} catch (InvalidIdException e) {
+		 List<Product> product=productRepository.findByVendorUsrname(usernme);
+		List<Product> stream=product.stream().filter(p->p.getId()==pid).toList();
+		 if(stream.isEmpty())
+		 {
+			 throw new InvalidIdException("Product doesnt exist for you");
+		 }
+		 Image img=new Image();
+		 for(Product p:stream)
+		 {
+			 img.setP(p);
+		 }
+		 String fileName=image.getOriginalFilename();
+		 img.setImageName(fileName);
+		 
+		 FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("C:\\Users\\HUDA\\git\\repository_Ecom\\ECom\\src\\main\\resources\\static\\images\\" + fileName);
+			InputStream is= image.getInputStream();
+            byte[] byt=new byte[is.available()];
+            is.read(byt);
+            fos.write(byt);
+        
+            fos.close();
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 	image.setP(optional.get());
-		 	if(status.equals("cover"))
-		 	{
-		 		Optional<Image> optionalImage=imageRepository.findCoverImage("cover");
-		 		if(optionalImage.isEmpty())
-		 		{
-		 			image.setStatus("cover");
-		 		}
-		 		else
-		 		{
-		 			Image otherImage=optionalImage.get();
-		 			otherImage.setStatus("uncover");
-		 			imageRepository.save(otherImage);
-		 			image.setStatus("cover");
-		 			
-		 			
-		 			
-		 		}
-		 	}
-		 
-		 	imageRepository.save(image);
-	 }
-	 public List<Image> getAllImageOfProduct(int pid,Vendor v) throws InvalidIdException
-	 {
-		 Optional<Product> optionalProduct=productRepository.findById(pid);
-		 if(optionalProduct.isEmpty())
-		 {
-			throw new InvalidIdException("Product with this id not available");
-			
-		 }
-		 Product p=optionalProduct.get();
-		 if(v.getId()==p.getV().getId())
-		 {
-			 List<Image> images=imageRepository.getAllImageOfProduct(pid);
-			 if(images.isEmpty())
-			 {
-				 throw new InvalidIdException("No image associated with this product");
-			 }
-			 return images;
-		 }
-		 throw new InvalidIdException("You cannot access this product");
-	 }
-	 public Image getSpecificImageOfProduct(int imageId,Vendor v) throws InvalidIdException
-	 {
-		 Optional<Image> optionalImage=imageRepository.findById(imageId);
-		 if(optionalImage.isEmpty())
-		 {
-			 throw new InvalidIdException("not a valid image");
-		 }
-		 Image image=optionalImage.get();
-		 if(v.getId()==image.getP().getId())
-		 {
-			 return image;
-		 }
-		 throw new InvalidIdException("You cannot access this image");
-		 
-	 }
-	 
-public void deleteAllImageOfProduct(int pid,Vendor v) throws InvalidIdException
-{
-	 Optional<Product> optionalProduct=productRepository.findById(pid);
-	 if(optionalProduct.isEmpty())
-	 {
-		throw new InvalidIdException("Product with this id not available");
+         //save this in the DB
+ catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-	 }
-	 Product p=optionalProduct.get();
-	 if(v.getId()==p.getV().getId())
-	 {
-		 List<Image> images=imageRepository.getAllImageOfProduct(pid);
-		 if(images.isEmpty())
-		 {
-			 throw new InvalidIdException("No image associated with this product");
-		 }
-		 for(Image img:images)
-		 {
-			 imageRepository.deleteById(img.getId());
-		 }
-	 }
-	 else
-	 {
-		 throw new InvalidIdException("You cannot access this product");
+		
 
+		 
+		 	return imageRepository.save(img);
 	 }
+	 public List<Image> getAllImageOfProduct(int pid,String username) throws InvalidIdException
+	 {
+		 List<Image> image=imageRepository.findImageByUsername(username);
+			List<Image> streamList=image.stream().filter(i->i.getP().getId()==pid).toList();
+			if(streamList.isEmpty())
+			{
+				throw new InvalidIdException("No such image exist for you");
+			}
+
+		return streamList;
+	 }
+	 public Image getSpecificImageOfProduct(int imageId,String username) throws InvalidIdException
+	 {
+		 List<Image> image=imageRepository.findImageByUsername(username);
+		List<Image> streamList=image.stream().filter(i->i.getId()==imageId).toList();
+		
+for(Image i:streamList)
+{
+	return i;
+}
+throw new InvalidIdException("No such image exist for you");
+
+	 }	 
+public void deleteAllImageOfProduct(int pid,String username) throws InvalidIdException
+{
+	 List<Image> image=imageRepository.findImageByUsername(username);
+		List<Image> streamList=image.stream().filter(i->i.getP().getId()==pid).toList();
+		if(streamList.isEmpty())
+		{
+			throw new InvalidIdException("No such image exist for you");
+		}
+		imageRepository.deleteAll(streamList);
+	
 }
 
-public void deleteSpecificImageOfProduct(int pid,Vendor v,int imageId) throws InvalidIdException
+public void deleteSpecificImageOfProduct(int imageId,String username) throws InvalidIdException
 {
-	 Optional<Product> optionalProduct=productRepository.findById(pid);
-	 if(optionalProduct.isEmpty())
-	 {
-		throw new InvalidIdException("Product with this id not available");
-		
-	 }
-	 Product p=optionalProduct.get();
-	 if(v.getId()==p.getV().getId())
-	 {
-		 
-	 
-			 imageRepository.deleteById(imageId);
-		 
-	 }
-	 else
-	 {
-		 throw new InvalidIdException("You cannot access this product");
+	 List<Image> image=imageRepository.findImageByUsername(username);
+		List<Image> streamList=image.stream().filter(i->i.getId()==imageId).toList();
+		if(streamList.isEmpty())
+		{
+			throw new InvalidIdException("No such image exist for you");
 
-	 }
-}
-public void updateImage(Image newImage,int imageId,Vendor v) throws InvalidIdException
+		}
+for(Image i:streamList)
 {
-	Optional<Image> optionalImage=imageRepository.findById(imageId);
+	imageRepository.deleteById(i.getId());
+	
+}
+}
+public Image giveCoverImage(String username,int pid) throws InvalidIdException
+{
+	 List<Image> image=imageRepository.findImageByUsername(username);
+		List<Image> streamList=image.stream().filter(i->i.getP().getId()==pid).toList();
+		if(streamList.isEmpty())
+		{
+			throw new InvalidIdException("No such image exist for you");
+		}
+	Optional<Image> optionalImage=imageRepository.getImageWithProductIdAndCover(pid,"cover");
 	if(optionalImage.isEmpty())
 	{
-		 throw new InvalidIdException("No image found");
-
+		throw new InvalidIdException("No cover image for this product");
+		
 	}
-	Image image=optionalImage.get();
-	if(v.getId()!=image.getP().getV().getId())
+	return optionalImage.get();
+			
+}
+public void updateImage(int id, String userName) throws InvalidIdException {
+	// TODO Auto-generated method stub
+	List<Image> image=imageRepository.findImageByUsername(userName);
+	List<Image> streamList=image.stream().filter(i->i.getId()==id).toList();
+	if(streamList.isEmpty())
 	{
-		throw new InvalidIdException("You cannot access this product");
+		throw new InvalidIdException("No such image exist for you");
 	}
-	image.setImageData(newImage.getImageData());
-	image.setImageName(newImage.getImageName());
-	image.setType(newImage.getType());
-	if(image.getStatus().equals("uncover"))
+	for(Image i:streamList)
 	{
-		if(newImage.getStatus().equals("cover"))
+		Optional<Image> optionalImage=imageRepository.getImageWithProductIdAndCover(i.getP().getId(),"cover");
+		if(!optionalImage.isEmpty())
 		{
-			List<Image> imageCover=imageRepository.getImageWithProductIdAndCover(image.getP().getId(),"cover");
-			if(imageCover.isEmpty())
-			{
-				image.setStatus(newImage.getStatus());
-
-			}
-			else
-			{
-				throw new InvalidIdException("There is already one cover image uncover it first");
-			}
+			Image img=optionalImage.get();
+			img.setStatus("uncover");
 		}
+		i.setStatus("cover");
+		imageRepository.save(i);
+		
+		
 	}
-	image.setStatus(newImage.getStatus());
-	imageRepository.save(image);
-	
 	
 }
 
