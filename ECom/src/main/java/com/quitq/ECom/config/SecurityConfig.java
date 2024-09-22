@@ -38,6 +38,7 @@ public class SecurityConfig {
 .requestMatchers("/vendor/delete").hasRole("VENDOR")
 .requestMatchers("/vendor/update").hasRole("VENDOR")
 
+
 .requestMatchers("/product/add").hasRole("VENDOR")
 .requestMatchers("/product/delete/{id}").hasRole("VENDOR")
 .requestMatchers("/product/update/{id}").hasRole("VENDOR")
@@ -82,10 +83,13 @@ public class SecurityConfig {
                .requestMatchers("/orderproduct/vendor/returnOrder").hasRole("VENDOR")
                .requestMatchers("/orderproduct/vendor/exchangeOrder").hasRole("VENDOR")
 
+
+
 .requestMatchers("/product/vendorName/{name}").permitAll()
 
 .requestMatchers("/product/category/{name}").permitAll()
 .requestMatchers("/review/getAll/{pid}").permitAll()
+
 
 
 

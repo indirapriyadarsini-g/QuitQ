@@ -1,5 +1,6 @@
 package com.quitq.ECom.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class WarehouseManager {
 		this.contact = contact;
 		this.user = user;
 	}
+
 
 	public int getId() {
 		return id;
@@ -60,3 +62,4 @@ public class WarehouseManager {
 	}
 
 }
+

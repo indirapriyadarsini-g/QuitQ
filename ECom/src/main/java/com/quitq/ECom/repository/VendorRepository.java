@@ -1,7 +1,9 @@
 package com.quitq.ECom.repository;
 
 import java.util.List;
+
 import java.util.Optional;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,5 @@ public interface VendorRepository extends JpaRepository<Vendor,Integer> {
 List<Vendor> getListOfVendorInSameCity(String cityName,String status);
 @Query("select v from Vendor v join v.user u where u.username=?1")
 Vendor getVendorByUsername(String username);
+
 }

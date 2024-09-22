@@ -41,6 +41,7 @@ public class ImageController {
 		Image imageSave;
 		try {
 			imageSave = imageService.addImage(image, id,userName);
+
 			return ResponseEntity.ok(imageSave);
 
 		} catch (InvalidIdException e) {
@@ -58,6 +59,7 @@ public class ImageController {
 		
 		try {
 			List<Image> image=imageService.getAllImageOfProduct(id,userName);
+
 			return ResponseEntity.ok(image);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
@@ -73,6 +75,7 @@ public class ImageController {
 		
 		try {
 			Image image=imageService.getSpecificImageOfProduct(id,userName);
+
 			return ResponseEntity.ok(image);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
@@ -90,6 +93,7 @@ public class ImageController {
 		
 try {
 	imageService.deleteAllImageOfProduct(id,userName);
+
 	return ResponseEntity.ok("All image deleted succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -105,6 +109,7 @@ try {
 		
 try {
 	imageService.deleteSpecificImageOfProduct(id,userName);
+
 	return ResponseEntity.ok("Image deleted succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -120,6 +125,7 @@ try {
 		String userName=pr.getName();
 		try {
 	imageService.updateImage(id,userName);
+
 	return ResponseEntity.ok("Image updated succesfullly");
 } catch (InvalidIdException e) {
 	// TODO Auto-generated catch block
@@ -138,6 +144,7 @@ try {
 			Image image;
 			try {
 				image = imageService.giveCoverImage(userName, id);
+
 				return ResponseEntity.ok(image);
 
 			} catch (InvalidIdException e) {

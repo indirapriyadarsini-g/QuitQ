@@ -1,6 +1,7 @@
 package com.quitq.ECom.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +23,13 @@ public class AddressService {
 	@Autowired
 	AddressVendorRepository addressVendorRepository;
 	
+
 	public Address saveAddress(Address a)
 	{
 		return addressRepository.save(a);
 	}
 	public Optional<Address> findAll(VendorAddressDto address)
+
 	{
 		Optional<Address> optionalAddress=addressRepository.findByAll(address.getCity(),address.getLandmark(),address.getPincode(),address.getState(),address.getStreetdetails());
 		return optionalAddress;

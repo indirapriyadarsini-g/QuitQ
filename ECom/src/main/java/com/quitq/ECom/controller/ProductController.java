@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.model.Product;
+
+import com.quitq.ECom.model.User;
+import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.service.ProductService;
 import com.quitq.ECom.service.VendorService;
@@ -43,6 +48,7 @@ public ResponseEntity<?> addProduct(@RequestBody Product p,Principal pr)
 
 	try {
 		return ResponseEntity.ok(productService.addProduct(p,username));
+
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
 		
@@ -62,6 +68,7 @@ public ResponseEntity<?> getAllProduct(
 
 	return ResponseEntity.ok(productService.getAll(pageAble));
 }
+
 
 
 @GetMapping("/find/{id}")
@@ -92,6 +99,7 @@ public ResponseEntity<?> makeProductInactiveV2(Principal p,@PathVariable int id,
 		List<Product> pList=productService.getProductListByVendorUsername(username,id);
 		return ResponseEntity.ok("Your product"+pList+" made in active"
 				);
+
 	} catch (InvalidIdException e) {
 		messageDto.setMsg(e.getMessage());
 		e.printStackTrace();
@@ -105,8 +113,10 @@ public ResponseEntity<?> updateProduct(Principal pr,@RequestBody Product p,@Path
 {
 	String username=pr.getName();
 
+
 	try {
 		List<Product> p1=productService.updateProduct(username,p, id);
+
 		return ResponseEntity.ok(p1);
 	} catch (InvalidIdException e) {
 		messageDto.setMsg(e.getMessage());
@@ -121,6 +131,7 @@ public ResponseEntity<?> getProductByCategoryName(Principal pr,@PathVariable Str
 {
 	try {
 		List<Product> p=productService.findByCategoryName(pr.getName(),name);
+
 		return ResponseEntity.ok(p);
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -140,6 +151,7 @@ public ResponseEntity<?> getCategorySoldByVendor(Principal p,MessageDto messageD
 	try {
 		c = productService.findCategorySoldByVendor(name);
 		return ResponseEntity.ok(c);
+
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
 		messageDto.setMsg(e.getMessage());
@@ -150,15 +162,14 @@ public ResponseEntity<?> getCategorySoldByVendor(Principal p,MessageDto messageD
 	
 }
 @GetMapping("/vendor")
-public ResponseEntity<?> getProductByVendorName(Principal pr,MessageDto messageDto
-		
-		)
+public ResponseEntity<?> getProductByVendorName(Principal pr,MessageDto messageDto)
 {
 	String username=pr.getName();
 	
 	try {
 
 		List<Product> p=productService.findByParticularVendorName(username);
+
 		return ResponseEntity.ok(p);
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -175,9 +186,11 @@ public ResponseEntity<?> getProductByVendorName(Principal pr,MessageDto messageD
 public ResponseEntity<?> getProductByStatusAndVendor(Principal pr,@PathVariable String status,MessageDto messageDto)
 {
 	String username=pr.getName();
+
 	
 	try {
 		List<Product> p=productService.findByStatusAndVendor(username,status);
+
 		return ResponseEntity.ok(p);
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -196,6 +209,7 @@ public ResponseEntity<?> chanegVendorProductStatus(Principal pr,@PathVariable in
 	
 	try {
 		Product p=productService.makeProductActive(username,id);
+
 		return ResponseEntity.ok("Product "+p.getTitle()+" made active again ");
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -207,7 +221,6 @@ public ResponseEntity<?> chanegVendorProductStatus(Principal pr,@PathVariable in
 	}
 }
 
-
 	@GetMapping("/vendor/product/outOfStock")
 	
 		public ResponseEntity<?> outOfStockProduct(Principal pr,MessageDto messageDto)
@@ -216,6 +229,7 @@ public ResponseEntity<?> chanegVendorProductStatus(Principal pr,@PathVariable in
 			
 			try {
 				List<Product> p=productService.findOutOfStockProuct(username);
+
 				return ResponseEntity.ok(p);
 			} catch (InvalidIdException e) {
 				// TODO Auto-generated catch block
@@ -290,6 +304,7 @@ public ResponseEntity<?> uploadProductCsvFile(@RequestBody MultipartFile file,Pr
 		return ResponseEntity.badRequest().body(dto);
 	}
 }
+
 
 
 

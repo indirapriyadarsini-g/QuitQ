@@ -2,7 +2,8 @@ package com.quitq.ECom.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -31,6 +32,7 @@ List<Product> findByVendorUsrname(String username);
 List<Object[]> findCategorySoldByVendor(String username);
 @Query("select p from Product p join p.v vendor where vendor.user.username=?1 and p.title like %?2%")
 List<Product> findProductByNameAndUsername(String username, String name);
+
 
 
 }

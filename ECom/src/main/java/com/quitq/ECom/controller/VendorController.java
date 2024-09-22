@@ -2,6 +2,8 @@ package com.quitq.ECom.controller;
 
 import java.security.Principal;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,6 +71,7 @@ public class VendorController {
 		String userName=p.getName();
 	try {
 		vendorService.delete(userName);
+
 		return ResponseEntity.ok("Vendor deleted Successfully");
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
@@ -83,6 +86,7 @@ public class VendorController {
 		String username=p.getName();
 		try {
 			Vendor vendor=vendorService.updateVendor(username,v);
+
 			return ResponseEntity.ok(vendor);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block

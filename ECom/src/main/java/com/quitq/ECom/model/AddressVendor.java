@@ -1,3 +1,4 @@
+
 package com.quitq.ECom.model;
 
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ public class AddressVendor {
 
 	private int id;
 	private String status="inactive";
+
 	@ManyToOne
 	private Address address;
 	@ManyToOne

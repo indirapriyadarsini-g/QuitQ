@@ -53,6 +53,7 @@ private Warehouse warehouse;
 public Product(String title, double price, double discount, String status, boolean isOutOfStock, double quantity,
 		 Category c,Vendor v) {
 	super();
+
 	this.title = title;
 	this.price = price;
 	this.discount = discount;
@@ -61,6 +62,7 @@ public Product(String title, double price, double discount, String status, boole
 	this.quantity = quantity;
 	this.v = v;
 	this.c = c;
+
 }
 public Product() {
 	super();

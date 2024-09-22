@@ -19,3 +19,4 @@ Optional<Address> findActiveStatusOfVendor(String string, int id);
 List<Object[]> findParticularAddressOfParticularVendor(int vid, int aid);
 
 }
+

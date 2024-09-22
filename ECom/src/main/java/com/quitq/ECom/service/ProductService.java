@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.enums.Category;
@@ -36,6 +38,7 @@ public class ProductService {
 		Vendor vendor=vendorRepository.getVendorByUsername(username);
 		
 	
+
 		p.setV(vendor);
 				
 		return productRepository.save(p);
@@ -44,6 +47,7 @@ public class ProductService {
 	public List<Product> getAll(Pageable pageable)
 	{
 		return productRepository.findAll(pageable).getContent();
+
 	}
 	public Product getById(int pid) throws InvalidIdException
 	{
@@ -77,6 +81,7 @@ public class ProductService {
 		return streamList;
 	
 		
+
 
 	}
 
@@ -125,6 +130,7 @@ if(p.isEmpty())
 }
 		return p;
 	
+
 	}
 	
 	public List<Product> findByStatus(String status) throws InvalidIdException
@@ -159,6 +165,7 @@ if(p.isEmpty())
 		throw new InvalidIdException("No product exist with this id");
 
 	
+
 	}
 
 	public List<Product> findByWarehouseId(int id) throws InvalidIdException
@@ -173,6 +180,7 @@ if(p.isEmpty())
 	public List<Product> findOutOfStockProuct(String username) throws InvalidIdException
 	{
 		List<Product> p=productRepository.findOutOfStockProduct(username,true);
+
 		if(p==null||p.isEmpty())
 		{
 			throw new InvalidIdException("No products out of stock");

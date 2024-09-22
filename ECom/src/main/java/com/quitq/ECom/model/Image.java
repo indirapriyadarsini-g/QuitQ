@@ -18,6 +18,7 @@ private int id;
 private String imageName;
 private String status="uncover";
 
+
 public Image() {
 	super();
 	// TODO Auto-generated constructor stub
@@ -27,6 +28,7 @@ public Image(int id, String imageName, String status,Product p) {
 	this.id = id;
 	this.imageName = imageName;
 	this.status = status;
+
 	this.p=p;
 }
 @ManyToOne
@@ -56,6 +58,5 @@ public String getStatus() {
 public void setStatus(String status) {
 	this.status = status;
 }
-
 
 }

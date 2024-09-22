@@ -1,6 +1,8 @@
 package com.quitq.ECom.model;
 
+
 import jakarta.persistence.Column;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,12 +12,7 @@ import jakarta.persistence.OneToOne;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+
 
 @Entity
 public class Cart {
@@ -31,6 +28,7 @@ public class Cart {
 		super();
 		this.id = id;
 		this.productList = productList;
+
 		this.customer = customer;
 		this.cartTotal = cartTotal;
 	}
@@ -52,6 +50,7 @@ public class Cart {
 	}
 
 	public Customer getCustomer() {
+
 		return customer;
 	}
 
@@ -76,6 +75,7 @@ public class Cart {
 	@OneToOne
 	private Customer customer;
 	@Column(nullable = false)
+
 
 	private double cartTotal;
 	

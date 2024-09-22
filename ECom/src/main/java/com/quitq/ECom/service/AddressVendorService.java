@@ -2,8 +2,10 @@ package com.quitq.ECom.service;
 
 import java.util.Optional;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class AddressVendorService {
 @Autowired
 AddressService addressService;
 	public AddressVendor add(Address a,Vendor v,String status) throws InvalidIdException {
+
 		// TODO Auto-generated method stub
 		Optional<AddressVendor> optional=addressVendorRepository.findByAddressIdAndVendorId(a.getId(),v.getId());
 		if(optional.isEmpty())
@@ -122,3 +125,4 @@ else
 	
 
 }
+

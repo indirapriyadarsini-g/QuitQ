@@ -1,6 +1,7 @@
 package com.quitq.ECom.controller;
 
 import java.security.Principal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,7 @@ import com.quitq.ECom.service.VendorService;
 
 import jakarta.transaction.Transactional;
 
+
 @RestController
 @RequestMapping("/vendor/address")
 public class VendorAddressController {
@@ -45,6 +48,7 @@ public class VendorAddressController {
 	
 	@PostMapping("/add")
 	public ResponseEntity<?> addAddress(Principal p,@RequestBody VendorAddressDto address,MessageDto dto)
+
 	{
 		String username=p.getName();
 		User u=userRepository.getUserByUsername(username);
@@ -60,13 +64,16 @@ public class VendorAddressController {
 		{
 			status="inactive";
 		}
+
 		Optional<Address> optionalAddress=addressService.findAll(address);
 		Address a;
 		if(optionalAddress.isEmpty())
 		{
+
 			
 			
 			a=addressService.saveAddress(temp);
+
 		}
 		else
 		{
@@ -74,6 +81,7 @@ public class VendorAddressController {
 		}
 	try {
 		return ResponseEntity.ok(addressVendorService.add(a,v,status));
+
 	} catch (InvalidIdException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -95,6 +103,7 @@ public class VendorAddressController {
 		return ResponseEntity.ok(address);
 
 	}
+
 	@GetMapping("/get/{aid}")
 	public ResponseEntity<?> getParticularAddressOfVendor(@PathVariable int aid,Principal p)
 	{

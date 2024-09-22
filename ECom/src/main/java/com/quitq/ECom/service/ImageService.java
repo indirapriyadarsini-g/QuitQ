@@ -1,9 +1,11 @@
 package com.quitq.ECom.service;
 
 import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Product;
-import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.ProductRepository;
 
@@ -154,6 +156,7 @@ public Image giveCoverImage(String username,int pid) throws InvalidIdException
 		{
 			throw new InvalidIdException("No such image exist for you");
 		}
+
 	Optional<Image> optionalImage=imageRepository.getImageWithProductIdAndCover(pid,"cover");
 	if(optionalImage.isEmpty())
 	{

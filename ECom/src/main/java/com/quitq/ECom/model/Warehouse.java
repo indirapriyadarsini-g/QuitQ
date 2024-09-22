@@ -1,14 +1,12 @@
 package com.quitq.ECom.model;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -23,17 +21,30 @@ public class Warehouse {
     private String name;
     
     private int capacity;
+    
+    private String city;
 
-    @OneToOne
-    private WarehouseManager warehouseManager;
+    public String getCity() {
+		return city;
+	}
 
-	public Warehouse(int id, String name, int capacity, WarehouseManager warehouseManager) {
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public Warehouse(int id, String name, int capacity, String city, WarehouseManager warehouseManager) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.capacity = capacity;
+		this.city = city;
 		this.warehouseManager = warehouseManager;
 	}
+
+	@OneToOne
+    private WarehouseManager warehouseManager;
+
+
 
 	public int getId() {
 		return id;
@@ -46,6 +57,7 @@ public class Warehouse {
 	public String getName() {
 		return name;
 	}
+
 
 	public void setName(String name) {
 		this.name = name;
@@ -70,3 +82,4 @@ public class Warehouse {
     
     
 }
+
