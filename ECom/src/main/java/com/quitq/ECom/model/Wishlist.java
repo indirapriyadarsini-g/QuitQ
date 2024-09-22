@@ -26,6 +26,11 @@ public class Wishlist {
 	}
 
 
+	public Wishlist() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public int getId() {
 		return id;
 	}

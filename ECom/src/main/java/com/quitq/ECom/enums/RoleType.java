@@ -4,6 +4,7 @@ public enum RoleType {
 	CUSTOMER,
 	VENDOR,
 	WAREHOUSEMANAGER,
-	EXECUTIVE
+	EXECUTIVE,
+	ADMIN, USER
 	
 }

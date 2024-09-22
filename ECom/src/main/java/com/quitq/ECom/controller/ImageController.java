@@ -18,9 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.model.Image;
-import com.quitq.ECom.model.User;
+import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
-import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.VendorRepository;
 import com.quitq.ECom.service.ImageService;
 
@@ -30,7 +30,7 @@ public class ImageController {
 	@Autowired
 	ImageService imageService;
 	@Autowired
-	UserRepository userRepository;
+	UserInfoRepository userRepository;
 	@Autowired
 	VendorRepository vendorRepository;
 	@PostMapping("/add/{id}")
@@ -138,7 +138,7 @@ try {
 	public ResponseEntity<?> coverImage(@PathVariable int id,Principal pr,MessageDto dto)
 	{
 		String userName=pr.getName();
-		User u=userRepository.getUserByUsername(userName);
+		UserInfo u=userRepository.getUserInfoByUsername(userName);
 		Vendor v=vendorRepository.findByUserId(u.getId());
 	
 			Image image;

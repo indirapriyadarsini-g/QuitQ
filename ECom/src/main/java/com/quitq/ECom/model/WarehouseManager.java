@@ -18,9 +18,9 @@ public class WarehouseManager {
 	private String contact;
 	
 	@OneToOne
-	private User user;
+	private UserInfo user;
 
-	public WarehouseManager(int id, String name, String contact, User user) {
+	public WarehouseManager(int id, String name, String contact, UserInfo user) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -53,11 +53,11 @@ public class WarehouseManager {
 		this.contact = contact;
 	}
 
-	public User getUser() {
+	public UserInfo getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserInfo user) {
 		this.user = user;
 	}
 

@@ -98,6 +98,9 @@ public class CartProduct {
 		this.cart = cart;
 		this.product = product;
 	}
+	public CartProduct() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	
 }

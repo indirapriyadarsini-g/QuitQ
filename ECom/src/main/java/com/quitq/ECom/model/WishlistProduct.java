@@ -66,5 +66,9 @@ public class WishlistProduct {
 		this.product = product;
 		this.cartProduct = cartProduct;
 	}
+
+	public WishlistProduct() {
+		// TODO Auto-generated constructor stub
+	}
 	
 }

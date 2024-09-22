@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.quitq.ECom.model.Exchange;
@@ -11,7 +12,15 @@ import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Return;
 
+import jakarta.transaction.Transactional;
+
 public interface OrderProductRepository extends JpaRepository<OrderProduct,Integer> {
+	
+	@Transactional
+	@Modifying
+	@Query("update OrderProduct op set op.quantity = op.quantity+1 where op=?1")
+	int addProductCount(OrderProduct orderProduct);
+	
 @Query("select p from OrderProduct op join op.product p where p.v.user.username=?1")
 	List<Product> findByUserName(String userName);
 @Query("select p from Product p where p.id not in(select pro.id from OrderProduct op join op.product pro where pro.v.user.username=?1) and p.v.user.username=?1")

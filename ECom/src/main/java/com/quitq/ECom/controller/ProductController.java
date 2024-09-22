@@ -25,9 +25,9 @@ import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.model.Product;
 
-import com.quitq.ECom.model.User;
+import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
-import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.ProductService;
 import com.quitq.ECom.service.VendorService;
 
@@ -39,7 +39,7 @@ ProductService productService;
 @Autowired
 VendorService vendorService;
 @Autowired
-UserRepository userRepository;
+UserInfoRepository userRepository;
 @PostMapping("/add")
 public ResponseEntity<?> addProduct(@RequestBody Product p,Principal pr)
 

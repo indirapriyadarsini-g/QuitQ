@@ -21,10 +21,10 @@ import com.quitq.ECom.config.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.VendorAddressDto;
 import com.quitq.ECom.model.Address;
-import com.quitq.ECom.model.User;
+import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.AddressRepository;
-import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.AddressService;
 import com.quitq.ECom.service.AddressVendorService;
 import com.quitq.ECom.service.VendorService;
@@ -38,7 +38,7 @@ public class VendorAddressController {
 	@Autowired
 	AddressVendorService addressVendorService;
 	@Autowired
-	UserRepository userRepository;
+	UserInfoRepository userRepository;
 	@Autowired
 	VendorService vendorService;
 	@Autowired
@@ -51,7 +51,7 @@ public class VendorAddressController {
 
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		Address temp=new Address();
 		temp.setCity(address.getCity());
@@ -97,7 +97,7 @@ public class VendorAddressController {
 	public ResponseEntity<?> getAllAddressOfVendor(Principal p)
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		List<VendorAddressDto> address=addressService.getAllAddressOfVendor(v);
 		return ResponseEntity.ok(address);
@@ -108,7 +108,7 @@ public class VendorAddressController {
 	public ResponseEntity<?> getParticularAddressOfVendor(@PathVariable int aid,Principal p)
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		List<VendorAddressDto> address=addressService.getAddressOfVendorWithId(v, aid);
 		return ResponseEntity.ok(address);
@@ -118,7 +118,7 @@ public class VendorAddressController {
 	public ResponseEntity<?>  deleteVendorAddress(@PathVariable int aid,Principal p,MessageDto messageDto)
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		try {
 			addressVendorService.deleteAddress(aid, v.getId());
@@ -136,7 +136,7 @@ public class VendorAddressController {
 	{
 
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		try {
 			addressService.updateAddress(address, aid,v.getId());
@@ -152,7 +152,7 @@ messageDto.setMsg(e.getMessage());
 	public ResponseEntity<?> getActiveAddressOfVendor(Principal p,MessageDto messageDto)
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		Optional<Address> a=addressService.getActiveAddressOfVendor(v.getId());
 		if(a.isEmpty())
@@ -165,7 +165,7 @@ messageDto.setMsg(e.getMessage());
 	public ResponseEntity<?> changeStatusOfAddress(@PathVariable String status,@PathVariable int aid,Principal p,MessageDto messageDto)
 	{
 		String username=p.getName();
-		User u=userRepository.getUserByUsername(username);
+		UserInfo u=userRepository.getUserInfoByUsername(username);
 		Vendor v=vendorService.getVendorByUserId(u.getId());
 		try {
 			addressVendorService.changeStatusOfAddress(v.getId(), aid, status);

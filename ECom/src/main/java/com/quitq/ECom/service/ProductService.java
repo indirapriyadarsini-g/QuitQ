@@ -20,7 +20,7 @@ import com.quitq.ECom.enums.Category;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.ProductRepository;
-import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.VendorRepository;
 
 @Service
@@ -30,7 +30,7 @@ public class ProductService {
 	
 	
 	@Autowired
-	UserRepository userRepository;
+	UserInfoRepository userRepository;
 	@Autowired
 	VendorRepository vendorRepository;
 	public Product addProduct(Product p,String username) throws InvalidIdException

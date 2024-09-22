@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="orders")
+@Table(name="order")
 public class Order {
 	
 	@Id
@@ -119,6 +119,13 @@ public class Order {
 	@Column(nullable = false)
 
 	private double orderFee;
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 	@OneToOne
-	Cart cart;
+	private Cart cart;
 }

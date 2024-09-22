@@ -21,9 +21,9 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
-	private User user;
+	private UserInfo user;
 
-	public Customer(int id, String name, String contact, User user) {
+	public Customer(int id, String name, String contact, UserInfo user) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -60,11 +60,11 @@ public class Customer {
 		this.contact = contact;
 	}
 
-	public User getUser() {
+	public UserInfo getUserInfo() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUserInfo(UserInfo user) {
 		this.user = user;
 	}
 

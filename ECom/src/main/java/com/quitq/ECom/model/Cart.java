@@ -33,6 +33,10 @@ public class Cart {
 		this.cartTotal = cartTotal;
 	}
 
+	public Cart() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -76,6 +80,16 @@ public class Cart {
 	private Customer customer;
 	@Column(nullable = false)
 
+
+	private int cartQuantity;
+	
+	public int getCartQuantity() {
+		return cartQuantity;
+	}
+
+	public void setCartQuantity(int cartQuantity) {
+		this.cartQuantity = cartQuantity;
+	}
 
 	private double cartTotal;
 	

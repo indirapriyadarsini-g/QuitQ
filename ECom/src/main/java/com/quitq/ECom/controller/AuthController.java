@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
 import com.quitq.ECom.enums.RoleType;
-import com.quitq.ECom.model.User;
-import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.MyUserDetailsService;
 
 
@@ -26,7 +26,7 @@ public class AuthController {
     @Autowired
     private MyUserDetailsService userDetailsService;
     @Autowired
-	private UserRepository userRepository;
+	private UserInfoRepository userRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -34,7 +34,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
     @PostMapping("/auth/token")
-    public String createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception {
+    public String createAuthenticationToken(@RequestBody UserInfo authenticationRequest) throws Exception {
  
         try {
             authenticationManager.authenticate(
@@ -51,8 +51,8 @@ public class AuthController {
         return jwt;
     }
     @PostMapping("/auth/signup")
-    public void signup(@RequestBody User userInfo) {
-    	userInfo.setRole("ROLE_CUSTOMER");
+    public void signup(@RequestBody UserInfo userInfo) {
+    	userInfo.setRole(RoleType.CUSTOMER);
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
     }

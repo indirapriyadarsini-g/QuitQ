@@ -24,8 +24,8 @@ public class Vendor {
 	@Column(nullable = false)
 	private String buisnessName;
 	@OneToOne
-	private User user;
-	public Vendor(int id, String name, String buisnessName, User user) {
+	private UserInfo user;
+	public Vendor(int id, String name, String buisnessName, UserInfo user) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -54,10 +54,10 @@ public class Vendor {
 	public void setBuisnessName(String buisnessName) {
 		this.buisnessName = buisnessName;
 	}
-	public User getUser() {
+	public UserInfo getUser() {
 		return user;
 	}
-	public void setUser(User user) {
+	public void setUser(UserInfo user) {
 		this.user = user;
 	}
 	
