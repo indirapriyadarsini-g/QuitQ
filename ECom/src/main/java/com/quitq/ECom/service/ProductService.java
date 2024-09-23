@@ -219,7 +219,11 @@ if(p.isEmpty())
 		Vendor v=vendorRepository.getVendorByUsername(username);
 		InputStream inputStream;
 		try {
+			/*It returns an input stream in form of bytes stream to read content of file from */
 			inputStream = file.getInputStream();
+			
+			/*InputStreanReader convets byte stream into character stream*/
+			/*Buffered the charters into buffer  for efficient reading of characters*/
 			BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
 			br.readLine();
 			String data="";
