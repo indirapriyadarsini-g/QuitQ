@@ -33,6 +33,8 @@ import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
+import com.quitq.ECom.repository.OrderProductRepository;
+import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.WishlistRepository;
@@ -63,6 +65,12 @@ public class CustomerController {
 	
 	@Autowired
 	private WishlistRepository wishlistRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
+	
+	@Autowired
+	private OrderProductRepository orderProductRepository;
 
 	
 //	@Autowired
@@ -161,8 +169,28 @@ public class CustomerController {
 	
 	@DeleteMapping("/remove-from-cart")
 	public ResponseEntity<?> removeProductFromCart(@PathVariable int cpId,Principal principal, MessageDto dto){
-		return null;
-		
+		try {
+			Optional<Cart> cart = cartRepository.getCartByUsername(principal.getName());
+			int n = cartProductRepository.deleteCartProductsByCart(cart.get());
+			if(n<1)	throw new Exception("No cartProduct deleted");
+			return ResponseEntity.ok(new String(""+n+" products deleted"));
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}		
+	}
+	
+	@DeleteMapping("/remove-from-order")
+	public ResponseEntity<?> removeProductFromOrder(@PathVariable int opId,Principal principal, MessageDto dto){
+		try {
+			Optional<Order> order = orderRepository.getOrderByUsername(principal.getName());
+			int n = orderProductRepository.deleteOrderProductsByOrder(order.get());
+			if(n<1)	throw new Exception("No cartProduct deleted");
+			return ResponseEntity.ok(new String(""+n+" products deleted"));
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}		
 	}
 	
 	
@@ -218,20 +246,20 @@ public class CustomerController {
 		return customerService.incrementProductCountInCart(cartProduct);
 	}
 	
-//	@PutMapping("/sub-count-in-cart")
-//	public ResponseEntity<?> subProductCountInCart(Principal principal,@RequestBody CartProduct cartProduct){
-//		return customerService.decrementProductCountInCart(cartProduct);
-//	}
-//	
-//	@PutMapping("/add-count-in-order")
-//	public ResponseEntity<?> addProductCountInOrder(Principal principal,@RequestBody CartProduct cartProduct){
-//		return customerService.incrementProductCountInOrder(cartProduct);
-//	}
-//	
-//	@PutMapping("/sub-count-in-order")
-//	public ResponseEntity<?> subProductCountInOrder(Principal principal,@RequestBody CartProduct cartProduct){
-//		return customerService.decrementProductCountInOrder(cartProduct);
-//	}
+	@PutMapping("/sub-count-in-cart")
+	public ResponseEntity<?> subProductCountInCart(Principal principal,@RequestBody CartProduct cartProduct){
+		return customerService.decrementProductCountInCart(cartProduct);
+	}
+	
+	@PutMapping("/add-count-in-order")
+	public ResponseEntity<?> addProductCountInOrder(Principal principal,@RequestBody OrderProduct orderProduct){
+		return customerService.incrementProductCountInOrder(orderProduct);
+	}
+	
+	@PutMapping("/sub-count-in-order")
+	public ResponseEntity<?> subProductCountInOrder(Principal principal,@RequestBody OrderProduct orderProduct){
+		return customerService.decrementProductCountInOrder(orderProduct);
+	}
 	
 	
 	

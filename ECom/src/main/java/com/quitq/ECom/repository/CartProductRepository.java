@@ -20,11 +20,17 @@ public interface CartProductRepository extends JpaRepository<CartProduct,Integer
 	@Transactional
 	@Modifying
 	@Query("delete from CartProduct cp where cp.cart = ?1")
-	void deleteCartProductsByCart(Cart cart);
+	int deleteCartProductsByCart(Cart cart);
 
 	
 	@Transactional
 	@Modifying
 	@Query("update CartProduct cp set cp.productQuantity = cp.productQuantity+1 where cp=?1")
 	int addProductCount(CartProduct cartProduct);
+
+	
+	@Transactional
+	@Modifying
+	@Query("update CartProduct cp set cp.productQuantity = cp.productQuantity-1 where cp=?1")
+	int subProductCount(CartProduct cartProduct);
 }

@@ -98,6 +98,17 @@ public class CustomerService {
 		}			
 	}
 	
+	public ResponseEntity<?> decrementProductCountInOrder(OrderProduct orderProduct) {
+		try {
+			int n = orderProductRepository.subProductCount(orderProduct);
+			if(n<1)	throw new Exception("No update happened");
+			Optional<OrderProduct> op = orderProductRepository.findById(orderProduct.getId());
+			return ResponseEntity.ok(op.get());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}			
+	}
+	
 
 	public ResponseEntity<?> incrementProductCountInOrder(OrderProduct orderProduct) {
 	try {
@@ -113,6 +124,17 @@ public class CustomerService {
 	public Customer getProfileDetails(String name) {
 		Customer customer = customerRepository.getCustomerByUsername(name);
 		return customer;
+	}
+
+	public ResponseEntity<?> decrementProductCountInCart(CartProduct cartProduct) {
+		try {
+			int n = cartProductRepository.subProductCount(cartProduct);
+			if(n<1)	throw new Exception("No update happened");
+			Optional<CartProduct> op = cartProductRepository.findById(cartProduct.getId());
+			return ResponseEntity.ok(op.get());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}		
 	}
 
 	

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.quitq.ECom.model.Exchange;
+import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Return;
@@ -50,6 +51,16 @@ List<Return> getReturnedOrder(String userName);
 @Query("select e from Exchange e join e.orderProduct op where op.product.v.user.username=?1")
 
 List<Exchange> getExchangedOrder(String userName);
+
+@Transactional
+@Modifying
+@Query("update OrderProduct op set op.quantity = op.quantity-1 where op=?1")
+int subProductCount(OrderProduct orderProduct);
+
+@Transactional
+@Modifying
+@Query("delete from OrderProduct op where op.order = ?1")
+int deleteOrderProductsByOrder(Order order);
 
 
 }
