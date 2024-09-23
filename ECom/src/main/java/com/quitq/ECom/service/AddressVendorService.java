@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quitq.ECom.config.Exception.InvalidIdException;
+import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.model.Address;
 import com.quitq.ECom.model.AddressVendor;
 import com.quitq.ECom.model.Vendor;

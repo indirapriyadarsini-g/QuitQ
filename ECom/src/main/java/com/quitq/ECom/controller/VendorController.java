@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quitq.ECom.config.Exception.InvalidIdException;
+import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.enums.RoleType;
 import com.quitq.ECom.model.UserInfo;

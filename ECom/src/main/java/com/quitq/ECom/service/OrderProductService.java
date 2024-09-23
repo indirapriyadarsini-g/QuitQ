@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quitq.ECom.config.Exception.InvalidIdException;
+import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MostOrderedProductDto;
 import com.quitq.ECom.dto.OrderProductDetailDto;
 import com.quitq.ECom.dto.ProductStatsDto;

@@ -1,4 +1,4 @@
-package com.quitq.ECom.config.Exception;
+package com.quitq.ECom.Exception;
 
 public class InvalidIdException extends Exception {
 	private String message;

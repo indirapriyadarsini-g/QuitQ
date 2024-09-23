@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.quitq.ECom.config.Exception.InvalidIdException;
+import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserInfoRepository;

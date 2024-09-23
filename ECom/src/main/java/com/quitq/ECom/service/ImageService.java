@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import com.quitq.ECom.config.Exception.InvalidIdException;
+import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.repository.ImageRepository;
