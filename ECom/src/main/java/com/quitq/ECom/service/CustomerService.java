@@ -2,6 +2,7 @@
 package com.quitq.ECom.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
-import com.quitq.ECom.model.Wishlist;
+import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
-import com.quitq.ECom.repository.WishlistRepository;
+import com.quitq.ECom.repository.WishlistProductRepository;
 
 @Service
 public class CustomerService {
@@ -34,36 +35,29 @@ public class CustomerService {
 	private CartRepository cartRepository;
 	
 	@Autowired
-	private WishlistRepository wishlistRepository;
+	private WishlistProductRepository wishlistProductRepository;
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
 
 	
 
-	public Boolean register(Customer customer) {
-		try{
-			customerRepository.save(customer);
-			return true;
-		}
-		catch(Exception e) {
-			return false;
-		}
-		
-		
+	public Customer register(Customer customer) {
+			return customerRepository.save(customer);
 	}
 
-	public Optional<Cart> getProductsFromCart(Customer customer) {
-		return cartRepository.getCartByCustomer(customer);
-	
-	}
-	
-	public Optional<Wishlist> getProductsFromWishlist(String username) {
+	public Optional<List<CartProduct>> getCartProductsByUsername(String username) {
 		Customer customer = customerRepository.getCustomerByUsername(username);
-		return wishlistRepository.getWishlistByCustomer(customer);
+		return cartProductRepository.getCartProductByCustomer(customer);
+	
+	}
+	
+	public Optional<List<WishlistProduct>> getWishlistProductByUsername(String username) {
+		Customer customer = customerRepository.getCustomerByUsername(username);
+		return wishlistProductRepository.getWishlistProductByCustomer(customer);
 	}
 
-	public Optional<Order> customerOrder(Customer customer,Cart cart) {
+	public Optional<Order> customerOrder(Cart cart) {
 		
 		Order order = new Order();
 		
@@ -83,8 +77,9 @@ public class CustomerService {
 		return Optional.of(order);
 	}
 
-	public Optional<Cart> getCartByCustomer(Customer customer) {
-		return cartRepository.getCartByCustomer(customer);
+	public Optional<List<CartProduct>> getCartProductByUsername(String username) {
+		Customer customer = customerRepository.getCustomerByUsername(username);
+		return cartProductRepository.getCartProductByCustomer(customer);
 	}
 
 	public ResponseEntity<?> incrementProductCountInCart(CartProduct cartProduct) {

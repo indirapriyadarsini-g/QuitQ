@@ -85,7 +85,7 @@ public class CustomerController {
 			cust.setName(customer.getName());
 			cust.setUserInfo(userInfo);
 			cust.getUserInfo().setRole(RoleType.CUSTOMER);
-			customerService.register(cust);
+			Customer c = customerService.register(cust);
 			
 			Cart cart = new Cart();
 			cart.setCustomer(cust);
@@ -93,33 +93,30 @@ public class CustomerController {
 			Wishlist wishlist = new Wishlist();
 			wishlist.setCustomer(cust);
 			
-			return ResponseEntity.ok(new String("Customer details registered"));
+			return ResponseEntity.ok(c);
 		} catch (Exception e) {
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
 		}
 	}
 	
+	@GetMapping("/view-my-profile")
+	public ResponseEntity<?> viewCustomerProfile(Principal principal,MessageDto dto){
+		Customer customer = customerService.getProfileDetails(principal.getName());
+		if(customer!=null) return ResponseEntity.ok(customer);
+		else return ResponseEntity.badRequest().body("Customer not registered");
+	}
+	
 	
 	@GetMapping("/view-my-cart")
 	public ResponseEntity<?> getProductsFromCart(Principal principal,MessageDto dto){
-		Optional<List<CartProduct>> cartProdrepo;
-		try {
-			Optional<Cart> cart = cartRepository.getCartByUsername(principal.getName());
-			cartProdrepo = cartProductRepository.getCartProductsByCart(cart.get());
-		} catch (Exception e) {
-			dto.setMsg(e.getMessage());
-			return ResponseEntity.badRequest().body(dto);
-		}
-		
-		if(cartProdrepo.isEmpty()) {
-			dto.setMsg("No products inside cart");
-			return ResponseEntity.badRequest().body(dto);
-		}
+			Optional<List<CartProduct>> cartProdList = customerService.getCartProductByUsername(principal.getName());
 
-		List<CartProduct> cpList = cartProdrepo.get();
-		return ResponseEntity.ok(cpList);
-		
+			if(cartProdList.isPresent()) return ResponseEntity.ok(cartProdList);
+		else {
+			dto.setMsg("No products inside the cart");
+			return ResponseEntity.badRequest().body(dto);
+		}
 		
 	}
 	
@@ -167,7 +164,7 @@ public class CustomerController {
 		
 	}
 	
-	@DeleteMapping("/remove-from-cart")
+	@DeleteMapping("/remove-from-cart/{cpId}")
 	public ResponseEntity<?> removeProductFromCart(@PathVariable int cpId,Principal principal, MessageDto dto){
 		try {
 			Optional<Cart> cart = cartRepository.getCartByUsername(principal.getName());
@@ -180,7 +177,7 @@ public class CustomerController {
 		}		
 	}
 	
-	@DeleteMapping("/remove-from-order")
+	@DeleteMapping("/remove-from-order/{opId}")
 	public ResponseEntity<?> removeProductFromOrder(@PathVariable int opId,Principal principal, MessageDto dto){
 		try {
 			Optional<Order> order = orderRepository.getOrderByUsername(principal.getName());
@@ -195,23 +192,15 @@ public class CustomerController {
 	
 	
 	@PostMapping("/add-to-wishlist/{pId}")
-	public ResponseEntity<?> addProductToWishlist(@PathVariable int pId,@RequestBody UserInfo user, MessageDto dto){
-		String username = user.getUsername();
+	public ResponseEntity<?> addProductToWishlist(@PathVariable int pId,Principal principal, MessageDto dto){
 		try{
-		Customer customer = customerRepository.getCustomerByUsername(username);
+		Customer customer = customerRepository.getCustomerByUsername(principal.getName());
 		Product product = productRepository.findById(pId).get();
 		
 		WishlistProduct wishlistProduct = new WishlistProduct();
 		
-		Wishlist wishlist;
-		Optional<Wishlist> wlopt = wishlistRepository.getWishlistByCustomer(customer);
-		if(wlopt.isEmpty()) {
-			wishlist = new Wishlist();
-			wishlist.setCustomer(customer);
-		}
-		else {
-			wishlist = wlopt.get();
-		}
+		Wishlist wishlist = wishlistRepository.getWishlistByCustomer(customer);
+		
 		
 		wishlistProduct.setWishlist(wishlist);
 		wishlistProduct.setProduct(product);
@@ -219,24 +208,25 @@ public class CustomerController {
 		double q = product.getQuantity();
 		if(q>1) product.setQuantity(q-1);
 		
+		return ResponseEntity.ok(wishlistProduct);
 		}catch(Exception e) {
 			dto.setMsg(e.getMessage());
-			ResponseEntity.badRequest().body(dto);
+			return ResponseEntity.badRequest().body(dto);
 		}
-		return ResponseEntity.ok("Product added to wishlist");
+		
 	}
 	
 	
-	@GetMapping("/my-wishlist")
+	@GetMapping("/view-my-wishlist")
 	public ResponseEntity<?> getProductsFromWishlist(Principal principal,MessageDto dto){
-			Optional<Wishlist> wishlist = customerService.getProductsFromWishlist(principal.getName());
-			if(!wishlist.isEmpty()) {
-				return ResponseEntity.ok(wishlist);
-			}
-			else {
-				dto.setMsg("Customer not registered");
-				return ResponseEntity.badRequest().body(dto);
-			}		
+		Optional<List<WishlistProduct>> wlProdList = customerService.getWishlistProductByUsername(principal.getName());
+
+		if(wlProdList.isPresent()) return ResponseEntity.ok(wlProdList);
+	else {
+		dto.setMsg("No products inside the wishlist");
+		return ResponseEntity.badRequest().body(dto);
+	}
+		
 	}
 	
 	
@@ -270,15 +260,13 @@ public class CustomerController {
 	@PostMapping("/order")
 	public ResponseEntity<?> customerOrder(Principal principal,MessageDto dto,OrderInvoiceDto orderDto){
 		
-		Customer customer;
 		Optional<Cart> cart;
 		Optional<List<CartProduct>> cartProdrepo;
 		try {
-			customer = customerRepository.getCustomerByUsername(principal.getName());
-			cart = cartRepository.getCartByCustomer(customer);
+			cart = cartRepository.getCartByUsername(principal.getName());
 			cartProdrepo = cartProductRepository.getCartProductsByCart(cart.get());
 			cart.get().setCartQuantity(cartProdrepo.get().size());
-			Optional<Order> order = customerService.customerOrder(customer,cart.get());
+			Optional<Order> order = customerService.customerOrder(cart.get());
 			
 			if(!order.isEmpty()) {
 				Order custOrder = order.get();
@@ -296,7 +284,7 @@ public class CustomerController {
 			dto.setMsg(e.getMessage());
 			ResponseEntity.badRequest().body(dto);
 		}
-		dto.setMsg("Not happening");
+		dto.setMsg("Not updating");
 		return ResponseEntity.badRequest().body(dto);
 	}
 	
@@ -314,6 +302,7 @@ public class CustomerController {
 			dto.setMsg("Product not available");
 			return ResponseEntity.badRequest().body(dto);
 		}
+		
 		
 //		warehouseManagerService.sendStockAlerts(product.get());
 		
@@ -343,7 +332,7 @@ public class CustomerController {
 		
 		order.setOrderFee(fee);
 		
-		return ResponseEntity.ok("Ordered successfully!");
+		return ResponseEntity.ok(order);
 	}
 }
 		

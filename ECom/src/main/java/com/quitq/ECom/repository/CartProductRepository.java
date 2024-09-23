@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
+import com.quitq.ECom.model.Customer;
 
 import jakarta.transaction.Transactional;
 
@@ -33,4 +34,8 @@ public interface CartProductRepository extends JpaRepository<CartProduct,Integer
 	@Modifying
 	@Query("update CartProduct cp set cp.productQuantity = cp.productQuantity-1 where cp=?1")
 	int subProductCount(CartProduct cartProduct);
+
+	
+	@Query("select cp from CartProduct cp join cp.cart c where c.customer = ?1")
+	Optional<List<CartProduct>> getCartProductByCustomer(Customer customer);
 }
