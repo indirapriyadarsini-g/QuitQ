@@ -58,7 +58,8 @@ public class CustomerService {
 	
 	}
 	
-	public Optional<Wishlist> getProductsFromWishlist(Customer customer) {
+	public Optional<Wishlist> getProductsFromWishlist(String username) {
+		Customer customer = customerRepository.getCustomerByUsername(username);
 		return wishlistRepository.getWishlistByCustomer(customer);
 	}
 
@@ -96,6 +97,7 @@ public class CustomerService {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}			
 	}
+	
 
 	public ResponseEntity<?> incrementProductCountInOrder(OrderProduct orderProduct) {
 	try {
@@ -107,6 +109,11 @@ public class CustomerService {
 		return ResponseEntity.badRequest().body(e.getMessage());
 	}			
 }
+
+	public Customer getProfileDetails(String name) {
+		Customer customer = customerRepository.getCustomerByUsername(name);
+		return customer;
+	}
 
 	
 	

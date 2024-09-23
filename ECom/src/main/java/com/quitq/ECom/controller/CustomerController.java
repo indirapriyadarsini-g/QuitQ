@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -120,39 +121,50 @@ public class CustomerController {
 		try{
 		Customer customer = customerRepository.getCustomerByUsername(username);
 		Product product = productRepository.findById(pId).get();
+		if(product.getQuantity()>1) {
+			CartProduct cartProduct = new CartProduct();
 		
-		CartProduct cartProduct = new CartProduct();
+			Cart cart;
+			Optional<Cart> cartopt = cartRepository.getCartByCustomer(customer);
+			if(cartopt.isEmpty()) {
+				cart = new Cart();
+				cart.setCustomer(customer);
+			}
+			else {
+				cart = cartopt.get();
+			}
 		
-		Cart cart;
-		Optional<Cart> cartopt = cartRepository.getCartByCustomer(customer);
-		if(cartopt.isEmpty()) {
-			cart = new Cart();
-			cart.setCustomer(customer);
-		}
+			cartProduct.setCart(cart);
+			cartProduct.setProduct(product);
+			cartProduct.setProductQuantity(1);
+			cartProduct.setStatus(StatusType.ACTIVE);
+			cartProduct.setAmountPayable(product.getPrice());
+		
+			cartProductRepository.save(cartProduct);
+		
+			product.setQuantity(product.getQuantity()-1);
+		
+			return ResponseEntity.ok(cartProduct);
+			}
 		else {
-			cart = cartopt.get();
+			dto.setMsg("Product not available");
+			return ResponseEntity.badRequest().body(dto);
 		}
-		
-		cartProduct.setCart(cart);
-		cartProduct.setProduct(product);
-		cartProduct.setProductQuantity(1);
-		cartProduct.setStatus(StatusType.ACTIVE);
-		cartProduct.setAmountPayable(product.getPrice());
-		
-		cartProductRepository.save(cartProduct);
-		
-		double q = product.getQuantity();
-		if(q>1) product.setQuantity(q-1);
-		
-		return ResponseEntity.ok(cartProduct);
 		
 		}catch(Exception e) {
 			dto.setMsg(e.getMessage());
-			ResponseEntity.badRequest().body(dto);
+			return ResponseEntity.badRequest().body(dto);
 		}
+		
+		
+	}
+	
+	@DeleteMapping("/remove-from-cart")
+	public ResponseEntity<?> removeProductFromCart(@PathVariable int cpId,Principal principal, MessageDto dto){
 		return null;
 		
 	}
+	
 	
 	@PostMapping("/add-to-wishlist/{pId}")
 	public ResponseEntity<?> addProductToWishlist(@PathVariable int pId,@RequestBody UserInfo user, MessageDto dto){
@@ -188,8 +200,8 @@ public class CustomerController {
 	
 	
 	@GetMapping("/my-wishlist")
-	public ResponseEntity<?> getProductsFromWishlist(@RequestBody Customer customer,MessageDto dto){
-			Optional<Wishlist> wishlist = customerService.getProductsFromWishlist(customer);
+	public ResponseEntity<?> getProductsFromWishlist(Principal principal,MessageDto dto){
+			Optional<Wishlist> wishlist = customerService.getProductsFromWishlist(principal.getName());
 			if(!wishlist.isEmpty()) {
 				return ResponseEntity.ok(wishlist);
 			}
