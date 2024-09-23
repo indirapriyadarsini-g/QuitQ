@@ -49,9 +49,8 @@ public class WarehouseController {
     }
     
     @PostMapping("/addp2w/{warehouseId}/products/{productId}")
-    public ResponseEntity<Product> addProductToWarehouse(@PathVariable int warehouseId,
-                                                          @PathVariable int productId) {
-      Product product = warehouseManagerService.addProductToWarehouse(warehouseId, productId);
+    public ResponseEntity<?> addProductToWarehouse(@PathVariable int warehouseId, @PathVariable int productId) {
+      ResponseEntity<?> product = warehouseManagerService.addProductToWarehouse(warehouseId, productId);
       if (product != null) {
         return ResponseEntity.ok(product);
       } else {
@@ -66,8 +65,8 @@ public class WarehouseController {
     }
     
     @GetMapping("/getstockbyname/{productName}/stock-quantity")
-    public ResponseEntity<Double> fetchStockQtyByProductName(@PathVariable String productName) {
-      Double quantity = warehouseManagerService.fetchStockQtyByProductName(productName);
+    public ResponseEntity<?> fetchStockQtyByProductName(@PathVariable String productName) {
+      ResponseEntity<?> quantity = warehouseManagerService.fetchStockQtyByProductName(productName);
       if (quantity != null) {
         return ResponseEntity.ok(quantity);
       } else {

@@ -1,8 +1,9 @@
 	package com.quitq.ECom.repository;
 	
 	import java.util.List;
-	
-	import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 	import org.springframework.data.jpa.repository.Query;
 	import org.springframework.stereotype.Repository;
 	
@@ -12,7 +13,7 @@
 	
 	@Repository
 	public interface WarehouseManagerRepository extends JpaRepository<WarehouseManager, Integer> {
-		WarehouseManager findByWarehouse(Warehouse warehouse);
+		WarehouseManager findByWarehouse(Optional<Warehouse> warehouse);
 	
 		@Query("SELECT p FROM Product p WHERE p NOT IN (SELECT w.products FROM Warehouse w WHERE w.id = ?1)")
 		List<Product> findProductsNotInWarehouse(Integer warehouseId);
@@ -27,7 +28,7 @@
 		List<Product> getIsZeroStock();
 	
 		@Query("SELECT p FROM Product p WHERE p.title = ?1")
-		Product findByName(String name);
+		Optional<Product> findByName(String name);
 	
 		@Query("SELECT p FROM Product p WHERE p.quantity < ?1")
 		List<Product> findByQuantityLessThan(Integer threshold);

@@ -1,5 +1,7 @@
 package com.quitq.ECom.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ public class WarehouseManagerController {
 
     @GetMapping("/getwmgr/{warehouseId}")
     public WarehouseManager getWarehouseManagerByWarehouseId(@PathVariable Integer id) {
-        Warehouse warehouse = warehouseService.getWarehouseById(id);
+        Optional<Warehouse> warehouse = warehouseService.getWarehouseById(id);
         return warehouseManagerService.getWarehouseManagerByWarehouse(warehouse);
     }
     @PostMapping("/createmgr")
