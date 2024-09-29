@@ -31,6 +31,7 @@ public class JwtUtil {
 	
 	// this method resolves a claim placed by UI developer while giving the token
 	// this claim must also be registered with overall claims class
+	//*PayLoad part conatins the actual data to be trasfereed using  token/
 	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         // extract the claims basis given token
 		final Claims claims = extractAllClaims(token);

@@ -74,6 +74,7 @@ public class ImageService {
 		 
 		 FileOutputStream fos;
 		try {
+			/*FileOutPut stream is an output stream for writing stream of raw bytes [bytes] into file with speicfied name*/
 			fos = new FileOutputStream("C:\\Users\\HUDA\\git\\repository_Ecom\\ECom\\src\\main\\resources\\static\\images\\" + fileName);
 			InputStream is= image.getInputStream();
             byte[] byt=new byte[is.available()];

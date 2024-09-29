@@ -90,6 +90,8 @@ public class SecurityConfig {
 
 
             		   .requestMatchers("/vendor/add").permitAll()
+            		   .requestMatchers("/auth/login").permitAll()
+
                        .requestMatchers("/auth/token").permitAll()
                        .requestMatchers("/auth/signup").permitAll()
                        .requestMatchers("/admin/hello").hasRole("ADMIN")
