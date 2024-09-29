@@ -1,25 +1,19 @@
-package com.quitq.ECom.model;
+package com.quitq.ECom.dto;
 
+import java.util.List;
 
+import com.quitq.ECom.model.Image;
+import com.quitq.ECom.model.Order;
+import com.quitq.ECom.model.OrderProduct;
+import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.Review;
 
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
-@Entity
-public class OrderProduct {
-	public OrderProduct() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+public class OrderProductDto {
+	
+	private int orderProdId;
 	
 	@ManyToOne
 	private Order order;
@@ -30,7 +24,6 @@ public class OrderProduct {
 	@OneToOne
 	private Review review;
 	
-	
 	private int quantity;
 	
 	private double totalAmount;
@@ -39,13 +32,16 @@ public class OrderProduct {
 	
 	private double amountPayable;
 	
-
-	public int getId() {
-		return id;
+	private List<Image> imList;
+	
+	
+	
+	public int getOrderProdId() {
+		return orderProdId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setOrderProdId(int orderProdId) {
+		this.orderProdId = orderProdId;
 	}
 
 	public Order getOrder() {
@@ -70,28 +66,6 @@ public class OrderProduct {
 
 	public void setReview(Review review) {
 		this.review = review;
-	}
-
-
-
-	public OrderProduct(int id, Order order, Product product, Review review, int quantity, double totalAmount,
-			double discount, double amountPayable) {
-		super();
-		this.id = id;
-		this.order = order;
-		this.product = product;
-		this.review = review;
-		this.quantity = quantity;
-		this.totalAmount = totalAmount;
-		this.discount = discount;
-		this.amountPayable = amountPayable;
-	}
-
-	@Override
-	public String toString() {
-		return "OrderProduct [id=" + id + ", order=" + order + ", product=" + product + ", review=" + review
-				+ ", quantity=" + quantity + ", totalAmount=" + totalAmount + ", discount=" + discount
-				+ ", amountPayable=" + amountPayable + "]";
 	}
 
 	public int getQuantity() {
@@ -126,10 +100,29 @@ public class OrderProduct {
 		this.amountPayable = amountPayable;
 	}
 
-	
+	public List<Image> getImList() {
+		return imList;
+	}
 
-	
+	public void setImList(List<Image> imList) {
+		this.imList = imList;
+	}
 
-	
+	public OrderProductDto() {
+		
+	}
+
+	public OrderProductDto(OrderProduct op, List<Image> imList) {
+		super();
+		this.orderProdId = op.getId();
+		this.order = op.getOrder();
+		this.product = op.getProduct();
+		this.review = op.getReview();
+		this.quantity = op.getQuantity();
+		this.totalAmount = op.getTotalAmount();
+		this.discount = op.getDiscount();
+		this.amountPayable = op.getAmountPayable();
+		this.imList = imList;
+	}
 	
 }

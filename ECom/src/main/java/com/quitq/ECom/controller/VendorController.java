@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
-import com.quitq.ECom.enums.RoleType;
+
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserInfoRepository;
@@ -38,7 +38,7 @@ public class VendorController {
 	public ResponseEntity<?> addVendor(@RequestBody Vendor v,MessageDto messageDto)
 	{
 		UserInfo userInfo=v.getUser();
-		userInfo.setRole(RoleType.VENDOR);
+		userInfo.setRole("ROLE_VENDOR");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
 		return ResponseEntity.ok(vendorService.addVendor(v));

@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.quitq.ECom.enums.RoleType;
+
 import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.repository.CustomerRepository;
@@ -32,7 +32,7 @@ public class CustomerTest {
 		UserInfo ui = new UserInfo();
 		ui.setId(1);
 		ui.setPassword("qwerty");
-		ui.setRole(RoleType.USER);
+		ui.setRole("ROLE_USER");
 		ui.setUsername("may");
 		
 		when(customerService.register(customer)).thenReturn(customer);

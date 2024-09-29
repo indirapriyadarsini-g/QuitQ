@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.quitq.ECom.enums.RoleType;
+
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.VendorRepository;
@@ -33,7 +33,7 @@ public class VendorTest {
 		v.setName("Harish");
 		UserInfo u=new UserInfo();
 		u.setId(1);
-		u.setRole(RoleType.VENDOR);
+		u.setRole("ROLE_VENDOR");
 		u.setPassword("12345");
 		u.setUsername("xyz@gmail.com");
 		v.setUser(u);
@@ -44,13 +44,13 @@ public class VendorTest {
 	public void getAllVendor()
 	{
 		List<Vendor> list=new ArrayList<>();
-		UserInfo u=new UserInfo(1,"xyz@gmail.com","1234",RoleType.VENDOR);
+		UserInfo u=new UserInfo(1,"xyz@gmail.com","1234","ROLE_VENDOR");
 		Vendor v=new Vendor(1,"xyz electroncs","Harish",u);
 		list.add(v);
-		 u=new UserInfo(2,"abc@gmail.com","1234",RoleType.VENDOR);
+		 u=new UserInfo(2,"abc@gmail.com","1234","ROLE_VENDOR");
 		 v=new Vendor(2,"abc electroncs","Ramesh",u);
 		 list.add(v);
-		 u=new UserInfo(3,"efg@gmail.com","1234",RoleType.VENDOR);
+		 u=new UserInfo(3,"efg@gmail.com","1234","ROLE_VENDOR");
 		 v=new Vendor(3,"efg electroncs","Ramesh",u);
 		 list.add(v);
 		 when(vendorService.getAll()).thenReturn(list);
@@ -60,7 +60,7 @@ public class VendorTest {
 	@Test
 	public void getVendorById()
 	{
-		UserInfo u=new UserInfo(1,"xyz@gmail.com","1234",RoleType.VENDOR);
+		UserInfo u=new UserInfo(1,"xyz@gmail.com","1234","ROLE_VENDOR");
 		Vendor v=new Vendor(1,"xyz electroncs","Harish",u);
 	
 		 when(vendorService.getVendorByUserId(1)).thenReturn(v);

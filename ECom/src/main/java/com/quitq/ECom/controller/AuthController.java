@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
-import com.quitq.ECom.enums.RoleType;
+
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.MyUserDetailsService;
@@ -52,7 +52,7 @@ public class AuthController {
     }
     @PostMapping("/auth/signup")
     public void signup(@RequestBody UserInfo userInfo) {
-    	userInfo.setRole(RoleType.CUSTOMER);
+    	userInfo.setRole("ROLE_USER");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
     }

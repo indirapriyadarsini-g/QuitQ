@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
 import com.quitq.ECom.enums.OrderStatus;
-import com.quitq.ECom.enums.RoleType;
+
 import com.quitq.ECom.enums.StatusType;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
@@ -84,7 +84,7 @@ public class CustomerController {
 			cust.setContact(customer.getContact());
 			cust.setName(customer.getName());
 			cust.setUserInfo(userInfo);
-			cust.getUserInfo().setRole(RoleType.CUSTOMER);
+			cust.getUserInfo().setRole("ROLE_CUSTOMER");
 			Customer c = customerService.register(cust);
 			
 			Cart cart = new Cart();

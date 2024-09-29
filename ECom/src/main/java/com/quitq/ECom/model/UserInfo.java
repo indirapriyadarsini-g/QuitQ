@@ -1,11 +1,9 @@
 package com.quitq.ECom.model;
 
-import com.quitq.ECom.enums.RoleType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,9 +22,9 @@ public class UserInfo {
 	
 	
 
-	private RoleType role;
+	private String role;
 
-	public UserInfo(int id, String username, String password, RoleType role) {
+	public UserInfo(int id, String username, String password, String role) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -34,11 +32,11 @@ public class UserInfo {
 		this.role = role;
 	}
 
-	public RoleType getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(RoleType role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
