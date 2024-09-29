@@ -33,8 +33,10 @@ public class SecurityConfig {
        http.csrf(AbstractHttpConfigurer::disable)
                .authorizeHttpRequests(auth -> auth
             		   .requestMatchers("/auth/token").permitAll() 
-            		   .requestMatchers("/error").permitAll()
+            		   .requestMatchers("/auth/login").permitAll()
             		   .requestMatchers("/auth/signup").permitAll()  
+
+            		   .requestMatchers("/error").permitAll()
             		   .requestMatchers("/customer/register-profile").permitAll()
             		   .requestMatchers("/customer/view-my-profile").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/view-my-cart").hasRole("CUSTOMER")		
@@ -51,7 +53,6 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/cart/refresh").hasRole("CUSTOMER")
             		   
             		   
-            		   .requestMatchers("/auth/login").permitAll()
                        .requestMatchers("/vendor/get/{id}").hasRole("VENDOR")
                        .requestMatchers("/vendor/getAll").hasRole("EXECUTIVE")
                        .requestMatchers("/vendor/delete").hasRole("VENDOR")

@@ -1,10 +1,13 @@
 package com.quitq.ECom.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +22,8 @@ import com.quitq.ECom.service.MyUserDetailsService;
 
 
 @RestController
+@CrossOrigin(origins={"http://localhost:4200"})
+
 public class AuthController {
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -47,7 +52,9 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         System.out.println(userDetails.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        dto.setMsg(jwt);
+        dto.setToken(jwt);
+        
+        
         return dto;
     }
     @PostMapping("/auth/signup")
@@ -68,6 +75,13 @@ public class AuthController {
     public String adminHello() {
         return "Hello, Admin!";
     }
+    @GetMapping("/auth/login")
+    public UserInfo login(Principal p) {
+    	String username=p.getName();
+    	UserInfo u=userRepository.getUserInfoByUsername(username);
+    	return u;
+    }
+ 
     
   
   
