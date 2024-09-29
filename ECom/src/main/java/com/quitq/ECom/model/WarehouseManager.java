@@ -19,6 +19,9 @@ public class WarehouseManager {
 	
 	@OneToOne
 	private UserInfo user;
+	
+	@OneToOne
+	private Warehouse warehouse;
 
 	public WarehouseManager(int id, String name, String contact, UserInfo user) {
 		super();

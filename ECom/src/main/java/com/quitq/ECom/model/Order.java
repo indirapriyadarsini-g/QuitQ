@@ -128,4 +128,19 @@ public class Order {
 	}
 	@OneToOne
 	private Cart cart;
+
+	public Order(int id, OrderStatus status, LocalDateTime orderPlacedTime, LocalDateTime orderDeliveredTime,
+			double orderAmount, double orderDiscount, double orderFee, Cart cart) {
+		super();
+		this.id = id;
+		this.status = status;
+		this.orderPlacedTime = orderPlacedTime;
+		this.orderDeliveredTime = orderDeliveredTime;
+		this.orderAmount = orderAmount;
+		this.orderDiscount = orderDiscount;
+		this.orderFee = orderFee;
+		this.cart = cart;
+	}
+	
+	
 }

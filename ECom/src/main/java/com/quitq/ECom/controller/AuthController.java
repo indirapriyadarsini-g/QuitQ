@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
-
+import com.quitq.ECom.dto.TokenDto;
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.MyUserDetailsService;
@@ -34,7 +34,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
     @PostMapping("/auth/token")
-    public String createAuthenticationToken(@RequestBody UserInfo authenticationRequest) throws Exception {
+    public TokenDto createAuthenticationToken(@RequestBody UserInfo authenticationRequest,TokenDto dto) throws Exception {
  
         try {
             authenticationManager.authenticate(
@@ -47,8 +47,8 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         System.out.println(userDetails.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
- 
-        return jwt;
+        dto.setMsg(jwt);
+        return dto;
     }
     @PostMapping("/auth/signup")
     public void signup(@RequestBody UserInfo userInfo) {

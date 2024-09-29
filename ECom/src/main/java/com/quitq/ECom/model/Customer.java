@@ -21,19 +21,19 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
-	private UserInfo user;
+	private UserInfo userInfo;
 
-	public Customer(int id, String name, String contact, UserInfo user) {
+	public Customer(int id, String name, String contact, UserInfo userInfo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.contact = contact;
-		this.user = user;
+		this.userInfo = userInfo;
 	}
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", user=" + user + "]";
+		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", user=" + userInfo + "]";
 	}
 
 	public int getId() {
@@ -61,11 +61,11 @@ public class Customer {
 	}
 
 	public UserInfo getUserInfo() {
-		return user;
+		return userInfo;
 	}
 
 	public void setUserInfo(UserInfo user) {
-		this.user = user;
+		this.userInfo = user;
 	}
 
 	public Customer() {

@@ -1,12 +1,12 @@
 package com.quitq.ECom.model;
 
-import jakarta.persistence.Entity;
+import java.util.List;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -24,7 +24,29 @@ public class Warehouse {
     
     private String city;
 
-    public String getCity() {
+    @OneToMany
+    private List<Product> product;
+    
+    public Warehouse(int id, String name, int capacity, String city, List<Product> product,
+			WarehouseManager warehouseManager) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.capacity = capacity;
+		this.city = city;
+		this.product = product;
+		this.warehouseManager = warehouseManager;
+	}
+
+	public List<Product> getProduct() {
+		return product;
+	}
+
+	public void setProduct(List<Product> product) {
+		this.product = product;
+	}
+
+	public String getCity() {
 		return city;
 	}
 

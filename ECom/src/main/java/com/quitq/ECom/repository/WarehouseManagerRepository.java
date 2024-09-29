@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 	public interface WarehouseManagerRepository extends JpaRepository<WarehouseManager, Integer> {
 		WarehouseManager findByWarehouse(Optional<Warehouse> warehouse);
 	
-		@Query("SELECT p FROM Product p WHERE p NOT IN (SELECT w.products FROM Warehouse w WHERE w.id = ?1)")
+		@Query("SELECT p FROM Product p WHERE p NOT IN (SELECT w.product FROM Warehouse w WHERE w.id = ?1)")
 		List<Product> findProductsNotInWarehouse(Integer warehouseId);
 	
 		@Query("SELECT p.quantity FROM Product p WHERE p.title = ?1")

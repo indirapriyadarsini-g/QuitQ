@@ -2,6 +2,7 @@
 package com.quitq.ECom.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,16 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.quitq.ECom.dto.CartProductDto;
+import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
+import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
+import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
-import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
+import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.WishlistProductRepository;
 
@@ -31,8 +36,9 @@ public class CustomerService {
 	@Autowired
 	private CartProductRepository cartProductRepository;
 	
+	
 	@Autowired
-	private CartRepository cartRepository;
+	private ImageRepository imageRepository;
 	
 	@Autowired
 	private WishlistProductRepository wishlistProductRepository;
@@ -47,8 +53,7 @@ public class CustomerService {
 	}
 
 	public Optional<List<CartProduct>> getCartProductsByUsername(String username) {
-		Customer customer = customerRepository.getCustomerByUsername(username);
-		return cartProductRepository.getCartProductByCustomer(customer);
+		return cartProductRepository.getCartProductByUsername(username);
 	
 	}
 	
@@ -78,8 +83,7 @@ public class CustomerService {
 	}
 
 	public Optional<List<CartProduct>> getCartProductByUsername(String username) {
-		Customer customer = customerRepository.getCustomerByUsername(username);
-		return cartProductRepository.getCartProductByCustomer(customer);
+		return cartProductRepository.getCartProductByUsername(username);
 	}
 
 	public ResponseEntity<?> incrementProductCountInCart(CartProduct cartProduct) {
@@ -130,6 +134,37 @@ public class CustomerService {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}		
+	}
+
+	public List<CartProductDto> getCartProductDtoByUsername(String name) {
+		List<CartProductDto> cartProdDtoList = new ArrayList<>();
+		List<CartProduct> cartProdList = cartProductRepository.getCartProductByUsername(name).get();
+		for(CartProduct cp: cartProdList) {
+			CartProductDto cpdto = new CartProductDto();
+			cpdto.setCartProduct(cp);
+			
+			Product prod = cartProductRepository.getProductByCartProduct(cp);
+			List<Image> imList = imageRepository.getImageByProduct(prod);
+			cpdto.setImList(imList);
+			cartProdDtoList.add(cpdto);
+		}
+		return cartProdDtoList;
+	}
+
+	public List<WishlistProductDto> getWishlistProductDtoByUsername(String name) {
+		List<WishlistProductDto> wishlistProdDtoList = new ArrayList<>();
+		List<WishlistProduct> wishlistProdList = wishlistProductRepository.getWishlistProductByUsername(name);
+		for(WishlistProduct wp:wishlistProdList) {
+			WishlistProductDto wlpdto = new WishlistProductDto();
+			wlpdto.setWishlistProduct(wp);
+			
+			Product prod = wishlistProductRepository.getProductByWishlistProduct(wp);
+			List<Image> imList = imageRepository.getImageByProduct(prod);
+			wlpdto.setImList(imList);
+			
+			wishlistProdDtoList.add(wlpdto);
+		}
+		return wishlistProdDtoList;
 	}
 
 	

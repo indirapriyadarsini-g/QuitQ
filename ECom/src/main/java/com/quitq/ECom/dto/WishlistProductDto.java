@@ -17,6 +17,10 @@ public class WishlistProductDto {
 		this.imList = imList;
 	}
 
+	public WishlistProductDto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public WishlistProduct getWishlistProduct() {
 		return wishlistProduct;
 	}

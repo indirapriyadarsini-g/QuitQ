@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
-import com.quitq.ECom.model.Customer;
+import com.quitq.ECom.model.Product;
 
 import jakarta.transaction.Transactional;
 
@@ -36,6 +36,11 @@ public interface CartProductRepository extends JpaRepository<CartProduct,Integer
 	int subProductCount(CartProduct cartProduct);
 
 	
-	@Query("select cp from CartProduct cp join cp.cart c where c.customer = ?1")
-	Optional<List<CartProduct>> getCartProductByCustomer(Customer customer);
+	
+	
+	@Query("select cp from CartProduct cp join cp.cart c join c.customer cust join cust.userInfo u where u.username = ?1")
+	Optional<List<CartProduct>> getCartProductByUsername(String username);
+
+	@Query("select p from CartProduct cp join cp.product p where cp = ?1")
+	Product getProductByCartProduct(CartProduct cp);
 }

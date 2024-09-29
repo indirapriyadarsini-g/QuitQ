@@ -5,6 +5,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quitq.ECom.dto.CartProductDto;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
+import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
-
 import com.quitq.ECom.enums.StatusType;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
@@ -45,6 +48,8 @@ import com.quitq.ECom.service.CustomerService;
 @RequestMapping("customer/")
 public class CustomerController {
 
+	private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+	
 	@Autowired
 	private CustomerService customerService;
 
@@ -92,9 +97,10 @@ public class CustomerController {
 			
 			Wishlist wishlist = new Wishlist();
 			wishlist.setCustomer(cust);
-			
+			logger.info("Profile Registered");
 			return ResponseEntity.ok(c);
 		} catch (Exception e) {
+			logger.warn(e.getMessage());
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
 		}
@@ -110,9 +116,11 @@ public class CustomerController {
 	
 	@GetMapping("/view-my-cart")
 	public ResponseEntity<?> getProductsFromCart(Principal principal,MessageDto dto){
-			Optional<List<CartProduct>> cartProdList = customerService.getCartProductByUsername(principal.getName());
-
-			if(cartProdList.isPresent()) return ResponseEntity.ok(cartProdList);
+		
+			List<CartProductDto> cartProdDtoList = customerService.getCartProductDtoByUsername(principal.getName());
+		
+//			Optional<List<CartProduct>> cartProdList = customerService.getCartProductByUsername(principal.getName());
+			if(cartProdDtoList!=null) return ResponseEntity.ok(cartProdDtoList);
 		else {
 			dto.setMsg("No products inside the cart");
 			return ResponseEntity.badRequest().body(dto);
@@ -149,9 +157,12 @@ public class CustomerController {
 		
 			product.setQuantity(product.getQuantity()-1);
 		
+			logger.info("Product added to cart");
+			
 			return ResponseEntity.ok(cartProduct);
 			}
 		else {
+			logger.warn("Product not available");
 			dto.setMsg("Product not available");
 			return ResponseEntity.badRequest().body(dto);
 		}
@@ -159,9 +170,7 @@ public class CustomerController {
 		}catch(Exception e) {
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
-		}
-		
-		
+		}		
 	}
 	
 	@DeleteMapping("/remove-from-cart/{cpId}")
@@ -170,8 +179,10 @@ public class CustomerController {
 			Optional<Cart> cart = cartRepository.getCartByUsername(principal.getName());
 			int n = cartProductRepository.deleteCartProductsByCart(cart.get());
 			if(n<1)	throw new Exception("No cartProduct deleted");
+			logger.info("Deleted");
 			return ResponseEntity.ok(new String(""+n+" products deleted"));
 		}catch(Exception e) {
+			logger.warn(e.getMessage());
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
 		}		
@@ -219,9 +230,11 @@ public class CustomerController {
 	
 	@GetMapping("/view-my-wishlist")
 	public ResponseEntity<?> getProductsFromWishlist(Principal principal,MessageDto dto){
-		Optional<List<WishlistProduct>> wlProdList = customerService.getWishlistProductByUsername(principal.getName());
+		List<WishlistProductDto> wlProdDtoList = customerService.getWishlistProductDtoByUsername(principal.getName());
+		
+//		Optional<List<WishlistProduct>> wlProdList = customerService.getWishlistProductByUsername(principal.getName());
 
-		if(wlProdList.isPresent()) return ResponseEntity.ok(wlProdList);
+		if(wlProdDtoList!=null) return ResponseEntity.ok(wlProdDtoList);
 	else {
 		dto.setMsg("No products inside the wishlist");
 		return ResponseEntity.badRequest().body(dto);
