@@ -96,6 +96,23 @@ public class SecurityConfig {
                .requestMatchers("/orderproduct/vendor/productStats/{month}").hasRole("VENDOR")
                .requestMatchers("/orderproduct/vendor/returnOrder").hasRole("VENDOR")
                .requestMatchers("/orderproduct/vendor/exchangeOrder").hasRole("VENDOR")
+
+               .requestMatchers("/warehouse-manager/getwmgr/{warehouseId}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse-manager/createmgr").permitAll()
+               .requestMatchers("/warehouse-manager/updatemgr/{id}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse-manager/deletemgr/{id}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/get/{city}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/addwh").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/updatewh/{id}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/deletewh/{id}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/addp2w/{warehouseId}/products/{productId}").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/getpnotinw/{warehouseId}/products/not-in").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/getstockbyname/{productName}/stock-quantity").hasRole("WAREHOUSEMANAGER")
+               .requestMatchers("/warehouse/zero-stock").hasRole("WAREHOUSEMANAGER")
+
+
+               
+
                .requestMatchers("/product/vendorName/{name}").permitAll()
 
 .requestMatchers("/product/category/{name}").permitAll()

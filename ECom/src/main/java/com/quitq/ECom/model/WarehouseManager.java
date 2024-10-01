@@ -18,7 +18,7 @@ public class WarehouseManager {
 	private String contact;
 	
 	@OneToOne
-	private UserInfo user;
+	private UserInfo userInfo;
 	
 	@OneToOne
 	private Warehouse warehouse;
@@ -28,10 +28,12 @@ public class WarehouseManager {
 		this.id = id;
 		this.name = name;
 		this.contact = contact;
-		this.user = user;
+		this.userInfo = userInfo;
 	}
 
-
+	public WarehouseManager(int id) {
+        this.id = id;
+    }
 	public int getId() {
 		return id;
 	}
@@ -55,13 +57,18 @@ public class WarehouseManager {
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
-
-	public UserInfo getUser() {
-		return user;
+	
+	public UserInfo getUserInfo() {
+		return userInfo;
 	}
 
-	public void setUser(UserInfo user) {
-		this.user = user;
+	public void setUserInfo(UserInfo user) {
+		this.userInfo = user;
+	}
+
+	public WarehouseManager() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 }
