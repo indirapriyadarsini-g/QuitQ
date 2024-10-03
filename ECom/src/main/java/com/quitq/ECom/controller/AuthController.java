@@ -59,7 +59,7 @@ public class AuthController {
     }
     @PostMapping("/auth/signup")
     public void signup(@RequestBody UserInfo userInfo) {
-    	userInfo.setRole("ROLE_USER");
+    	userInfo.setRole("ROLE_CUSTOMER");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
     }
