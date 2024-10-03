@@ -106,6 +106,18 @@ public class CustomerController {
 		}
 	}
 	
+	@GetMapping("/view-all-product")
+	public ResponseEntity<?> getAllProduct(MessageDto dto){
+		List<Product> prodList = customerService.getAllProduct();
+		if(prodList==null) {
+			dto.setMsg("No products available");
+			return ResponseEntity.badRequest().body(dto);
+		}
+		else {
+			return ResponseEntity.ok(prodList);
+		}
+	}
+	
 	@GetMapping("/view-my-profile")
 	public ResponseEntity<?> viewCustomerProfile(Principal principal,MessageDto dto){
 		Customer customer = customerService.getProfileDetails(principal.getName());

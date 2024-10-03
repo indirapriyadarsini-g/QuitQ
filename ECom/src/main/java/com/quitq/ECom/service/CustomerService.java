@@ -25,6 +25,7 @@ import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
+import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.WishlistProductRepository;
 
 @Service
@@ -36,6 +37,8 @@ public class CustomerService {
 	@Autowired
 	private CartProductRepository cartProductRepository;
 	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	@Autowired
 	private ImageRepository imageRepository;
@@ -165,6 +168,11 @@ public class CustomerService {
 			wishlistProdDtoList.add(wlpdto);
 		}
 		return wishlistProdDtoList;
+	}
+
+	public List<Product> getAllProduct() {
+		return productRepository.findAll();
+		
 	}
 
 	
