@@ -2,6 +2,7 @@ package com.quitq.ECom.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -61,6 +62,14 @@ int subProductCount(OrderProduct orderProduct);
 @Modifying
 @Query("delete from OrderProduct op where op.order = ?1")
 int deleteOrderProductsByOrder(Order order);
+
+@Query("select op from OrderProduct op where op.order = ?1")
+Optional<OrderProduct> getOrderProductByOrder(Order order);
+
+@Transactional
+@Modifying
+@Query("delete from OrderProduct op where op.id = ?1")
+int deleteOrderProductsByOrderId(int opId);
 
 
 }

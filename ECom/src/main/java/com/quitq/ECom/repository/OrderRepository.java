@@ -1,5 +1,6 @@
 package com.quitq.ECom.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,10 @@ import com.quitq.ECom.model.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Integer>{
 
+//	@Query("select o from Order o join o.cart c join c.customer cust join cust.userInfo u where u.username = ?1")
+//	Optional<Order> getOrderByUsername(String name);
+
 	@Query("select o from Order o join o.cart c join c.customer cust join cust.userInfo u where u.username = ?1")
-	Optional<Order> getOrderByUsername(String name);
+	Optional<List<Order>> getOrderByUsername(String name);
 
 }

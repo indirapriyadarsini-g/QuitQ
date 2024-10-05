@@ -25,6 +25,7 @@ import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
+import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.WishlistProductRepository;
 
@@ -45,6 +46,10 @@ public class CustomerService {
 	
 	@Autowired
 	private WishlistProductRepository wishlistProductRepository;
+	
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
@@ -173,6 +178,37 @@ public class CustomerService {
 	public List<Product> getAllProduct() {
 		return productRepository.findAll();
 		
+	}
+
+	public List<Order> getOrderList(String name) {
+		Optional<List<Order>> orderList = orderRepository.getOrderByUsername(name);
+		return orderList.get();
+	}
+
+	public OrderProduct getOrderProductDetails(Order order) {
+		// TODO Auto-generated method stub
+		Optional<OrderProduct> orderProduct = orderProductRepository.getOrderProductByOrder(order);
+		return orderProduct.get();
+	}
+
+	
+
+	public List<Product> searchProdByParam(String category, int minDiscount, String prodName,String includeOutOfStock) {
+		// TODO Auto-generated method stub
+		List<Product> prodList = productRepository.findAll();
+		if(!category.equals("none")) {
+			prodList = prodList.stream().filter(p-> p.getC().toString().equalsIgnoreCase(category)).toList();
+		}
+		if(minDiscount!=0) {
+			prodList = prodList.stream().filter(p-> p.getDiscount()>=minDiscount).toList();
+		}
+		if(!prodName.equals("none")) {
+			prodList = prodList.stream().filter(p-> p.getTitle().equalsIgnoreCase(prodName)).toList();
+		}
+		if(!includeOutOfStock.equals("no")) {
+			prodList = prodList.stream().filter(p-> p.getQuantity()>=0).toList();
+		}
+		return null;
 	}
 
 	
