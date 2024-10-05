@@ -38,6 +38,7 @@ public class SecurityConfig {
 
             		   .requestMatchers("/error").permitAll()
             		   .requestMatchers("/customer/register-profile").permitAll()
+            		   .requestMatchers("/customer/view-all-product").permitAll()
             		   .requestMatchers("/customer/view-my-profile").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/view-my-cart").hasRole("CUSTOMER")		
             		   .requestMatchers("/customer/view-my-wishlist").hasRole("CUSTOMER")	
