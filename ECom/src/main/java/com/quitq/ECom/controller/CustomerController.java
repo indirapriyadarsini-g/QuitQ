@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.CartProductDto;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
+import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
 import com.quitq.ECom.enums.StatusType;
@@ -37,7 +40,6 @@ import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
-import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.WishlistRepository;
@@ -45,6 +47,7 @@ import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
 
 @RestController
+@CrossOrigin(origins={"http://localhost:4200"})
 @RequestMapping("customer/")
 public class CustomerController {
 
@@ -71,8 +74,6 @@ public class CustomerController {
 	@Autowired
 	private WishlistRepository wishlistRepository;
 	
-	@Autowired
-	private OrderRepository orderRepository;
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
@@ -103,6 +104,18 @@ public class CustomerController {
 			logger.warn(e.getMessage());
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
+		}
+	}
+	
+	@GetMapping("/view-all-product")
+	public ResponseEntity<?> getAllProduct(MessageDto dto){
+		List<ProductWImageDto> prodList = customerService.getAllProduct();
+		if(prodList==null) {
+			dto.setMsg("No products available");
+			return ResponseEntity.badRequest().body(dto);
+		}
+		else {
+			return ResponseEntity.ok(prodList);
 		}
 	}
 	
@@ -189,10 +202,10 @@ public class CustomerController {
 	}
 	
 	@DeleteMapping("/remove-from-order/{opId}")
-	public ResponseEntity<?> removeProductFromOrder(@PathVariable int opId,Principal principal, MessageDto dto){
+	public ResponseEntity<?> removeProductFromOrder(@PathVariable int opId, MessageDto dto){
 		try {
-			Optional<Order> order = orderRepository.getOrderByUsername(principal.getName());
-			int n = orderProductRepository.deleteOrderProductsByOrder(order.get());
+//			Optional<OrderProduct> orderProduct = orderProductRepository.getOrderByUsername(principal.getName());
+			int n = orderProductRepository.deleteOrderProductsByOrderId(opId);
 			if(n<1)	throw new Exception("No cartProduct deleted");
 			return ResponseEntity.ok(new String(""+n+" products deleted"));
 		}catch(Exception e) {
@@ -347,7 +360,38 @@ public class CustomerController {
 		
 		return ResponseEntity.ok(order);
 	}
+	
+	@GetMapping("/view-my-order")
+	public ResponseEntity<?> viewOrderList(Principal principal, MessageDto dto){
+		List<Order> orderList = customerService.getOrderList(principal.getName());
+		if(orderList!=null) return ResponseEntity.ok(orderList);
+		dto.setMsg("No orders placed");
+		return ResponseEntity.badRequest().body(dto);
+	}
+	
+	@GetMapping("/view-order-details")
+	public ResponseEntity<?> viewOrderDetails(@RequestBody Order order,MessageDto dto){
+		OrderProduct orderProduct = customerService.getOrderProductDetails(order);
+		return ResponseEntity.ok(orderProduct);
+	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<?> searchProduct(
+			@RequestParam(defaultValue="none",required=false)String category,
+			@RequestParam(defaultValue="0",required = false) int minDiscount,
+			@RequestParam(defaultValue = "none", required = false) String prodName,
+			@RequestParam(defaultValue = "no", required = false) String includeOutOfStock			
+			){
+		List<Product> prodList = customerService.searchProdByParam(category,minDiscount,prodName,includeOutOfStock);
+		return ResponseEntity.ok(prodList);
+	}
+	
+	
+	
 }
+
+
+
 		
 //		Optional<OrderProduct> orderProduct = customerService.customerOrderProduct(customer,prodId);
 //		if(!orderProduct.isEmpty()) {

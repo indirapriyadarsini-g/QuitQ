@@ -2,6 +2,7 @@ package com.quitq.ECom.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +67,14 @@ int deleteOrderProductsByOrder(Order order);
 @Query("select p from OrderProduct op join op.product p where p.v.user.username=?1")
 
 Page<Product> findByUserNameAndPageAble(String userName, Pageable pageAble);
+
+@Query("select op from OrderProduct op where op.order = ?1")
+Optional<OrderProduct> getOrderProductByOrder(Order order);
+
+@Transactional
+@Modifying
+@Query("delete from OrderProduct op where op.id = ?1")
+int deleteOrderProductsByOrderId(int opId);
 
 
 }

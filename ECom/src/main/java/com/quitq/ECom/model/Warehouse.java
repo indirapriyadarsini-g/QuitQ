@@ -27,8 +27,7 @@ public class Warehouse {
     @OneToMany
     private List<Product> product;
     
-    public Warehouse(int id, String name, int capacity, String city, List<Product> product,
-			WarehouseManager warehouseManager) {
+    public Warehouse(int id, String name, int capacity, String city, List<Product> product,WarehouseManager warehouseManager) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -62,6 +61,8 @@ public class Warehouse {
 		this.city = city;
 		this.warehouseManager = warehouseManager;
 	}
+	public Warehouse() {
+    }
 
 	@OneToOne
     private WarehouseManager warehouseManager;
