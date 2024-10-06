@@ -15,8 +15,9 @@ public class UserInfo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id; 
 	
-	@Column(unique=true,nullable = false)
-	private String username;
+
+	@Column(nullable = false,unique = true)
+ 	private String username;
 	
 	@Column(nullable = false)
 	private String password; 
