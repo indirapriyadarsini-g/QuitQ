@@ -184,6 +184,8 @@ public class CustomerService {
 			pdto.setProduct(p);
 			List<Image> imList = imageRepository.getImageByProduct(p);
 			pdto.setImageList(imList);
+			
+			prodWImage.add(pdto);
 		}
 		return prodWImage;
 			

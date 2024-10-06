@@ -110,13 +110,14 @@ public class CustomerController {
 	@GetMapping("/view-all-product")
 	public ResponseEntity<?> getAllProduct(MessageDto dto){
 		List<ProductWImageDto> prodList = customerService.getAllProduct();
-		if(prodList==null) {
-			dto.setMsg("No products available");
-			return ResponseEntity.badRequest().body(dto);
-		}
-		else {
+//		System.out.println(prodList.get(0).getProduct().getTitle());
+//		if(prodList==null) {
+//			dto.setMsg("No products available");
+//			return ResponseEntity.badRequest().body(dto);
+//		}
+//		else {
 			return ResponseEntity.ok(prodList);
-		}
+//		}
 	}
 	
 	@GetMapping("/view-my-profile")
