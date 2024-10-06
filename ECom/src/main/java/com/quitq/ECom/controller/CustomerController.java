@@ -85,19 +85,14 @@ public class CustomerController {
 	@PostMapping("/register-profile")
 	public ResponseEntity<?> customerRegister(@RequestBody Customer customer,Principal principal, MessageDto dto){
 		try {
-			UserInfo userInfo = userRepository.getUserInfoByUsername(principal.getName());
-			Customer cust = new Customer();
+			
+			Customer cust = customerRepository.getCustomerByUsername(principal.getName());
 			cust.setContact(customer.getContact());
 			cust.setName(customer.getName());
-			cust.setUserInfo(userInfo);
 			cust.getUserInfo().setRole("ROLE_CUSTOMER");
 			Customer c = customerService.register(cust);
 			
-			Cart cart = new Cart();
-			cart.setCustomer(cust);
 			
-			Wishlist wishlist = new Wishlist();
-			wishlist.setCustomer(cust);
 			logger.info("Profile Registered");
 			return ResponseEntity.ok(c);
 		} catch (Exception e) {

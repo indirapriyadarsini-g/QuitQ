@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
 import com.quitq.ECom.dto.TokenDto;
-
+import com.quitq.ECom.model.Cart;
+import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.repository.UserInfoRepository;
-
 import com.quitq.ECom.service.MyUserDetailsService;
 
 
@@ -64,6 +65,12 @@ public class AuthController {
     	userInfo.setRole("ROLE_CUSTOMER");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
+    	Customer customer = new Customer();
+    	customer.setUserInfo(userInfo);
+    	Cart cart = new Cart();
+    	Wishlist wishlist = new Wishlist();
+    	cart.setCustomer(customer);
+    	wishlist.setCustomer(customer);    	
     }
    
     
