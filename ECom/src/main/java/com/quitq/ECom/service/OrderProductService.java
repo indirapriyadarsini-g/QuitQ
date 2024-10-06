@@ -16,6 +16,7 @@ import com.quitq.ECom.dto.OrderProductDetailDto;
 import com.quitq.ECom.dto.ProductStatsDto;
 import com.quitq.ECom.dto.TopSellingProductDto;
 import com.quitq.ECom.model.Exchange;
+import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Return;
 import com.quitq.ECom.repository.OrderProductRepository;
@@ -46,11 +47,11 @@ private OrderProductRepository orderProductRepository;
 			throw new InvalidIdException("No products have been unordered");
 		}
 		return product;	}
-	public List<OrderProductDetailDto> getOrderedProductDetails(String userName) throws InvalidIdException {
+	public List<OrderProduct> getOrderedProductDetails(String userName) throws InvalidIdException {
 		// TODO Auto-generated method stub
-		List<Object[]> obj=orderProductRepository.getOrderedProductDetails(userName);
+		List<OrderProduct> obj=orderProductRepository.getOrderedProductDetails(userName);
 		List<OrderProductDetailDto> list=new ArrayList<>();
-		for(Object o[]:obj)
+	/*	for(Object o[]:obj)
 		{
 			OrderProductDetailDto dto=new OrderProductDetailDto();
 			dto.setOrderId(Integer.parseInt(o[0].toString()));
@@ -68,11 +69,12 @@ private OrderProductRepository orderProductRepository;
 		if(list.isEmpty())
 		{
 			throw new InvalidIdException("No products ordered for details");
-		}
-		return list;
+		}*/
+		return obj;
 		
 	}
-	public List<OrderProductDetailDto> getOrderedProductDetailsFilterStatus(String userName, String status) throws InvalidIdException {
+	/*
+	public List<OrderProduct> getOrderedProductDetailsFilterStatus(String userName, String status) throws InvalidIdException {
 	List<OrderProductDetailDto> dto=this.getOrderedProductDetails(userName);
 	List<OrderProductDetailDto> streamList=dto.stream().filter(p->p.getOrderStatus().equalsIgnoreCase(status)).toList();
 	if(streamList.isEmpty())
@@ -90,7 +92,7 @@ private OrderProductRepository orderProductRepository;
 		}
 		return dto;
 		
-	}
+	}*/
 	public Integer getOrderedReciveByDate(String userName, String date) throws InvalidIdException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate dateTime = LocalDate.parse(date, formatter);

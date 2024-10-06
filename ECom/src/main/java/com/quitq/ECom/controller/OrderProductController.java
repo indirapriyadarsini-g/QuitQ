@@ -22,6 +22,7 @@ import com.quitq.ECom.dto.OrderProductDetailDto;
 import com.quitq.ECom.dto.ProductStatsDto;
 import com.quitq.ECom.dto.TopSellingProductDto;
 import com.quitq.ECom.model.Exchange;
+import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Return;
 import com.quitq.ECom.service.OrderProductService;
@@ -72,7 +73,7 @@ public class OrderProductController {
 	{
 		String userName=p.getName();
 		try {
-			List<OrderProductDetailDto> dto=orderProductService.getOrderedProductDetails(userName);
+			List<OrderProduct> dto=orderProductService.getOrderedProductDetails(userName);
 			return ResponseEntity.ok(dto);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +81,7 @@ public class OrderProductController {
 			messageDto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(messageDto);
 		}
-	}
+	}/*
 	@GetMapping("/vendor/product/details/{status}")
 	public ResponseEntity<?> getAllOrderedProductDetailsFilterStatus(@PathVariable String status,Principal p,MessageDto messageDto)
 	{
@@ -108,7 +109,7 @@ public class OrderProductController {
 			messageDto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(messageDto);
 		}
-	}
+	}*/
 	@GetMapping("/vendor/orderReceiveDate/{date}")
 	public ResponseEntity<?> getOrderedReceivedByDate(@PathVariable String date,Principal p,MessageDto messageDto)
 	{
