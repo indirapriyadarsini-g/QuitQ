@@ -29,7 +29,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct,Integ
 	List<Product> findByUserName(String userName);
 @Query("select p from Product p where p.id not in(select pro.id from OrderProduct op join op.product pro where pro.v.user.username=?1) and p.v.user.username=?1")
 List<Product> findByUsernameUnordered(String userName);
-@Query("select o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount from OrderProduct op join op.product p join op.order o where p.v.user.username=?1")
+@Query("select o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime from OrderProduct op join op.product p join op.order o where p.v.user.username=?1")
 List<Object[]> getOrderedProductDetails(String userName);
 @Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 group by month(o.orderPlacedTime)")
 Integer getNumberOfOrdersReceivedByMonth(String userName, int month);

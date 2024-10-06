@@ -62,6 +62,7 @@ private OrderProductRepository orderProductRepository;
 			dto.setTitle(o[6].toString());
 			dto.setPrice(Double.parseDouble(o[7].toString()));
 			dto.setDiscount(Double.parseDouble(o[8].toString()));
+			dto.setOrderPlacedTime(LocalDate.parse(o[9].toString().split("T")[0]));
 			list.add(dto);
 		}
 		if(list.isEmpty())
