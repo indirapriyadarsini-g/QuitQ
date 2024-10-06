@@ -57,7 +57,7 @@ public class ImageService {
 	        return image;
 	    }
 	    */
-	 public Image addImage(MultipartFile image,int pid,String usernme) throws InvalidIdException
+	 public Image addImage(MultipartFile image,int pid,String usernme,boolean status) throws InvalidIdException
 	 {
 		 List<Product> product=productRepository.findByVendorUsrname(usernme);
 		List<Product> stream=product.stream().filter(p->p.getId()==pid).toList();
@@ -75,6 +75,7 @@ public class ImageService {
 		 
 		 FileOutputStream fos;
 		try {
+			/*FileOutPut stream is an output stream for writing stream of raw bytes [bytes] into file with speicfied name*/
 			fos = new FileOutputStream("C:\\Users\\HUDA\\git\\repository_Ecom\\ECom\\src\\main\\resources\\static\\images\\" + fileName);
 			InputStream is= image.getInputStream();
             byte[] byt=new byte[is.available()];
@@ -92,7 +93,9 @@ public class ImageService {
 			e.printStackTrace();
 		}
 		
-		
+		if(status==true) {
+			img.setStatus("cover");
+		}
 
 		 
 		 	return imageRepository.save(img);

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.Exception.InvalidIdException;
@@ -22,9 +24,14 @@ import com.quitq.ECom.repository.OrderProductRepository;
 public class OrderProductService {
 @Autowired
 private OrderProductRepository orderProductRepository;
-	public List<Product> findAllOrderedProducts(String userName) throws InvalidIdException {
+	public Page<Product> findAllOrderedProducts(String userName, Pageable pageable) throws InvalidIdException {
 		// TODO Auto-generated method stub
-		List<Product> product=orderProductRepository.findByUserName(userName);
+		Page<Product> product=orderProductRepository.findByUserNameAndPageAble(userName,pageable);
+	
+		for(Product p:product) {
+			System.out.println(p.getTitle());
+	
+		}
 		if(product.isEmpty())
 		{
 			throw new InvalidIdException("No products have been ordered");

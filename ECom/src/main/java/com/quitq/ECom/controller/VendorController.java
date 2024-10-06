@@ -1,12 +1,12 @@
 package com.quitq.ECom.controller;
 
 import java.security.Principal;
-
-
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,13 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
-
+import com.quitq.ECom.enums.Category;
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.service.VendorService;
 
 @RestController
+@CrossOrigin(origins={"http://localhost:4200"})
+
 @RequestMapping("/vendor")
 public class VendorController {
 	@Autowired
@@ -51,19 +53,13 @@ public class VendorController {
 		return ResponseEntity.ok(vendorService.getAll());
 		
 	}
-	@GetMapping("/get/{id}")
-	public ResponseEntity<?> getVendor(@PathVariable int id,MessageDto messageDto)
+	@GetMapping("/get")
+	public ResponseEntity<?> getVendor(Principal p,MessageDto messageDto) throws InvalidIdException
 	{
 		
-		try {
-			Vendor v=vendorService.findById(id);
-			return ResponseEntity.ok(v);
-		} catch (InvalidIdException e) {
-			// TODO Auto-generated catch block
-			messageDto.setMsg(e.getMessage());
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(messageDto);
-		}
+		String username=p.getName();
+		Vendor v=vendorService.getVendorByUserName(username);
+		return ResponseEntity.ok(v);
 	}
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteVendor(Principal p,MessageDto messageDto)
@@ -94,6 +90,10 @@ public class VendorController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(messageDto);
 		}
+	}
+	@GetMapping("/getAllCategory")
+	public List<Category> getAllCategory(){
+		return List.of(Category.values());
 	}
 	/*
 	@GetMapping("/product/{id}")

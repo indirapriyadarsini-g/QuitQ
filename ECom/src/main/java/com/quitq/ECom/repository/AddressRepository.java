@@ -5,9 +5,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.quitq.ECom.model.Address;
-
+@Repository
 public interface AddressRepository extends JpaRepository<Address,Integer> {
 @Query(" select a from Address a where a.city=?1 and a.landmark=?2 and a.pincode=?3 and a.state=?4 and a.streetdetails=?5")
 	Optional<Address> findByAll(String city, String landmark, int pincode, String state, String streetdetails);

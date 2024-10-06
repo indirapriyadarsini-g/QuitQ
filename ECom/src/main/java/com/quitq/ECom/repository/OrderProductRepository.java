@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -62,6 +64,9 @@ int subProductCount(OrderProduct orderProduct);
 @Modifying
 @Query("delete from OrderProduct op where op.order = ?1")
 int deleteOrderProductsByOrder(Order order);
+@Query("select p from OrderProduct op join op.product p where p.v.user.username=?1")
+
+Page<Product> findByUserNameAndPageAble(String userName, Pageable pageAble);
 
 @Query("select op from OrderProduct op where op.order = ?1")
 Optional<OrderProduct> getOrderProductByOrder(Order order);

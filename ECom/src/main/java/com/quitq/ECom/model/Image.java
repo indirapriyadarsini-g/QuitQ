@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 
 @Entity
-@Builder
+
 public class Image{
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)

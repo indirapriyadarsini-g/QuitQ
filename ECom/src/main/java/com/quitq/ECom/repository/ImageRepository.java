@@ -14,7 +14,7 @@ import com.quitq.ECom.model.Product;
 @Repository
 public interface ImageRepository extends JpaRepository<Image,Integer> {
 	
-	
+	@Query("select i from Image i where i.imageName=?1")
 	
 	Optional<Image> findByImageName(String name);
 	
