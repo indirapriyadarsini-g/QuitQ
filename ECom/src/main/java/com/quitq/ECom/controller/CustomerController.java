@@ -142,12 +142,12 @@ public class CustomerController {
 		
 	}
 	
-	@PostMapping("/add-to-cart/{pId}")
-	public ResponseEntity<?> addProductToCart(@PathVariable int pId,Principal principal, MessageDto dto){
+	@PostMapping("/add-to-cart/")
+	public ResponseEntity<?> addProductToCart(@RequestBody Product product,Principal principal, MessageDto dto){
 		String username = principal.getName();
 		try{
 		Customer customer = customerRepository.getCustomerByUsername(username);
-		Product product = productRepository.findById(pId).get();
+//		Product product = productRepository.findById(pId).get();
 		if(product.getQuantity()>1) {
 			CartProduct cartProduct = new CartProduct();
 		
