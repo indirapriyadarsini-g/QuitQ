@@ -2,9 +2,9 @@
 package com.quitq.ECom.controller;
 
 import java.security.Principal;
-
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quitq.ECom.dto.CartProductDto;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
+import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
 import com.quitq.ECom.enums.StatusType;
@@ -108,7 +109,7 @@ public class CustomerController {
 	
 	@GetMapping("/view-all-product")
 	public ResponseEntity<?> getAllProduct(MessageDto dto){
-		List<Product> prodList = customerService.getAllProduct();
+		List<ProductWImageDto> prodList = customerService.getAllProduct();
 		if(prodList==null) {
 			dto.setMsg("No products available");
 			return ResponseEntity.badRequest().body(dto);

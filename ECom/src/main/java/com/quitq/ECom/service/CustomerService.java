@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.dto.CartProductDto;
+import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
 import com.quitq.ECom.model.Cart;
@@ -175,9 +176,17 @@ public class CustomerService {
 		return wishlistProdDtoList;
 	}
 
-	public List<Product> getAllProduct() {
-		return productRepository.findAll();
-		
+	public List<ProductWImageDto> getAllProduct() {
+		List<Product> prod = productRepository.findAll();
+		List<ProductWImageDto> prodWImage = new ArrayList<>();
+		for(Product p: prod) {
+			ProductWImageDto pdto = new ProductWImageDto();
+			pdto.setProduct(p);
+			List<Image> imList = imageRepository.getImageByProduct(p);
+			pdto.setImageList(imList);
+		}
+		return prodWImage;
+			
 	}
 
 	public List<Order> getOrderList(String name) {
