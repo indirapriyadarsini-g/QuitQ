@@ -22,7 +22,7 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="user")
+//	@PrimaryKeyJoinColumn(name="user")
 	private UserInfo userInfo;
 
 	public Customer(int id, String name, String contact, UserInfo userInfo) {
