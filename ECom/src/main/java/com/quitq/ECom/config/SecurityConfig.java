@@ -105,6 +105,8 @@ public class SecurityConfig {
 .requestMatchers("/product/category/{name}").permitAll()
 .requestMatchers("/review/getAll/{pid}").permitAll()
             		   .requestMatchers("/vendor/add").permitAll()
+            		   .requestMatchers("/auth/login").permitAll()
+
                        .requestMatchers("/auth/token").permitAll()
                        .requestMatchers("/auth/signup").permitAll()
                        .requestMatchers("/admin/hello").hasRole("ADMIN")

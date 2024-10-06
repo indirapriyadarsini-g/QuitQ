@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
 import com.quitq.ECom.dto.TokenDto;
+
 import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.repository.UserInfoRepository;
+
 import com.quitq.ECom.service.MyUserDetailsService;
 
 
@@ -38,6 +40,7 @@ public class AuthController {
  
     @Autowired
     private JwtUtil jwtUtil;
+   
     @PostMapping("/auth/token")
     public TokenDto createAuthenticationToken(@RequestBody UserInfo authenticationRequest,TokenDto dto) throws Exception {
  
@@ -52,9 +55,8 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         System.out.println(userDetails.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        dto.setToken(jwt);
-        
-        
+
+ dto.setToken(jwt);
         return dto;
     }
     @PostMapping("/auth/signup")
@@ -69,18 +71,19 @@ public class AuthController {
     public String userHello() {
         return "Hello, User!";
     }
- 
- 
-    @GetMapping("/admin/hello")
-    public String adminHello() {
-        return "Hello, Admin!";
-    }
     @GetMapping("/auth/login")
     public UserInfo login(Principal p) {
     	String username=p.getName();
     	UserInfo u=userRepository.getUserInfoByUsername(username);
     	return u;
     }
+ 
+ 
+    @GetMapping("/admin/hello")
+    public String adminHello() {
+        return "Hello, Admin!";
+    }
+   
  
     
   

@@ -32,6 +32,7 @@ import com.quitq.ECom.service.VendorService;
 @CrossOrigin(origins={"http://localhost:4200"})
 
 @RequestMapping("/product")
+
 public class ProductController {
 @Autowired
 ProductService productService;
