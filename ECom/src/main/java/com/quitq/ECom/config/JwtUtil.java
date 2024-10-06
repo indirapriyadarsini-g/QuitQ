@@ -23,6 +23,7 @@ public class JwtUtil {
     }
 	
 	
+	
 	// this method will set the expiry date of the token (usually 3 days) = 3 x 24 x 60 x 60
 	public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);

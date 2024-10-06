@@ -67,7 +67,6 @@ public class VendorService {
 		}
 		UserInfo user=optionalUser.get();
 		user.setUsername(v.getUser().getUsername());
-		user.setPassword(passwordEncoder.encode(v.getUser().getPassword()));
 		userRepository.save(user);
 
 		vendor.setUser(user);

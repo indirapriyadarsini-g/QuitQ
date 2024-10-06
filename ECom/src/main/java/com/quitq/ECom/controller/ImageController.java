@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,8 @@ import com.quitq.ECom.service.ImageService;
 
 @RestController
 @RequestMapping("/image")
+@CrossOrigin(origins={"http://localhost:4200"})
+
 public class ImageController {
 	@Autowired
 	ImageService imageService;
@@ -33,14 +36,14 @@ public class ImageController {
 	UserInfoRepository userRepository;
 	@Autowired
 	VendorRepository vendorRepository;
-	@PostMapping("/add/{id}")
-	public ResponseEntity<?> addImage(@RequestBody MultipartFile image,@PathVariable int id,Principal pr,MessageDto dto)
+	@PostMapping("/add/{id}/{status}")
+	public ResponseEntity<?> addImage(@RequestBody MultipartFile image,@PathVariable int id,@PathVariable boolean status,Principal pr,MessageDto dto)
 	{
 		String userName=pr.getName();
 		
 		Image imageSave;
 		try {
-			imageSave = imageService.addImage(image, id,userName);
+			imageSave = imageService.addImage(image, id,userName,status);
 
 			return ResponseEntity.ok(imageSave);
 
@@ -119,7 +122,7 @@ try {
 }
 	}
 	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateImage(@RequestBody MultipartFile image,
+	public ResponseEntity<?> updateImage(
 			@PathVariable int id,MessageDto dto,Principal pr)
 	{
 		String userName=pr.getName();

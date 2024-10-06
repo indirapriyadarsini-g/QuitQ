@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -87,7 +88,7 @@ public ResponseEntity<?> getProductById(@PathVariable int id,MessageDto messageD
 
 
 
-@DeleteMapping("/delete/v2/{id}")
+@DeleteMapping("/delete/{id}")
 public ResponseEntity<?> makeProductInactiveV2(Principal p,@PathVariable int id,MessageDto messageDto)
 {
 	/**/
@@ -160,13 +161,13 @@ public ResponseEntity<?> getCategorySoldByVendor(Principal p,MessageDto messageD
 	
 }
 @GetMapping("/vendor")
-public ResponseEntity<?> getProductByVendorName(Principal pr,MessageDto messageDto)
+public ResponseEntity<?> getProductByVendorName(@RequestParam(required=false,defaultValue="0")Integer page,@RequestParam(required=false,defaultValue="1000")Integer size,Principal pr,MessageDto messageDto)
 {
 	String username=pr.getName();
 	
 	try {
-
-		List<Product> p=productService.findByParticularVendorName(username);
+Pageable pageAble=PageRequest.of(page,size);
+		Page<Product> p=productService.findByParticularVendorName(username,pageAble);
 
 		return ResponseEntity.ok(p);
 	} catch (InvalidIdException e) {

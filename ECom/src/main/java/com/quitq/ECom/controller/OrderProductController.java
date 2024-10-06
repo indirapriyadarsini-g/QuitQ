@@ -4,10 +4,15 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.Exception.InvalidIdException;
@@ -23,15 +28,21 @@ import com.quitq.ECom.service.OrderProductService;
 
 @RestController
 @RequestMapping("/orderproduct")
+@CrossOrigin(origins={"http://localhost:4200"})
+
 public class OrderProductController {
 	@Autowired
 	OrderProductService orderProductService;
 	@GetMapping("/vendor/getAll")
-	public ResponseEntity<?> getAllOrderedProducts(Principal p,MessageDto messageDto)
+	public ResponseEntity<?> getAllOrderedProducts(Principal p,	@RequestParam(defaultValue = "0", required = false)Integer page, 
+			@RequestParam(defaultValue = "1000", required = false)Integer size,MessageDto messageDto
+			)
 	{
 		String userName=p.getName();
 	try {
-		List<Product> product=orderProductService.findAllOrderedProducts(userName);
+		Pageable pageable =PageRequest.of(page,size);
+
+		Page<Product> product=orderProductService.findAllOrderedProducts(userName,pageable);
 
 		return ResponseEntity.ok(product);
 	} catch (InvalidIdException e) {

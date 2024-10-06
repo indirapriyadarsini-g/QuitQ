@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,9 +121,9 @@ public class ProductService {
 	}
 
 
-	public List<Product> findByParticularVendorName(String username) throws InvalidIdException {
+	public Page<Product> findByParticularVendorName(String username, Pageable pageAble) throws InvalidIdException {
 		// TODO Auto-generated method stub
-		List<Product> p=productRepository.findByVendorUsrname(username);
+		Page<Product> p=productRepository.findByVendorUsrnameAndPage(username,pageAble);
 if(p.isEmpty())
 {
 	throw new InvalidIdException("You haven't added any product");

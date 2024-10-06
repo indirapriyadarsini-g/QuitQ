@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 
@@ -21,6 +22,7 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
+	@PrimaryKeyJoinColumn(name="user")
 	private UserInfo userInfo;
 
 	public Customer(int id, String name, String contact, UserInfo userInfo) {

@@ -57,7 +57,7 @@ public class ImageService {
 	        return image;
 	    }
 	    */
-	 public Image addImage(MultipartFile image,int pid,String usernme) throws InvalidIdException
+	 public Image addImage(MultipartFile image,int pid,String usernme,boolean status) throws InvalidIdException
 	 {
 		 List<Product> product=productRepository.findByVendorUsrname(usernme);
 		List<Product> stream=product.stream().filter(p->p.getId()==pid).toList();
@@ -92,7 +92,9 @@ public class ImageService {
 			e.printStackTrace();
 		}
 		
-		
+		if(status==true) {
+			img.setStatus("cover");
+		}
 
 		 
 		 	return imageRepository.save(img);
