@@ -21,7 +21,7 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="user")
+	
 	private UserInfo userInfo;
 	
 	
