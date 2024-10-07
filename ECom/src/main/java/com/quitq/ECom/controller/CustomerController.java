@@ -41,6 +41,7 @@ import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.ProductRepository;
+import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -220,10 +221,10 @@ public class CustomerController {
 	
 	
 	@PostMapping("/add-to-wishlist/{pId}")
-	public ResponseEntity<?> addProductToWishlist(@PathVariable int pId,Principal principal, MessageDto dto){
+	public ResponseEntity<?> addProductToWishlist(@RequestBody Product product,Principal principal, MessageDto dto){
 		try{
 		Customer customer = customerRepository.getCustomerByUsername(principal.getName());
-		Product product = productRepository.findById(pId).get();
+		
 		
 		WishlistProduct wishlistProduct = new WishlistProduct();
 		
