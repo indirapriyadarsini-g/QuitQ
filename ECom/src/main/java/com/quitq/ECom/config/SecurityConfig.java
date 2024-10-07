@@ -64,7 +64,7 @@ public class SecurityConfig {
                        .requestMatchers("/product/delete/{id}").permitAll()
                        .requestMatchers("/product/delete/v2/{id}").permitAll()
 
-                       .requestMatchers("/product/update/{id}").hasRole("VENDOR")
+                       .requestMatchers("/product/update/{id}").permitAll()
                        .requestMatchers("/product/vendor").permitAll()
                        .requestMatchers("/product/vendor/categorySold").hasRole("VENDOR")
                        .requestMatchers("/product/vendor/productName/{name}").hasRole("VENDOR")

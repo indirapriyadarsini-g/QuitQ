@@ -2,7 +2,7 @@ package com.quitq.ECom.enums;
 
 public enum Category {
 
-ELECTRONICS,
+ELECTRONIC,
 
 HOME,
 GROCERIES,
