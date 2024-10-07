@@ -216,16 +216,16 @@ public class CustomerService {
 	public List<Product> searchProdByParam(String category, int minDiscount, String prodName,String includeOutOfStock) {
 		// TODO Auto-generated method stub
 		List<Product> prodList = productRepository.findAll();
-		if(!category.equals("none")) {
+		if(!category.equals("none") && !category.equals("") && category!=null) {
 			prodList = prodList.stream().filter(p-> p.getC().toString().equalsIgnoreCase(category)).toList();
 		}
 		if(minDiscount!=0) {
 			prodList = prodList.stream().filter(p-> p.getDiscount()>=minDiscount).toList();
 		}
-		if(!prodName.equals("none")) {
+		if(!prodName.equals("none") && !prodName.equals("") && prodName!=null) {
 			prodList = prodList.stream().filter(p-> p.getTitle().equalsIgnoreCase(prodName)).toList();
 		}
-		if(!includeOutOfStock.equals("no")) {
+		if(!includeOutOfStock.equals("no") && !includeOutOfStock.equals("") && includeOutOfStock!=null) {
 			prodList = prodList.stream().filter(p-> p.getQuantity()>=0).toList();
 		}
 		return null;
