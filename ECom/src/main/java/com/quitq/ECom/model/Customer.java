@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 
@@ -24,6 +23,8 @@ public class Customer {
 	@OneToOne
 //	@PrimaryKeyJoinColumn(name="user")
 	private UserInfo userInfo;
+	
+	
 
 	public Customer(int id, String name, String contact, UserInfo userInfo) {
 		super();
@@ -31,11 +32,12 @@ public class Customer {
 		this.name = name;
 		this.contact = contact;
 		this.userInfo = userInfo;
-	}
+			}
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", user=" + userInfo + "]";
+		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", userInfo=" + userInfo
+				+  "]";
 	}
 
 	public int getId() {

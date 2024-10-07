@@ -27,13 +27,13 @@ import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
 import com.quitq.ECom.enums.StatusType;
+import com.quitq.ECom.model.Address;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
-import com.quitq.ECom.model.UserInfo;
 import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
@@ -41,7 +41,6 @@ import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.ProductRepository;
-import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -56,8 +55,6 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@Autowired
-	private UserInfoRepository userRepository;
 	
 	@Autowired
 	private ProductRepository productRepository;
@@ -146,16 +143,15 @@ public class CustomerController {
 		if(product.getQuantity()>1) {
 			CartProduct cartProduct = new CartProduct();
 		
-			Cart cart;
-			Optional<Cart> cartopt = cartRepository.getCartByCustomer(customer);
-			if(cartopt.isEmpty()) {
-				cart = new Cart();
-				cart.setCustomer(customer);
+			Cart cart = cartRepository.getCartByCustomer(customer);
+			
+			Optional<CartProduct> cpExisting = cartProductRepository.getCartProductByCartAndProduct(cart,product);
+			
+			if(cpExisting.isPresent()) {
+				dto.setMsg("Already exists in cart");
+				return ResponseEntity.badRequest().body(dto);
 			}
-			else {
-				cart = cartopt.get();
-			}
-		
+			
 			cartProduct.setCart(cart);
 			cartProduct.setProduct(product);
 			cartProduct.setProductQuantity(1);
@@ -164,6 +160,10 @@ public class CustomerController {
 		
 			cartProductRepository.save(cartProduct);
 		
+			cart.setCartQuantity(cart.getCartQuantity()+1);
+			cart.setCartTotal(cart.getCartTotal()+cartProduct.getAmountPayable());
+			cart.getProductList().add(cartProduct.getProduct());
+			cartRepository.save(cart);
 			product.setQuantity(product.getQuantity()-1);
 		
 			logger.info("Product added to cart");
@@ -182,14 +182,22 @@ public class CustomerController {
 		}		
 	}
 	
-	@DeleteMapping("/remove-from-cart/{cpId}")
-	public ResponseEntity<?> removeProductFromCart(@PathVariable int cpId,Principal principal, MessageDto dto){
+	@DeleteMapping("/remove-from-cart/{cpid}")
+	public ResponseEntity<?> removeProductFromCart(@PathVariable int cpid,Principal principal, MessageDto dto){
 		try {
-			Optional<Cart> cart = cartRepository.getCartByUsername(principal.getName());
-			int n = cartProductRepository.deleteCartProductsByCart(cart.get());
-			if(n<1)	throw new Exception("No cartProduct deleted");
+			Cart cart = cartRepository.getCartByUsername(principal.getName());
+			CartProduct cp = cartProductRepository.findById(cpid).get();
+			Cart toverify = cp.getCart();
+			if(cart == toverify) {
+			cartProductRepository.delete(cp);
+			cart.setCartQuantity(cart.getCartQuantity() - cp.getProductQuantity());
+			cart.setCartTotal(cart.getCartTotal() - cp.getAmountPayable());
+			cart.getProductList().remove(cp.getProduct());
+			cartRepository.save(cart);
+			}
 			logger.info("Deleted");
-			return ResponseEntity.ok(new String(""+n+" products deleted"));
+			dto.setMsg("Deleted");
+			return ResponseEntity.ok(dto);
 		}catch(Exception e) {
 			logger.warn(e.getMessage());
 			dto.setMsg(e.getMessage());
@@ -282,13 +290,13 @@ public class CustomerController {
 	@PostMapping("/order")
 	public ResponseEntity<?> customerOrder(Principal principal,MessageDto dto,OrderInvoiceDto orderDto){
 		
-		Optional<Cart> cart;
+		
 		Optional<List<CartProduct>> cartProdrepo;
 		try {
-			cart = cartRepository.getCartByUsername(principal.getName());
-			cartProdrepo = cartProductRepository.getCartProductsByCart(cart.get());
-			cart.get().setCartQuantity(cartProdrepo.get().size());
-			Optional<Order> order = customerService.customerOrder(cart.get());
+			Cart cart = cartRepository.getCartByUsername(principal.getName());
+			cartProdrepo = cartProductRepository.getCartProductsByCart(cart);
+			cart.setCartQuantity(cartProdrepo.get().size());
+			Optional<Order> order = customerService.customerOrder(cart);
 			
 			if(!order.isEmpty()) {
 				Order custOrder = order.get();
@@ -382,6 +390,33 @@ public class CustomerController {
 		return ResponseEntity.ok(prodList);
 	}
 	
+	@PostMapping("/add-address")
+	public ResponseEntity<?> addAddress(@RequestBody Address address, Principal principal, MessageDto dto){
+		try{
+			customerService.addAddressByUsername(address,principal.getName());
+			dto.setMsg("Address updated");
+			return ResponseEntity.ok(dto);
+		}
+		catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+		
+	}
+	
+	@GetMapping("/view-address")
+	public ResponseEntity<?> getAddress(Principal principal, MessageDto dto){
+		try{
+			List<Address> addressList = customerService.getAddressByUsername(principal.getName());
+			return ResponseEntity.ok(addressList);
+		}
+		catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+	}
 	
 	
 }

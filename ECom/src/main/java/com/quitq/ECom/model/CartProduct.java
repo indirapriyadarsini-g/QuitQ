@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -28,9 +29,9 @@ public class CartProduct {
 	@Enumerated(EnumType.STRING)
 	private StatusType status;
 	
-	@OneToOne
+	@ManyToOne
 	private Cart cart;
-	@OneToOne
+	@ManyToOne
 	private Product product;
 	public int getId() {
 		return id;

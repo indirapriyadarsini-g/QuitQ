@@ -14,15 +14,18 @@ import com.quitq.ECom.dto.CartProductDto;
 import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
+import com.quitq.ECom.model.Address;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
+import com.quitq.ECom.model.CustomerAddress;
 import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
+import com.quitq.ECom.repository.CustomerAddressRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
@@ -54,6 +57,9 @@ public class CustomerService {
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
+	
+	@Autowired
+	private CustomerAddressRepository customerAddressRepository;
 
 	
 
@@ -221,6 +227,22 @@ public class CustomerService {
 		}
 		return null;
 	}
+
+	public void addAddressByUsername(Address address, String name) {
+		// TODO Auto-generated method stub
+		CustomerAddress customerAddress = new CustomerAddress();
+		Customer customer = customerRepository.getCustomerByUsername(name);
+		customerAddress.setAddress(address);
+		customerAddress.setCustomer(customer);
+		customerAddressRepository.save(customerAddress);
+	}
+
+	public List<Address> getAddressByUsername(String name) {
+		// TODO Auto-generated method stub
+		return customerAddressRepository.getAddressByUsername(name);
+	}
+
+	
 
 	
 	
