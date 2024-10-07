@@ -23,6 +23,7 @@ import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.Review;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CustomerAddressRepository;
@@ -31,6 +32,7 @@ import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
+import com.quitq.ECom.repository.ReviewRepository;
 import com.quitq.ECom.repository.WishlistProductRepository;
 
 @Service
@@ -61,7 +63,8 @@ public class CustomerService {
 	@Autowired
 	private CustomerAddressRepository customerAddressRepository;
 
-	
+	@Autowired
+	private ReviewRepository reviewRepository;
 
 	public Customer register(Customer customer) {
 			return customerRepository.save(customer);
@@ -240,6 +243,20 @@ public class CustomerService {
 	public List<Address> getAddressByUsername(String name) {
 		// TODO Auto-generated method stub
 		return customerAddressRepository.getAddressByUsername(name);
+	}
+
+	public void addReview(int pId, Review review, String name) {
+		// TODO Auto-generated method stub
+		Product product = productRepository.findById(pId).get();
+		Customer customer = customerRepository.getCustomerByUsername(name);
+		review.setCustomer(customer);
+		review.setProduct(product);
+		reviewRepository.save(review);
+	}
+
+	public List<Review> getProductReviews(Product product) {
+		// TODO Auto-generated method stub
+		return reviewRepository.getReviewByProduct(product);
 	}
 
 	

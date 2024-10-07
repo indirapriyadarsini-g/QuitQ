@@ -45,7 +45,7 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/order-now/{pId}").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/order").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/add-to-cart").permitAll()
-            		   .requestMatchers("/customer/add-to-wishlist/{pId}").hasRole("CUSTOMER")	
+            		   .requestMatchers("/customer/add-to-wishlist").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/remove-from-order/{cpId}").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/add-count-in-cart/").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/sub-count-in-cart/").hasRole("CUSTOMER")
@@ -53,6 +53,8 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/sub-count-in-order/").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/cart/refresh").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/remove-from-cart/{cpid}").permitAll()
+            		   .requestMatchers("/customer/add-review/{pId}").permitAll()
+            		   .requestMatchers("/customer/view-product-reviews").permitAll()
             		   
             		   
                        .requestMatchers("/vendor/get").permitAll()

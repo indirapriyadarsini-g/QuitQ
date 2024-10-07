@@ -34,6 +34,7 @@ import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.Review;
 import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
@@ -41,7 +42,6 @@ import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.ProductRepository;
-import com.quitq.ECom.repository.UserInfoRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -75,6 +75,7 @@ public class CustomerController {
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
+	
 
 	
 //	@Autowired
@@ -417,6 +418,31 @@ public class CustomerController {
 			return ResponseEntity.badRequest().body(dto);
 		}
 		
+	}
+	
+	@PostMapping("/add-review/{pId}")
+	public ResponseEntity<?> addReview(@RequestBody Review review, @PathVariable int pId ,Principal principal, MessageDto dto){
+		try {
+			customerService.addReview(pId,review,principal.getName());
+			dto.setMsg("Review Added");
+			return ResponseEntity.ok(dto);
+		}
+		catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+	}
+	
+	@GetMapping("/view-product-reviews")
+	public ResponseEntity<?> viewProductReviews(@RequestBody Product product,MessageDto dto){
+		try {
+			List<Review> reviewList = customerService.getProductReviews(product);
+			return ResponseEntity.ok(reviewList);
+		}
+		catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
 	}
 	
 	
