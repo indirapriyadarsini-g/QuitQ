@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.CartProductDto;
@@ -34,7 +35,6 @@ import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Review;
-import com.quitq.ECom.model.SearchDto;
 import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
@@ -381,27 +381,27 @@ public class CustomerController {
 		return ResponseEntity.ok(orderProduct);
 	}
 	
-//	@GetMapping("/search")
-//	public ResponseEntity<?> searchProduct(
-//			@RequestParam(defaultValue="none",required=false)String category,
-//			@RequestParam(defaultValue="0",required = false) int minDiscount,
-//			@RequestParam(defaultValue = "none", required = false) String prodName,
-//			@RequestParam(defaultValue = "no", required = false) String includeOutOfStock			
-//			){
-//		List<Product> prodList = customerService.searchProdByParam(category,minDiscount,prodName,includeOutOfStock);
-//		return ResponseEntity.ok(prodList);
-//	}
-	
 	@GetMapping("/search")
-	public ResponseEntity<?> searchProduct(@RequestBody SearchDto search, MessageDto dto){
-		
-		List<Product> prodList = customerService.searchProdByParam(
-				search.getCategory(),
-				search.getMinDiscount(),
-				search.getProdName(),
-				search.getIncludeOutOfStock());
+	public ResponseEntity<?> searchProduct(
+			@RequestParam(defaultValue="none",required=false)String category,
+			@RequestParam(defaultValue="0",required = false) int minDiscount,
+			@RequestParam(defaultValue = "none", required = false) String prodName,
+			@RequestParam(defaultValue = "no", required = false) String includeOutOfStock			
+			){
+		List<Product> prodList = customerService.searchProdByParam(category,minDiscount,prodName,includeOutOfStock);
 		return ResponseEntity.ok(prodList);
 	}
+	
+//	@GetMapping("/search")
+//	public ResponseEntity<?> searchProduct(@RequestBody SearchDto search, MessageDto dto){
+//		
+//		List<Product> prodList = customerService.searchProdByParam(
+//				search.getCategory(),
+//				search.getMinDiscount(),
+//				search.getProdName(),
+//				search.getIncludeOutOfStock());
+//		return ResponseEntity.ok(prodList);
+//	}
 	
 	
 	
