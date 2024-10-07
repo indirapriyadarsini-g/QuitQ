@@ -187,6 +187,16 @@ if(p.isEmpty())
 		}
 		return p;
 	}
+	public List<Product> findInStockProuct(String username) throws InvalidIdException
+	{
+		List<Product> p=productRepository.findOutOfStockProduct(username,false);
+
+		if(p==null||p.isEmpty())
+		{
+			throw new InvalidIdException("No products out of stock");
+		}
+		return p;
+	}
 
 	public List<Product> getProductListByVendorUsername(String username,int pid) throws InvalidIdException {
 		// TODO Auto-generated method stub
@@ -253,6 +263,12 @@ if(p.isEmpty())
 		
 		
 		
+	}
+
+	public Product hardDelete(String username, int id) {
+Product p=productRepository.findById(id).get();
+p.setStatus("deleted");
+return productRepository.save(p);
 	}
 
 	

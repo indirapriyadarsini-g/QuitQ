@@ -242,7 +242,27 @@ public ResponseEntity<?> chanegVendorProductStatus(Principal pr,@PathVariable in
 	
 	
 }
+	@GetMapping("/vendor/product/inStock")
+	
+	public ResponseEntity<?> outInStockProduct(Principal pr,MessageDto messageDto)
+	{
+		String username=pr.getName();
+		
+		try {
+			List<Product> p=productService.findInStockProuct(username);
 
+			return ResponseEntity.ok(p);
+		} catch (InvalidIdException e) {
+			// TODO Auto-generated catch block
+			messageDto.setMsg(e.getMessage());
+			e.printStackTrace();
+
+			return ResponseEntity.badRequest().body(messageDto);
+
+		}
+
+
+}
 
 @GetMapping("/warehouse/{id}")
 public ResponseEntity<?> getProductByWarehouseIId(@PathVariable int id,MessageDto messageDto)
@@ -303,6 +323,13 @@ public ResponseEntity<?> uploadProductCsvFile(@RequestBody MultipartFile file,Pr
 		dto.setMsg(e.getMessage());
 		return ResponseEntity.badRequest().body(dto);
 	}
+}
+@DeleteMapping("/hardDelete/{id}")
+public ResponseEntity<?> hardDeleted(@PathVariable int id,Principal p,MessageDto dto) throws IOException
+{
+	String username=p.getName();
+	Product pro=productService.hardDelete(username,id);
+	return ResponseEntity.ok(pro);
 }
 
 

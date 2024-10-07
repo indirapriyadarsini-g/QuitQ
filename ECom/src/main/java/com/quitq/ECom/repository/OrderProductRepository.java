@@ -27,27 +27,27 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct,Integ
 	
 @Query("select p from OrderProduct op join op.product p where p.v.user.username=?1")
 	List<Product> findByUserName(String userName);
-@Query("select p from Product p where p.id not in(select pro.id from OrderProduct op join op.product pro where pro.v.user.username=?1) and p.v.user.username=?1")
+@Query("select p from Product p where p.id not in(select pro.id from OrderProduct op join op.product pro where pro.v.user.username=?1) and p.v.user.username=?1 and p.status!='deleted'")
 List<Product> findByUsernameUnordered(String userName);
 @Query("select op from OrderProduct op join op.product p join op.order o where p.v.user.username=?1")
 List<OrderProduct> getOrderedProductDetails(String userName);
-@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 group by month(o.orderPlacedTime)")
+@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
 Integer getNumberOfOrdersReceivedByMonth(String userName, int month);
-@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2 group by date(o.orderPlacedTime)")
+@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2  and p.status!='deleted' group by date(o.orderPlacedTime)")
 
 Integer getNumberOfOrdersReceivedByDate(String userName, LocalDate dateTime);
-@Query("select sum(op.quantity) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 group by month(o.orderPlacedTime)")
+@Query("select sum(op.quantity) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
 
 Integer noOfProductOrderedMonth(String userName, int month);
-@Query("select sum(op.quantity) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2 group by date(o.orderPlacedTime)")
+@Query("select sum(op.quantity) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2 and p.status!='deleted' group by date(o.orderPlacedTime)")
 
 Integer noOfProductOrderedDate(String userName, LocalDate dateTime);
 @Query("select p.id,p.title,p.price,p.discount,p.status,sum(op.quantity) from OrderProduct op join op.product p join op.order o where month(o.orderPlacedTime)=?2 and p.v.user.username=?1 group by op.product.id order by sum(op.quantity) desc limit 3 ")
 List<Object[]> getTopSellingProductOfMonth(String userName, int month);
-@Query("select p.id,p.title,p.price,p.discount,p.status,count(*) from OrderProduct op join op.product p join op.order o where month(o.orderPlacedTime)=?2 and p.v.user.username=?1 group by op.product.id order by count(*) desc  limit 3 ")
+@Query("select p.id,p.title,p.price,p.discount,p.status,count(*) from OrderProduct op join op.product p join op.order o where month(o.orderPlacedTime)=?2 and p.v.user.username=?1 and p.status!='deleted' group by op.product.id order by count(*) desc  limit 3 ")
 
 List<Object[]> getMostOrderedProductOfMonth(String userName, int month);
-@Query("select p.id,p.title,p.price,p.discount,p.status,sum(op.quantity),count(*),avg(r.stars) from OrderProduct op join op.product p join op.order o left join op.review r where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 group by op.product.id")
+@Query("select p.id,p.title,p.price,p.discount,p.status,sum(op.quantity),count(*),avg(r.stars) from OrderProduct op join op.product p join op.order o left join op.review r where p.v.user.username=?1 and p.status!='deleted' and month(o.orderPlacedTime)=?2 group by op.product.id")
 List<Object[]> productStas(String userName, int month);
 @Query("select r from Return r join r.orderProduct op where op.product.v.user.username=?1")
 List<Return> getReturnedOrder(String userName);
