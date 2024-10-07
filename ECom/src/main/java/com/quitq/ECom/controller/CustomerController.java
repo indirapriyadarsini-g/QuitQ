@@ -433,9 +433,10 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping("/view-product-reviews")
-	public ResponseEntity<?> viewProductReviews(@RequestBody Product product,MessageDto dto){
+	@GetMapping("/view-product-reviews/{pId}")
+	public ResponseEntity<?> viewProductReviews(@PathVariable int pId,MessageDto dto){
 		try {
+			Product product = productRepository.findById(pId).get();
 			List<Review> reviewList = customerService.getProductReviews(product);
 			return ResponseEntity.ok(reviewList);
 		}
