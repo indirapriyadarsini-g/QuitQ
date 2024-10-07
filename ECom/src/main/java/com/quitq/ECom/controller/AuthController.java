@@ -15,16 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.config.JwtUtil;
 import com.quitq.ECom.dto.TokenDto;
-
+import com.quitq.ECom.model.Cart;
+import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.Wishlist;
+import com.quitq.ECom.repository.CartRepository;
+import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.UserInfoRepository;
-
+import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.MyUserDetailsService;
 
 
 
-@RestController
 @CrossOrigin(origins={"http://localhost:4200"})
+@RestController
+
 
 public class AuthController {
 	@Autowired
@@ -34,6 +39,15 @@ public class AuthController {
     private MyUserDetailsService userDetailsService;
     @Autowired
 	private UserInfoRepository userRepository;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
+    
+    @Autowired 
+    private CartRepository cartRepository;
+    
+    @Autowired
+    private WishlistRepository wishlistRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -64,6 +78,15 @@ public class AuthController {
     	userInfo.setRole("ROLE_CUSTOMER");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
+    	Customer customer = new Customer();
+    	customer.setUserInfo(userInfo);
+    	customerRepository.save(customer);
+    	Cart cart = new Cart();
+    	Wishlist wishlist = new Wishlist();
+    	cart.setCustomer(customer);
+    	wishlist.setCustomer(customer); 
+    	cartRepository.save(cart);
+    	wishlistRepository.save(wishlist);
     }
    
     

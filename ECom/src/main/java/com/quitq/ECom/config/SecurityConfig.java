@@ -40,11 +40,11 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/register-profile").permitAll()
             		   .requestMatchers("/customer/view-all-product").permitAll()
             		   .requestMatchers("/customer/view-my-profile").hasRole("CUSTOMER")	
-            		   .requestMatchers("/customer/view-my-cart").hasRole("CUSTOMER")		
+            		   .requestMatchers("/customer/view-my-cart").permitAll()		
             		   .requestMatchers("/customer/view-my-wishlist").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/order-now/{pId}").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/order").hasRole("CUSTOMER")	
-            		   .requestMatchers("/customer/add-to-cart/{pId}").hasRole("CUSTOMER")	
+            		   .requestMatchers("/customer/add-to-cart").permitAll()
             		   .requestMatchers("/customer/add-to-wishlist/{pId}").hasRole("CUSTOMER")	
             		   .requestMatchers("/customer/remove-from-order/{cpId}").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/add-count-in-cart/").hasRole("CUSTOMER")
@@ -52,6 +52,7 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/add-count-in-order/").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/sub-count-in-order/").hasRole("CUSTOMER")
             		   .requestMatchers("/customer/cart/refresh").hasRole("CUSTOMER")
+            		   .requestMatchers("/customer/remove-from-cart/{cpid}").permitAll()
             		   
             		   
                        .requestMatchers("/vendor/get").permitAll()
