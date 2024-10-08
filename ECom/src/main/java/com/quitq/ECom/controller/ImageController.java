@@ -161,6 +161,13 @@ try {
 		
 		
 	}
+	@GetMapping("/getOneImage/{pid}")
+	public ResponseEntity<?> getOneImageOfProduct(@PathVariable int pid,Principal p){
+		String username=p.getName();
+		List<Image> i=imageService.getOneImageOfProduct(username,pid);
+		return ResponseEntity.ok(i);
+		
+	}
 	
 	
 

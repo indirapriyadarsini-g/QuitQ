@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/vendor/address")
+@CrossOrigin(origins={"http://localhost:4200"})
+
 public class VendorAddressController {
 	@Autowired
 	AddressVendorService addressVendorService;
@@ -65,20 +68,7 @@ public class VendorAddressController {
 			status="inactive";
 		}
 
-		Optional<Address> optionalAddress=addressService.findAll(address);
-		Address a;
-		if(optionalAddress.isEmpty())
-		{
-
-			
-			
-			a=addressService.saveAddress(temp);
-
-		}
-		else
-		{
-			a=optionalAddress.get();
-		}
+		Address a=addressService.saveAddress(temp);
 	try {
 		return ResponseEntity.ok(addressVendorService.add(a,v,status));
 
