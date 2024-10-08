@@ -114,6 +114,8 @@ public class CustomerController {
 //		}
 	}
 	
+	
+	
 	@GetMapping("/view-my-profile")
 	public ResponseEntity<?> viewCustomerProfile(Principal principal,MessageDto dto){
 		Customer customer = customerService.getProfileDetails(principal.getName());
