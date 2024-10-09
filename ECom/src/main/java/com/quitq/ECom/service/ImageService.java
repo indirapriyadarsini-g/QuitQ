@@ -94,6 +94,12 @@ public class ImageService {
 		}
 		
 		if(status==true) {
+			Optional<Image> i=imageRepository.getImageWithProductIdAndCover(img.getP().getId(),"cover");
+			if(i.isPresent())
+			{
+				i.get().setStatus("uncover");
+
+			}
 			img.setStatus("cover");
 		}
 
@@ -190,6 +196,11 @@ public void updateImage(int id, String userName) throws InvalidIdException {
 		
 	}
 	
+}
+public List<Image> getOneImageOfProduct(String username, int pid) {
+	// TODO Auto-generated method 
+List<Image> i=imageRepository.getOneImageOfProduct(username,pid);
+return i;
 }
 
 

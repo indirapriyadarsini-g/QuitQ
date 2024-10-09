@@ -47,6 +47,7 @@ public class AddressService {
 			dto.setLandmark(o[3].toString());
 			dto.setStreetdetails(o[4].toString());
 			dto.setPincode(Integer.parseInt(o[5].toString()));
+			dto.setAid(Integer.parseInt(o[6].toString()));
 			list.add(dto);
 		}
 		return list;
@@ -66,6 +67,7 @@ public class AddressService {
 			dto.setLandmark(o[3].toString());
 			dto.setStreetdetails(o[4].toString());
 			dto.setPincode(Integer.parseInt(o[5].toString()));
+			dto.setAid(Integer.parseInt(o[6].toString()));
 			list.add(dto);
 		}
 		return list;

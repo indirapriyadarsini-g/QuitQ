@@ -2,10 +2,6 @@ package com.quitq.ECom.service;
 
 import java.util.Optional;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +9,15 @@ import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.model.Address;
 import com.quitq.ECom.model.AddressVendor;
 import com.quitq.ECom.model.Vendor;
+import com.quitq.ECom.repository.AddressRepository;
 import com.quitq.ECom.repository.AddressVendorRepository;
 
 @Service
 public class AddressVendorService {
 	@Autowired
 	AddressVendorRepository addressVendorRepository;
+	@Autowired
+	AddressRepository addressRepository;
 @Autowired
 AddressService addressService;
 	public AddressVendor add(Address a,Vendor v,String status) throws InvalidIdException {
@@ -41,9 +40,12 @@ AddressService addressService;
 				}
 				else
 				{
+					AddressVendor addressVendor=addressVendorRepository.findByAddressIdAndVendorId(optionalAddress.get().getId(),v.getId()).get();
+					addressVendor.setStatus("inactive");
 					av.setVendor(v);
-					addressVendorRepository.save(av);
-					throw new InvalidIdException("you already have an active address make that address as inactive and than this address can be made active");
+					av.setStatus("active");
+					return addressVendorRepository.save(av);
+					
 				}
 
 			}
@@ -84,8 +86,10 @@ if(optionalAddress.isEmpty())
 }
 else
 {
-	throw new InvalidIdException("Already an adress is active");
-
+AddressVendor addressVendor=addressVendorRepository.findByAddressIdAndVendorId(optionalAddress.get().getId(),vid).get();
+addressVendor.setStatus("inactive");
+av.setStatus("active");
+addressVendorRepository.save(av);
 }
 		
 			
@@ -115,8 +119,14 @@ else
 		{
 			AddressVendor av=optional.get();
 			addressVendorRepository.deleteById(av.getId());
+			addressRepository.deleteById(av.getAddress().getId());
+
 		}
 
+	}
+	public void deleteAllAddress(int vid)
+	{
+	
 	}
 	
 	

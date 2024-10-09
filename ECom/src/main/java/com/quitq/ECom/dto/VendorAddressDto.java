@@ -6,6 +6,13 @@ public class VendorAddressDto {
 	private String landmark;
 	private int pincode;
 	private String status;
+	int aid;
+	public int getAid() {
+		return aid;
+	}
+	public void setAid(int aid) {
+		this.aid = aid;
+	}
 	public VendorAddressDto() {
 		super();
 		// TODO Auto-generated constructor stub
