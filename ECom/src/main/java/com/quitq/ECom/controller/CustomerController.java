@@ -138,7 +138,7 @@ public class CustomerController {
 		
 	}
 	
-	@PostMapping("/add-to-cart/")
+	@PostMapping("/add-to-cart")
 	public ResponseEntity<?> addProductToCart(@RequestBody Product product,Principal principal, MessageDto dto){
 		String username = principal.getName();
 		try{
