@@ -26,6 +26,7 @@ import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Review;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
+import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerAddressRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.ImageRepository;
@@ -53,6 +54,8 @@ public class CustomerService {
 	@Autowired
 	private WishlistProductRepository wishlistProductRepository;
 	
+	@Autowired
+	private CartRepository cartRepository;
 	
 	@Autowired
 	private OrderRepository orderRepository;
@@ -108,6 +111,12 @@ public class CustomerService {
 		try {
 			int n = cartProductRepository.addProductCount(cartProduct);
 			if(n<1)	throw new Exception("No update happened");
+			
+			Cart cart = cartProductRepository.getCartByCartProduct(cartProduct);
+			cart.setCartQuantity(cart.getCartQuantity()+1);
+			cart.setCartTotal(cart.getCartTotal()+cartProduct.getAmountPayable());
+			cartRepository.save(cart);
+			
 			Optional<CartProduct> cp = cartProductRepository.findById(cartProduct.getId());
 			return ResponseEntity.ok(cp.get());
 		} catch (Exception e) {
@@ -119,6 +128,12 @@ public class CustomerService {
 		try {
 			int n = orderProductRepository.subProductCount(orderProduct);
 			if(n<1)	throw new Exception("No update happened");
+			
+			Order order = orderProductRepository.getOrderByOrderProduct(orderProduct);
+			order.setOrderAmount(order.getOrderAmount()-orderProduct.getAmountPayable());
+			if(order.getOrderAmount()<500) order.setOrderFee(100);
+			orderRepository.save(order);
+			
 			Optional<OrderProduct> op = orderProductRepository.findById(orderProduct.getId());
 			return ResponseEntity.ok(op.get());
 		} catch (Exception e) {
@@ -131,6 +146,12 @@ public class CustomerService {
 	try {
 		int n = orderProductRepository.addProductCount(orderProduct);
 		if(n<1)	throw new Exception("No update happened");
+		
+		Order order = orderProductRepository.getOrderByOrderProduct(orderProduct);
+		order.setOrderAmount(order.getOrderAmount()+orderProduct.getAmountPayable());
+		if(order.getOrderAmount()>500) order.setOrderFee(0);
+		orderRepository.save(order);
+		
 		Optional<OrderProduct> op = orderProductRepository.findById(orderProduct.getId());
 		return ResponseEntity.ok(op.get());
 	} catch (Exception e) {
@@ -147,6 +168,12 @@ public class CustomerService {
 		try {
 			int n = cartProductRepository.subProductCount(cartProduct);
 			if(n<1)	throw new Exception("No update happened");
+			
+			Cart cart = cartProductRepository.getCartByCartProduct(cartProduct);
+			cart.setCartQuantity(cart.getCartQuantity()-1);
+			cart.setCartTotal(cart.getCartTotal()+cartProduct.getAmountPayable());
+			cartRepository.save(cart);
+			
 			Optional<CartProduct> op = cartProductRepository.findById(cartProduct.getId());
 			return ResponseEntity.ok(op.get());
 		} catch (Exception e) {

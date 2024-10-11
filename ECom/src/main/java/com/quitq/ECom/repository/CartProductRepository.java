@@ -46,4 +46,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct,Integer
 
 	@Query("select cp from CartProduct cp where cp.cart = ?1 and cp.product = ?2")
 	Optional<CartProduct> getCartProductByCartAndProduct(Cart cart,Product product);
+
+	@Query("select c from CartProduct cp join cp.cart c where cp = ?1")
+	Cart getCartByCartProduct(CartProduct cartProduct);
 }
