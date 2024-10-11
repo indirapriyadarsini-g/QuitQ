@@ -108,14 +108,7 @@ public class CustomerController {
 	@GetMapping("/view-all-product")
 	public ResponseEntity<?> getAllProduct(MessageDto dto){
 		List<ProductWImageDto> prodList = customerService.getAllProduct();
-//		System.out.println(prodList.get(0).getProduct().getTitle());
-//		if(prodList==null) {
-//			dto.setMsg("No products available");
-//			return ResponseEntity.badRequest().body(dto);
-//		}
-//		else {
 			return ResponseEntity.ok(prodList);
-//		}
 	}
 	
 	
@@ -132,8 +125,6 @@ public class CustomerController {
 	public ResponseEntity<?> getProductsFromCart(Principal principal,MessageDto dto){
 		
 			List<CartProductDto> cartProdDtoList = customerService.getCartProductDtoByUsername(principal.getName());
-		
-//			Optional<List<CartProduct>> cartProdList = customerService.getCartProductByUsername(principal.getName());
 			if(cartProdDtoList!=null) return ResponseEntity.ok(cartProdDtoList);
 		else {
 			dto.setMsg("No products inside the cart");
