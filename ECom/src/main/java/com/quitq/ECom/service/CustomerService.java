@@ -286,6 +286,11 @@ public class CustomerService {
 		return reviewRepository.getReviewByProduct(product);
 	}
 
+	public OrderProduct getOrderProductDetailsByOrderId(int oId) {
+		// TODO Auto-generated method stub
+		return orderProductRepository.getOrderProductByOrderId(oId);
+	}
+
 	
 
 	

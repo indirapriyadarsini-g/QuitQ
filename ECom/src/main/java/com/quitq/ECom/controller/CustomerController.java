@@ -372,9 +372,9 @@ public class CustomerController {
 		return ResponseEntity.badRequest().body(dto);
 	}
 	
-	@GetMapping("/view-order-details")
-	public ResponseEntity<?> viewOrderDetails(@RequestBody Order order,MessageDto dto){
-		OrderProduct orderProduct = customerService.getOrderProductDetails(order);
+	@GetMapping("/view-order-details/{oId}")
+	public ResponseEntity<?> viewOrderDetails(@PathVariable int oId,MessageDto dto){
+		OrderProduct orderProduct = customerService.getOrderProductDetailsByOrderId(oId);
 		return ResponseEntity.ok(orderProduct);
 	}
 	

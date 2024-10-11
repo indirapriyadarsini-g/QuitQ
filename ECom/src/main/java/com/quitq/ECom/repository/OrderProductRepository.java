@@ -79,6 +79,9 @@ int deleteOrderProductsByOrderId(int opId);
 @Query("select o from OrderProduct op join op.order o where op = ?1")
 Order getOrderByOrderProduct(OrderProduct orderProduct);
 
+@Query("select op from OrderProduct op where op.order.id = ?1")
+OrderProduct getOrderProductByOrderId(int oId);
+
 
 }
 /*o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime*/
