@@ -41,6 +41,7 @@ import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
+import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
@@ -77,6 +78,8 @@ public class CustomerController {
 	private OrderProductRepository orderProductRepository;
 	
 
+	@Autowired
+	private OrderRepository orderRepository;
 	
 //	@Autowired
 //	private WarehouseManagerService warehouseManagerService;
@@ -283,19 +286,25 @@ public class CustomerController {
 //	check prod availability
 	
 	@PostMapping("/order")
-	public ResponseEntity<?> customerOrder(Principal principal,MessageDto dto,OrderInvoiceDto orderDto){
-		
+	public ResponseEntity<?> customerOrder(@RequestBody String username,Principal principal, MessageDto dto,OrderInvoiceDto orderDto){
+		System.out.println("Inside ordering");
 		
 		Optional<List<CartProduct>> cartProdrepo;
 		try {
-			Cart cart = cartRepository.getCartByUsername(principal.getName());
+			System.out.println("Inside try");
+			Cart cart = cartRepository.getCartByUsername(username);
+			System.out.println("cart received");
 			cartProdrepo = cartProductRepository.getCartProductsByCart(cart);
+			System.out.println("cartprods received");
 			cart.setCartQuantity(cartProdrepo.get().size());
 			Optional<Order> order = customerService.customerOrder(cart);
 			
+			System.out.println("order done");
 			if(!order.isEmpty()) {
 				Order custOrder = order.get();
-				
+				orderRepository.save(custOrder);
+				System.out.println(custOrder.toString());
+				orderDto.setOrderId(custOrder.getId());
 				orderDto.setAmount(custOrder.getOrderAmount() - custOrder.getOrderDiscount() + custOrder.getOrderFee());
 				orderDto.setOrderId(custOrder.getId());
 				orderDto.setMsg("Order Placed");
@@ -307,10 +316,8 @@ public class CustomerController {
 			}
 		} catch (Exception e) {
 			dto.setMsg(e.getMessage());
-			ResponseEntity.badRequest().body(dto);
+			return ResponseEntity.badRequest().body(dto);
 		}
-		dto.setMsg("Not updating");
-		return ResponseEntity.badRequest().body(dto);
 	}
 	
 	@PostMapping("/order-now/{pId}")

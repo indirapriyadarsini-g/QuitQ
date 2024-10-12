@@ -97,9 +97,28 @@ public class CustomerService {
 		order.setOrderPlacedTime(LocalDateTime.now());
 		order.setStatus(OrderStatus.ORDERED);
 		
+		orderRepository.save(order);
+		
+		List<CartProduct> cpList = cartProductRepository.getCartProductsByCart(cart).get();
+		
+		for(CartProduct cp : cpList) {
+			OrderProduct op = new OrderProduct();
+			op.setProduct(cp.getProduct());
+			op.setAmountPayable(cp.getAmountPayable());
+			op.setDiscount(cp.getProductDiscount());
+			op.setOrder(order);
+			op.setQuantity(cp.getProductQuantity());
+			op.setTotalAmount(cp.getAmountPayable());
+			
+			orderProductRepository.save(op);
+		}
 
 		cartProductRepository.deleteCartProductsByCart(cart);
+		cart.setCartQuantity(0);
+		cart.setCartTotal(0);
+		cart.setProductList(null);
 		
+		cartRepository.save(cart);
 		return Optional.of(order);
 	}
 
