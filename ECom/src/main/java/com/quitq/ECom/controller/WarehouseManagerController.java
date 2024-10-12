@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.MessageDto;
-import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Warehouse;
 import com.quitq.ECom.model.WarehouseManager;
-import com.quitq.ECom.repository.UserInfoRepository;
+import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.service.WarehouseManagerService;
 import com.quitq.ECom.service.WarehouseService;
 
@@ -35,7 +35,7 @@ public class WarehouseManagerController {
     @Autowired
     private WarehouseService warehouseService;
     @Autowired
-	private UserInfoRepository userRepository;
+	private UserRepository userRepository;
 
 
     @GetMapping("/getwmgr/{warehouseId}")
@@ -46,7 +46,7 @@ public class WarehouseManagerController {
     @PostMapping("/createmgr")
     public ResponseEntity<?> createWarehouseManager(@RequestBody WarehouseManager warehouseManager, Principal principal, MessageDto dto) {
         try {
-            UserInfo userInfo = userRepository.getUserInfoByUsername(principal.getName());
+            User userInfo = userRepository.getUserByUsername(principal.getName());
             
             WarehouseManager mgr = new WarehouseManager();
             mgr.setContact(warehouseManager.getContact());

@@ -6,12 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name="user"
-		+ "")
-public class UserInfo {
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id; 
@@ -27,7 +24,7 @@ public class UserInfo {
 
 	private String role;
 
-	public UserInfo(int id, String username, String password, String role) {
+	public User(int id, String username, String password, String role) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -43,7 +40,7 @@ public class UserInfo {
 		this.role = role;
 	}
 
-	public UserInfo() {
+	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -77,7 +74,7 @@ public class UserInfo {
 
 	@Override
 	public String toString() {
-		return "UserInfo [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
 
 	

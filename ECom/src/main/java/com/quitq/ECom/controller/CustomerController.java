@@ -42,7 +42,6 @@ import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.ProductRepository;
-import com.quitq.ECom.repository.ReviewRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -73,9 +72,6 @@ public class CustomerController {
 	@Autowired
 	private WishlistRepository wishlistRepository;
 	
-	@Autowired
-	private ReviewRepository reviewRepository;
-	
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
@@ -92,7 +88,7 @@ public class CustomerController {
 			Customer cust = customerRepository.getCustomerByUsername(principal.getName());
 			cust.setContact(customer.getContact());
 			cust.setName(customer.getName());
-			cust.getUserInfo().setRole("ROLE_CUSTOMER");
+			cust.getUser().setRole("ROLE_CUSTOMER");
 			Customer c = customerService.register(cust);
 			
 			

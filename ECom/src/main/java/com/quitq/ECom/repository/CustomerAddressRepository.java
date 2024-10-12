@@ -10,7 +10,7 @@ import com.quitq.ECom.model.CustomerAddress;
 
 public interface CustomerAddressRepository extends JpaRepository<CustomerAddress,Integer>{
 
-	@Query("select ca.address from CustomerAddress ca join ca.customer c join c.userInfo u where u.username = ?1")
+	@Query("select ca.address from CustomerAddress ca join ca.customer c join c.user u where u.username = ?1")
 	List<Address> getAddressByUsername(String name);
 
 }

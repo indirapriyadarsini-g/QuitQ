@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import com.quitq.ECom.model.Customer;
-import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.service.CustomerService;
 
@@ -29,7 +29,7 @@ public class CustomerTest {
 		customer.setName("May");
 		customer.setContact("90909");
 		
-		UserInfo ui = new UserInfo();
+		User ui = new User();
 		ui.setId(1);
 		ui.setPassword("qwerty");
 		ui.setRole("ROLE_USER");

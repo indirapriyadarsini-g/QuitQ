@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.enums.Category;
-import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
-import com.quitq.ECom.repository.UserInfoRepository;
+import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.service.VendorService;
 
 @RestController
@@ -32,14 +31,14 @@ public class VendorController {
 	@Autowired
 	VendorService vendorService;
 	 @Autowired
-		private UserInfoRepository userRepository;
+		private UserRepository userRepository;
 		
 		@Autowired
 		private PasswordEncoder passwordEncoder;
 	@PostMapping("/add")
 	public ResponseEntity<?> addVendor(@RequestBody Vendor v,MessageDto messageDto)
 	{
-		UserInfo userInfo=v.getUser();
+		User userInfo=v.getUser();
 		userInfo.setRole("ROLE_VENDOR");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);

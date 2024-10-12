@@ -15,7 +15,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer>{
 //	@Query("select o from Order o join o.cart c join c.customer cust join cust.userInfo u where u.username = ?1")
 //	Optional<Order> getOrderByUsername(String name);
 
-	@Query("select o from Order o join o.cart c join c.customer cust join cust.userInfo u where u.username = ?1")
+	@Query("select o from Order o join o.cart c join c.customer cust join cust.user u where u.username = ?1")
 	Optional<List<Order>> getOrderByUsername(String name);
 
 }

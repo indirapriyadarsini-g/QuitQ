@@ -18,17 +18,17 @@ public class WarehouseManager {
 	private String contact;
 	
 	@OneToOne
-	private UserInfo userInfo;
+	private User user;
 	
 	@OneToOne
 	private Warehouse warehouse;
 
-	public WarehouseManager(int id, String name, String contact, UserInfo user) {
+	public WarehouseManager(int id, String name, String contact, User user) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.contact = contact;
-		this.userInfo = userInfo;
+		this.user = user;
 	}
 
 	public WarehouseManager(int id) {
@@ -58,12 +58,12 @@ public class WarehouseManager {
 		this.contact = contact;
 	}
 	
-	public UserInfo getUserInfo() {
-		return userInfo;
+	public User getUserInfo() {
+		return user;
 	}
 
-	public void setUserInfo(UserInfo user) {
-		this.userInfo = user;
+	public void setUserInfo(User user) {
+		this.user = user;
 	}
 
 	public WarehouseManager() {

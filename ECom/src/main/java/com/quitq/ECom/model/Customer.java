@@ -5,11 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+
 
 
 @Entity
-//@Table(name = "customer")
 public class Customer {
 
 	@Id
@@ -21,22 +20,21 @@ public class Customer {
 	private String contact;
 	
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="user")
-	private UserInfo userInfo;
+	private User user;
 	
 	
 
-	public Customer(int id, String name, String contact, UserInfo userInfo) {
+	public Customer(int id, String name, String contact, User userInfo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.contact = contact;
-		this.userInfo = userInfo;
+		this.user = userInfo;
 			}
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", userInfo=" + userInfo
+		return "Customer [id=" + id + ", name=" + name + ", contact=" + contact + ", user=" + user
 				+  "]";
 	}
 
@@ -64,12 +62,12 @@ public class Customer {
 		this.contact = contact;
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserInfo(UserInfo user) {
-		this.userInfo = user;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Customer() {

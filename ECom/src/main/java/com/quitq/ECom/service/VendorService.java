@@ -10,9 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.Exception.InvalidIdException;
-import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
-import com.quitq.ECom.repository.UserInfoRepository;
+import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.repository.VendorRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class VendorService {
 	VendorRepository vendorRepository;
 
 	@Autowired
-	UserInfoRepository userRepository;
+	UserRepository userRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	public Vendor addVendor(Vendor v)
@@ -60,12 +60,12 @@ public class VendorService {
 		
 		vendor.setBuisnessName(v.getBuisnessName());
 		vendor.setName(v.getName());
-		Optional<UserInfo> optionalUser=userRepository.findById(vendor.getUser().getId());
+		Optional<User> optionalUser=userRepository.findById(vendor.getUser().getId());
 		if(optionalUser.isEmpty())
 		{
 			throw new InvalidIdException("No user exist");
 		}
-		UserInfo user=optionalUser.get();
+		User user=optionalUser.get();
 		user.setUsername(v.getUser().getUsername());
 		userRepository.save(user);
 

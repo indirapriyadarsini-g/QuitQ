@@ -9,19 +9,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.quitq.ECom.model.UserInfo;
-import com.quitq.ECom.repository.UserInfoRepository;
+import com.quitq.ECom.model.User;
+import com.quitq.ECom.repository.UserRepository;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService{
 	
 	@Autowired
-	private UserInfoRepository userRepository; 
+	private UserRepository userRepository; 
 	
 
 	@Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfo userInfo = userRepository.getUserInfoByUsername(username);
+        User userInfo = userRepository.getUserByUsername(username);
                 
  
         return new org.springframework.security.core.userdetails.User(userInfo.getUsername(), userInfo.getPassword(),

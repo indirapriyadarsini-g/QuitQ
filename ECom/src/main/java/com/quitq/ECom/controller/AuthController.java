@@ -17,11 +17,11 @@ import com.quitq.ECom.config.JwtUtil;
 import com.quitq.ECom.dto.TokenDto;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.Customer;
-import com.quitq.ECom.model.UserInfo;
+import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
-import com.quitq.ECom.repository.UserInfoRepository;
+import com.quitq.ECom.repository.UserRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.MyUserDetailsService;
 
@@ -38,7 +38,7 @@ public class AuthController {
     @Autowired
     private MyUserDetailsService userDetailsService;
     @Autowired
-	private UserInfoRepository userRepository;
+	private UserRepository userRepository;
     
     @Autowired
     private CustomerRepository customerRepository;
@@ -56,7 +56,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
    
     @PostMapping("/auth/token")
-    public TokenDto createAuthenticationToken(@RequestBody UserInfo authenticationRequest,TokenDto dto) throws Exception {
+    public TokenDto createAuthenticationToken(@RequestBody User authenticationRequest,TokenDto dto) throws Exception {
  
         try {
             authenticationManager.authenticate(
@@ -69,17 +69,17 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         System.out.println(userDetails.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-
+        System.out.println(jwt);
  dto.setToken(jwt);
         return dto;
     }
     @PostMapping("/auth/signup")
-    public void signup(@RequestBody UserInfo userInfo) {
+    public void signup(@RequestBody User userInfo) {
     	userInfo.setRole("ROLE_CUSTOMER");
     	userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
     	userRepository.save(userInfo);
     	Customer customer = new Customer();
-    	customer.setUserInfo(userInfo);
+    	customer.setUser(userInfo);
     	customerRepository.save(customer);
     	Cart cart = new Cart();
     	Wishlist wishlist = new Wishlist();
@@ -95,9 +95,9 @@ public class AuthController {
         return "Hello, User!";
     }
     @GetMapping("/auth/login")
-    public UserInfo login(Principal p) {
+    public User login(Principal p) {
     	String username=p.getName();
-    	UserInfo u=userRepository.getUserInfoByUsername(username);
+    	User u=userRepository.getUserByUsername(username);
     	return u;
     }
  
