@@ -43,7 +43,7 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/view-my-cart").permitAll()		
             		   .requestMatchers("/customer/view-my-wishlist").permitAll()	
             		   .requestMatchers("/customer/order-now/{pId}").permitAll()		
-            		   .requestMatchers("/customer/order").permitAll()		
+            		   .requestMatchers("/customer/view-my-order").permitAll()		
             		   .requestMatchers("/customer/add-to-cart").permitAll()
             		   .requestMatchers("/customer/add-to-wishlist").permitAll()		
             		   .requestMatchers("/customer/remove-from-order/{cpId}").permitAll()	
