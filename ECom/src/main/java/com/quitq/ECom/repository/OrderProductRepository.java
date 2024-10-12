@@ -31,8 +31,8 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct,Integ
 List<Product> findByUsernameUnordered(String userName);
 @Query("select op from OrderProduct op join op.product p join op.order o where p.v.user.username=?1")
 List<OrderProduct> getOrderedProductDetails(String userName);
-@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
-Integer getNumberOfOrdersReceivedByMonth(String userName, int month);
+@Query("select month(o.orderPlacedTime),count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
+List<Object[]> getNumberOfOrdersReceivedByMonth(String userName, int month);
 @Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2  and p.status!='deleted' group by date(o.orderPlacedTime)")
 
 Integer getNumberOfOrdersReceivedByDate(String userName, LocalDate dateTime);
@@ -81,7 +81,24 @@ Order getOrderByOrderProduct(OrderProduct orderProduct);
 
 @Query("select op from OrderProduct op where op.order.id = ?1")
 OrderProduct getOrderProductByOrderId(int oId);
+@Query("select o.status,count(*) from OrderProduct op join op.order o where op.id not in(select op.id from Return r join r.orderProduct op where year(r.returnInitiatedDate)=2024) and op.id not in (select op.id from Exchange e join e.orderProduct op where year(e.exchangeInitiatedDate)=2024) and year(o.orderPlacedTime)=2024 and op.product.v.user.username=?1 group by o.status")
+List<Object[]> getOrderProductStats(String username);
+@Query("select count(*) from Return r join r.orderProduct op where year(r.returnInitiatedDate)=2024 and op.product.v.user.username=?1")
+List<Object[]> getReturnProductStats(String username);
+@Query("select count(*) from Exchange e join e.orderProduct op where year(e.exchangeInitiatedDate)=2024 and op.product.v.user.username=?1")
+List<Object[]> getExchangeProductStats(String username);
+@Query("select o.status,count(*) from OrderProduct op join op.order o where op.id not in(select op.id from Return r join r.orderProduct op where month(r.returnInitiatedDate)=9) and op.id not in (select op.id from Exchange e join e.orderProduct op where month(e.exchangeInitiatedDate)=9) and month(o.orderPlacedTime)=9 and op.product.v.user.username=?1 group by o.status")
 
+List<Object[]> getOrderProductStatsMonth(String username);
+@Query("select count(*) from Return r join r.orderProduct op where month(r.returnInitiatedDate)=9 and op.product.v.user.username=?1")
+List<Object[]> getReturnProductStatsMonth(String username);
+@Query("select count(*) from Exchange e join e.orderProduct op where month(e.exchangeInitiatedDate)=9 and op.product.v.user.username=?1")
+List<Object[]> getExchangeProductStatsMonth(String username);
+/*
+@Query("select o.status,count(*) from OrderProduct op join op.order o where op.id not in(select op.id from Return r join r.orderProduct op where r.returnInitiatedDate>=?1 and r.returnInitiatedDate<=?2) and op.id not in (select op.id from Exchange e join e.orderProduct op where e.exchangeInitiatedDate>=?1 and e.exchangeInitiatedDate<=?2) and o.orderPlacedTime>=?1 and o.orderPlacedTime<=?2 and op.product.v.user.username=?1 group by o.status")
+
+List<Object[]> getOrderProductStatsWeek(String username,String fromDate, String toDate);
+*/
 
 }
 /*o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime*/

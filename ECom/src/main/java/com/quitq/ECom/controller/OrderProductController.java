@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.MostOrderedProductDto;
-import com.quitq.ECom.dto.OrderProductDetailDto;
+import com.quitq.ECom.dto.OrderProductStatsDto;
 import com.quitq.ECom.dto.ProductStatsDto;
 import com.quitq.ECom.dto.TopSellingProductDto;
 import com.quitq.ECom.model.Exchange;
@@ -224,6 +224,24 @@ public class OrderProductController {
 			return ResponseEntity.badRequest().body(dto);
 		}
 		
+	}
+	@GetMapping("/vendor/orderProductStats")
+	public List<OrderProductStatsDto> getOrderProductStats(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.orderProductStats(username);
+		return dto;
+	}
+	@GetMapping("/vendor/orderProductStats/month")
+	public List<OrderProductStatsDto> getOrderProductStatsMonth(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.orderProductStatsMonth(username);
+		return dto;
+	}
+	@GetMapping("/vendor/orderProductStats/{fromDate}/{toDate}")
+	public List<OrderProductStatsDto> getOrderProductStatsDto(Principal p,@PathVariable String fromDate,@PathVariable String toDate){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.orderProductStatsWeek(username,fromDate,toDate);
+		return dto;
 	}
 	
 	
