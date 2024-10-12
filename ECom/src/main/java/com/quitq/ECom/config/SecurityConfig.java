@@ -71,7 +71,7 @@ public class SecurityConfig {
 
                        .requestMatchers("/product/update/{id}").permitAll()
                        .requestMatchers("/product/vendor").permitAll()
-                       .requestMatchers("/product/vendor/categorySold").hasRole("VENDOR")
+                       .requestMatchers("/product/vendor/categorySold").permitAll()
                        .requestMatchers("/product/vendor/productName/{name}").hasRole("VENDOR")
                        .requestMatchers("/product/vendor/addAll/upload").hasRole("VENDOR")
                        .requestMatchers("/product/vendor/orderBy/{order}/asc").hasRole("VENDOR")

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MostOrderedProductDto;
 import com.quitq.ECom.dto.OrderProductDetailDto;
+import com.quitq.ECom.dto.OrderProductStatsDto;
 import com.quitq.ECom.dto.ProductStatsDto;
 import com.quitq.ECom.dto.TopSellingProductDto;
 import com.quitq.ECom.model.Exchange;
@@ -215,5 +216,101 @@ private OrderProductRepository orderProductRepository;
 		}
 		return exchangeList;
 	}
+	public List<OrderProductStatsDto> orderProductStats(String username){
+		List<Object[]> obj=orderProductRepository.getOrderProductStats(username);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		 obj=orderProductRepository.getReturnProductStats(username);
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus("Returned");
+			dto.setNumber(Integer.parseInt(o[0].toString()));
+			list.add(dto);
+			
+		}	
+		 obj=orderProductRepository.getExchangeProductStats(username);
+			for(Object o[]:obj) {
+				OrderProductStatsDto dto=new OrderProductStatsDto();
+				dto.setStatus("Exchanged");
+				dto.setNumber(Integer.parseInt(o[0].toString()));
+				list.add(dto);
+				
+			}
+			return list;
+		
+		
+	}
+	public List<OrderProductStatsDto> orderProductStatsMonth(String username) {
+		// TODO Auto-generated method stub
+		List<Object[]> obj=orderProductRepository.getOrderProductStatsMonth(username);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		 obj=orderProductRepository.getReturnProductStatsMonth(username);
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus("Returned");
+			dto.setNumber(Integer.parseInt(o[0].toString()));
+			list.add(dto);
+			
+		}	
+		 obj=orderProductRepository.getExchangeProductStatsMonth(username);
+			for(Object o[]:obj) {
+				OrderProductStatsDto dto=new OrderProductStatsDto();
+				dto.setStatus("Exchanged");
+				dto.setNumber(Integer.parseInt(o[0].toString()));
+				list.add(dto);
+				
+			}
+			return list;
+	}
+	public List<OrderProductStatsDto> orderProductStatsWeek(String username, String fromDateS, String toDateS) {
+		// TODO Auto-generated method stub
+	/*	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fromDate = LocalDate.parse(fromDateS, formatter);
+		LocalDate toDate = LocalDate.parse(toDateS, formatter);
+
+		List<Object[]> obj=orderProductRepository.getOrderProductStatsWeek(username,fromDate,toDate);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		 obj=orderProductRepository.getReturnProductStatsMonth(username);
+		for(Object o[]:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus("Returned");
+			dto.setNumber(Integer.parseInt(o[0].toString()));
+			list.add(dto);
+			
+		}	
+		 obj=orderProductRepository.getExchangeProductStatsMonth(username);
+			for(Object o[]:obj) {
+				OrderProductStatsDto dto=new OrderProductStatsDto();
+				dto.setStatus("Exchanged");
+				dto.setNumber(Integer.parseInt(o[0].toString()));
+				list.add(dto);
+				
+			}
+			return list;
+			*/
+		return null;
+		
+	}
+	
 	
 }

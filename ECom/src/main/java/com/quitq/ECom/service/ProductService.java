@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.quitq.ECom.Exception.InvalidIdException;
+import com.quitq.ECom.dto.CategoryStatsDto;
 import com.quitq.ECom.enums.Category;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Vendor;
@@ -105,17 +105,20 @@ public class ProductService {
 		
 		return streamList;
 	}
-	public List<String> findCategorySoldByVendor(String username) throws InvalidIdException
+	public List<CategoryStatsDto> findCategorySoldByVendor(String username) throws InvalidIdException
 	{
 		List<Object[]> list=productRepository.findCategorySoldByVendor(username);
 		if(list.isEmpty())
 		{
 			throw new InvalidIdException("No category");
 		}
-		List<String> category=new ArrayList<>();
+		List<CategoryStatsDto> category=new ArrayList<>();
 		for(Object obj[]:list)
 		{
-			category.add(obj[0].toString());
+			CategoryStatsDto dto=new CategoryStatsDto();
+			dto.setTitle(obj[0].toString());
+			dto.setNumber(Integer.parseInt(obj[1].toString()));
+			category.add(dto);
 		}
 		return category;
 	}

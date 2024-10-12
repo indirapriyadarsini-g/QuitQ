@@ -29,7 +29,7 @@ List<Product> getByWarehouseId(int id);
 List<Product> findOutOfStockProduct(String username,boolean value);
 @Query("select p  from Product p join p.v vendor where vendor.user.username=?1 and p.status!='deleted'")
 List<Product> findByVendorUsrname(String username);
-@Query("select distinct p.c from Product p join p.v vendor where vendor.user.username=?1 and p.status!='deleted'")
+@Query("select  p.c,count(*) from Product p join p.v vendor  where vendor.user.username=?1 group by p.c ")
 List<Object[]> findCategorySoldByVendor(String username);
 @Query("select p from Product p join p.v vendor where vendor.user.username=?1 and p.title like %?2% and p.status!='deleted'" )
 List<Product> findProductByNameAndUsername(String username, String name);
