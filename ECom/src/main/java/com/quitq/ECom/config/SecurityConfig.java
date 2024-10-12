@@ -56,6 +56,7 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/add-review/{pId}").permitAll()	
             		   .requestMatchers("/customer/view-product-reviews").permitAll()
             		   .requestMatchers("/customer/cart-info").permitAll()
+            		   .requestMatchers("/customer/order").permitAll()
             		   
             		   
                        .requestMatchers("/vendor/get").permitAll()
