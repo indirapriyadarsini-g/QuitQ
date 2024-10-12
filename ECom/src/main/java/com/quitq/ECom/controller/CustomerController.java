@@ -453,6 +453,17 @@ public class CustomerController {
 		}
 	}
 	
+	@GetMapping("/cart-info")
+	public ResponseEntity<?> getCartInfo(Principal principal, MessageDto dto){
+		try {
+			Cart cart = cartRepository.getCartByUsername(principal.getName());
+			return ResponseEntity.ok(cart);
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+	}
 	
 	
 }
