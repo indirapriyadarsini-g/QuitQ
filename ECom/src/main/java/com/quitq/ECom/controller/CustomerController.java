@@ -3,6 +3,7 @@ package com.quitq.ECom.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
 import com.quitq.ECom.model.Exchange;
 import com.quitq.ECom.model.ExchangeReason;
+import com.quitq.ECom.model.Image;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
@@ -53,6 +55,7 @@ import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
 import com.quitq.ECom.repository.ExchangeReasonRepository;
 import com.quitq.ECom.repository.ExchangeRepository;
+import com.quitq.ECom.repository.ImageRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
@@ -88,6 +91,9 @@ public class CustomerController {
 	@Autowired
 	private WishlistRepository wishlistRepository;
 	
+	
+	@Autowired
+	private ImageRepository imageRepository;
 	
 	@Autowired
 	private OrderProductRepository orderProductRepository;
@@ -416,7 +422,18 @@ public class CustomerController {
 			@RequestParam(defaultValue = "no", required = false) String includeOutOfStock			
 			){
 		List<Product> prodList = customerService.searchProdByParam(category,minDiscount,prodName,includeOutOfStock);
-		return ResponseEntity.ok(prodList);
+		
+		List<ProductWImageDto> pwiList = new ArrayList<>();
+		for(Product p: prodList) {
+			List<Image> imList = imageRepository.getImageByProduct(p);
+			ProductWImageDto pwi = new ProductWImageDto();
+			pwi.setImageList(imList);
+			pwi.setProduct(p);
+			pwiList.add(pwi);
+		}
+		
+		
+		return ResponseEntity.ok(pwiList);
 	}
 	
 //	@GetMapping("/search")
