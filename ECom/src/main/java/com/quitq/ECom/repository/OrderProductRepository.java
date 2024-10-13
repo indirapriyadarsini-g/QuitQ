@@ -31,11 +31,11 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct,Integ
 List<Product> findByUsernameUnordered(String userName);
 @Query("select op from OrderProduct op join op.product p join op.order o where p.v.user.username=?1")
 List<OrderProduct> getOrderedProductDetails(String userName);
-@Query("select month(o.orderPlacedTime),count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
-List<Object[]> getNumberOfOrdersReceivedByMonth(String userName, int month);
-@Query("select count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and date(o.orderPlacedTime)=?2  and p.status!='deleted' group by date(o.orderPlacedTime)")
+@Query("select month(o.orderPlacedTime),count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and year(o.orderPlacedTime)=?2  group by month(o.orderPlacedTime)")
+List<Object[]> getNumberOfOrdersReceivedByMonth(String userName, int year);
+@Query("select day(o.orderPlacedTime),count(o.id) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2  group by o.orderPlacedTime")
 
-Integer getNumberOfOrdersReceivedByDate(String userName, LocalDate dateTime);
+List<Object[]> getNumberOfOrdersReceivedByDate(String userName,int month);
 @Query("select sum(op.quantity) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2 and p.status!='deleted' group by month(o.orderPlacedTime)")
 
 Integer noOfProductOrderedMonth(String userName, int month);
@@ -105,6 +105,13 @@ Product getProductByOrderProductId(int opId);
 
 @Query("select op from OrderProduct op where op.order = ?1")
 List<OrderProduct> getOrderProductsByOrder(Order order);
+@Query("select month(o.orderPlacedTime),count(op.amount_payable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and year(o.orderPlacedTime)=?2  group by month(o.orderPlacedTime)")
+
+List<Object[]> getSalesByMonth(String username, int year);
+@Query("select day(o.orderPlacedTime),count(op.amount_payable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2  group by o.orderPlacedTime")
+
+List<Object[]> getSalesByDate(String username, int month);
+
 
 }
 /*o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime*/

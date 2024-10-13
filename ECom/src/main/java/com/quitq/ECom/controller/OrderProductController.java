@@ -243,6 +243,30 @@ public class OrderProductController {
 		List<OrderProductStatsDto> dto=orderProductService.orderProductStatsWeek(username,fromDate,toDate);
 		return dto;
 	}
+	@GetMapping("/vendor/getNoOfOrdersReceived/month")
+	public List<OrderProductStatsDto> getNoOfOrderReceivedMonth(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.getNoOfOrdersReceived(username);
+		return dto;
+	}
+	@GetMapping("/vendor/getNoOfOrderReceived/date")
+	public List<OrderProductStatsDto> getNoOfOrdersReceivedDate(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.getNoOfOrderReceivedDate(username);
+		return dto;
+	}
+	@GetMapping("/vendor/sales/month")
+	public List<OrderProductStatsDto> getSalesByMonth(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.getSalesByMonth(username);
+		return dto;
+	}
+	@GetMapping("/vendor/sale/date")
+	public List<OrderProductStatsDto> getSalesByDate(Principal p){
+		String username=p.getName();
+		List<OrderProductStatsDto> dto=orderProductService.getSalesByDate(username);
+		return dto;
+	}
 	
 	
 
