@@ -555,6 +555,7 @@ public class CustomerController {
 			e.setExchangeStatus(ExchangeStatus.INITIATED);
 			e.setExchangeInitiatedDate(LocalDateTime.now());
 			
+			
 			return ResponseEntity.ok(exchangeRepository.save(e));
 		}catch(Exception e) {
 			dto.setMsg(e.getMessage());
