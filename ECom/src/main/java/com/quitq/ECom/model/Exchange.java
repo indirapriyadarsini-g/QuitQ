@@ -22,7 +22,7 @@ private int id;
 	private OrderProduct orderProduct;
 	private int exchangeQuantity;
 	@Enumerated(EnumType.STRING)
-	private ExchangeStatus returnStatus;
+	private ExchangeStatus exchangeStatus;
 	@ManyToOne
 	private Product exchangeProduct;
 	private LocalDateTime exchangeInitiatedDate;
@@ -40,7 +40,7 @@ private int id;
 		this.exchangeReason = exchangeReason;
 		this.orderProduct = orderProduct;
 		this.exchangeQuantity = exchangeQuantity;
-		this.returnStatus = returnStatus;
+		this.exchangeStatus = returnStatus;
 		this.exchangeProduct = exchangeProduct;
 		this.exchangeInitiatedDate = exchangeInitiatedDate;
 		this.exchangeCompletedDate = exchangeCompletedDate;
@@ -70,11 +70,11 @@ private int id;
 	public void setExchangeQuantity(int exchangeQuantity) {
 		this.exchangeQuantity = exchangeQuantity;
 	}
-	public ExchangeStatus getReturnStatus() {
-		return returnStatus;
+	public ExchangeStatus getExchangeStatus() {
+		return exchangeStatus;
 	}
-	public void setReturnStatus(ExchangeStatus returnStatus) {
-		this.returnStatus = returnStatus;
+	public void setExchangeStatus(ExchangeStatus returnStatus) {
+		this.exchangeStatus = returnStatus;
 	}
 	public Product getExchangeProduct() {
 		return exchangeProduct;

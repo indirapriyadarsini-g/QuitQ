@@ -291,14 +291,6 @@ public class CustomerService {
 		return customerAddressRepository.getAddressByUsername(name);
 	}
 
-	public void addReview(int pId, Review review, String name) {
-		// TODO Auto-generated method stub
-		Product product = productRepository.findById(pId).get();
-		Customer customer = customerRepository.getCustomerByUsername(name);
-		review.setCustomer(customer);
-		review.setProduct(product);
-		reviewRepository.save(review);
-	}
 
 	public List<Review> getProductReviews(Product product) {
 		// TODO Auto-generated method stub
@@ -308,6 +300,16 @@ public class CustomerService {
 	public OrderProduct getOrderProductDetailsByOrderId(int oId) {
 		// TODO Auto-generated method stub
 		return orderProductRepository.getOrderProductByOrderId(oId);
+	}
+
+	public void addReview(Product p, OrderProduct op, Review review, String name) {
+		// TODO Auto-generated method stub
+		Customer customer = customerRepository.getCustomerByUsername(name);
+		review.setProduct(p);
+		review.setCustomer(customer);
+		reviewRepository.save(review);
+		op.setReview(review);
+		orderProductRepository.save(op);
 	}
 
 	

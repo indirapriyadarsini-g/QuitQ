@@ -2,6 +2,7 @@
 package com.quitq.ECom.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,28 +22,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quitq.ECom.dto.CartProductDto;
+import com.quitq.ECom.dto.ExchangeDto;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
+import com.quitq.ECom.dto.OrderSummaryDto;
 import com.quitq.ECom.dto.ProductWImageDto;
+import com.quitq.ECom.dto.ReturnDto;
 import com.quitq.ECom.dto.WishlistProductDto;
+import com.quitq.ECom.enums.ExchangeStatus;
 import com.quitq.ECom.enums.OrderStatus;
+import com.quitq.ECom.enums.RefundStatus;
+import com.quitq.ECom.enums.ReturnStatus;
 import com.quitq.ECom.enums.StatusType;
 import com.quitq.ECom.model.Address;
 import com.quitq.ECom.model.Cart;
 import com.quitq.ECom.model.CartProduct;
 import com.quitq.ECom.model.Customer;
+import com.quitq.ECom.model.Exchange;
+import com.quitq.ECom.model.ExchangeReason;
 import com.quitq.ECom.model.Order;
 import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
+import com.quitq.ECom.model.Return;
+import com.quitq.ECom.model.ReturnReason;
 import com.quitq.ECom.model.Review;
 import com.quitq.ECom.model.Wishlist;
 import com.quitq.ECom.model.WishlistProduct;
 import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerRepository;
+import com.quitq.ECom.repository.ExchangeReasonRepository;
+import com.quitq.ECom.repository.ExchangeRepository;
 import com.quitq.ECom.repository.OrderProductRepository;
 import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
+import com.quitq.ECom.repository.ReturnReasonRepository;
+import com.quitq.ECom.repository.ReturnRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -80,6 +95,18 @@ public class CustomerController {
 
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private ReturnRepository returnRepository;
+	
+	@Autowired
+	private ReturnReasonRepository returnReasonRepository;
+	
+	@Autowired
+	private ExchangeRepository exchangeRepository;
+	
+	@Autowired
+	private ExchangeReasonRepository exchangeReasonRepository;
 	
 //	@Autowired
 //	private WarehouseManagerService warehouseManagerService;
@@ -434,10 +461,12 @@ public class CustomerController {
 		
 	}
 	
-	@PostMapping("/add-review/{pId}")
-	public ResponseEntity<?> addReview(@RequestBody Review review, @PathVariable int pId ,Principal principal, MessageDto dto){
+	@PostMapping("/add-review/{opId}")
+	public ResponseEntity<?> addReview(@RequestBody Review review, @PathVariable int opId ,Principal principal, MessageDto dto){
 		try {
-			customerService.addReview(pId,review,principal.getName());
+			Product p = orderProductRepository.getProductByOrderProductId(opId);
+			OrderProduct op = orderProductRepository.findById(opId).get();
+			customerService.addReview(p,op,review,principal.getName());
 			dto.setMsg("Review Added");
 			return ResponseEntity.ok(dto);
 		}
@@ -471,6 +500,72 @@ public class CustomerController {
 		}
 		
 	}
+	
+	@GetMapping("/view-order-summary/{oId}")
+	public ResponseEntity<?> getOrderSummary(Principal principal, @PathVariable int oId,MessageDto dto){
+		try {
+			Order order = orderRepository.findById(oId).get();
+			List<OrderProduct> opList = orderProductRepository.getOrderProductsByOrder(order);
+			
+			OrderSummaryDto summarydto = new OrderSummaryDto(order,opList);
+			return ResponseEntity.ok(summarydto);
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+		
+	}
+	
+	@PostMapping("/request-return")
+	public ResponseEntity<?> requestReturn(Principal principal,@RequestBody ReturnDto rdto,MessageDto dto){
+		try {
+			Return r = new Return();
+			ReturnReason rr = new ReturnReason();
+			
+			rr.setReason(rdto.getReturnReason());
+			returnReasonRepository.save(rr);
+			
+			r.setOrderProduct(rdto.getOrderProduct());
+			r.setReturnAmount(rdto.getReturnAmount());
+			r.setReturnQuantity(rdto.getReturnQuantity());
+			r.setReturnReason(rr);			
+			r.setRefundStatus(RefundStatus.NOT_REFUNDED);
+			r.setReturnInitiatedDate(LocalDateTime.now());
+			r.setReturnStatus(ReturnStatus.ReturnInitiated);
+			
+			return ResponseEntity.ok(returnRepository.save(r));
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+	}
+	
+	@PostMapping("/request-exchange")
+	public ResponseEntity<?> requestExchange(Principal principal,@RequestBody ExchangeDto edto,MessageDto dto){
+		try {
+			Exchange e = new Exchange();
+			ExchangeReason er = new ExchangeReason();
+			
+			er.setExchangeReason(edto.getExchangeReason());
+			exchangeReasonRepository.save(er);
+			
+			e.setOrderProduct(edto.getOrderProduct());
+			e.setExchangeQuantity(edto.getExchangeQuantity());
+			e.setExchangeReason(er);			
+			e.setExchangeStatus(ExchangeStatus.INITIATED);
+			e.setExchangeInitiatedDate(LocalDateTime.now());
+			
+			return ResponseEntity.ok(exchangeRepository.save(e));
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
+	}
+	
+	
+	
+	
+	
 	
 	
 }

@@ -100,5 +100,11 @@ List<Object[]> getExchangeProductStatsMonth(String username);
 List<Object[]> getOrderProductStatsWeek(String username,String fromDate, String toDate);
 */
 
+@Query("select p from OrderProduct op join op.product p where op.id = ?1")
+Product getProductByOrderProductId(int opId);
+
+@Query("select op from OrderProduct op where op.order = ?1")
+List<OrderProduct> getOrderProductsByOrder(Order order);
+
 }
 /*o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime*/
