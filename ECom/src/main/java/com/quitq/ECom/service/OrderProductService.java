@@ -97,12 +97,15 @@ private OrderProductRepository orderProductRepository;
 	public Integer getOrderedReciveByDate(String userName, String date) throws InvalidIdException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate dateTime = LocalDate.parse(date, formatter);
+		/*
 		Integer dto=orderProductRepository.getNumberOfOrdersReceivedByDate(userName,dateTime);
 		if(dto==null)
 		{
 			throw new InvalidIdException("No orders placed for this date");
 		}
 		return dto;
+		*/
+		return null;
 	}
 	public Integer getNoOfProductOrderedMonth(String userName, int month) throws InvalidIdException {
 		// TODO Auto-generated method stub
@@ -310,6 +313,58 @@ private OrderProductRepository orderProductRepository;
 			*/
 		return null;
 		
+	}
+	public List<OrderProductStatsDto> getNoOfOrdersReceived(String username) {
+		// TODO Auto-generated method stub
+		List<Object[]> obj=orderProductRepository.getNumberOfOrdersReceivedByMonth(username,2024);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object[]o:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		return list;
+	}
+	public List<OrderProductStatsDto> getNoOfOrderReceivedDate(String username) {
+		// TODO Auto-generated method stub
+		List<Object[]> obj=orderProductRepository.getNumberOfOrdersReceivedByDate(username,9);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object[]o:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		return list;
+	}
+	public List<OrderProductStatsDto> getSalesByMonth(String username) {
+		// TODO Auto-generated method stub
+		List<Object[]> obj=orderProductRepository.getSalesByMonth(username,9);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object[]o:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		return list;
+	}
+	public List<OrderProductStatsDto> getSalesByDate(String username) {
+		// TODO Auto-generated method stub
+		List<Object[]> obj=orderProductRepository.getSalesByDate(username,9);
+		List<OrderProductStatsDto> list=new ArrayList<>();
+		for(Object[]o:obj) {
+			OrderProductStatsDto dto=new OrderProductStatsDto();
+			dto.setStatus(o[0].toString());
+			dto.setNumber(Integer.parseInt(o[1].toString()));
+			list.add(dto);
+			
+		}
+		return list;
 	}
 	
 	
