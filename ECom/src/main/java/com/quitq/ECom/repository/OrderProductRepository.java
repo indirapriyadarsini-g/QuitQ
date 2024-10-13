@@ -105,10 +105,10 @@ Product getProductByOrderProductId(int opId);
 
 @Query("select op from OrderProduct op where op.order = ?1")
 List<OrderProduct> getOrderProductsByOrder(Order order);
-@Query("select month(o.orderPlacedTime),count(op.amount_payable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and year(o.orderPlacedTime)=?2  group by month(o.orderPlacedTime)")
+@Query("select month(o.orderPlacedTime),sum(op.amountPayable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and year(o.orderPlacedTime)=?2  group by month(o.orderPlacedTime)")
 
 List<Object[]> getSalesByMonth(String username, int year);
-@Query("select day(o.orderPlacedTime),count(op.amount_payable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2  group by o.orderPlacedTime")
+@Query("select day(o.orderPlacedTime),sum(op.amountPayable) from OrderProduct op join op.order o join op.product p where p.v.user.username=?1 and month(o.orderPlacedTime)=?2  group by o.orderPlacedTime")
 
 List<Object[]> getSalesByDate(String username, int month);
 
