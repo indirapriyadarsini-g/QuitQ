@@ -342,12 +342,12 @@ private OrderProductRepository orderProductRepository;
 	}
 	public List<OrderProductStatsDto> getSalesByMonth(String username) {
 		// TODO Auto-generated method stub
-		List<Object[]> obj=orderProductRepository.getSalesByMonth(username,9);
+		List<Object[]> obj=orderProductRepository.getSalesByMonth(username,2024);
 		List<OrderProductStatsDto> list=new ArrayList<>();
 		for(Object[]o:obj) {
 			OrderProductStatsDto dto=new OrderProductStatsDto();
 			dto.setStatus(o[0].toString());
-			dto.setNumber(Integer.parseInt(o[1].toString()));
+			dto.setPrice(Double.parseDouble(o[1].toString()));
 			list.add(dto);
 			
 		}

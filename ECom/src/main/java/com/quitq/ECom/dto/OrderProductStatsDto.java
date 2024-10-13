@@ -3,6 +3,13 @@ package com.quitq.ECom.dto;
 public class OrderProductStatsDto {
 private String status;
 private int number;
+private double price;
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
 public String getStatus() {
 	return status;
 }
