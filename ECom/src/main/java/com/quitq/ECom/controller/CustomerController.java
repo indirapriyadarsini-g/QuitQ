@@ -426,6 +426,7 @@ public class CustomerController {
 		List<ProductWImageDto> pwiList = new ArrayList<>();
 		for(Product p: prodList) {
 			List<Image> imList = imageRepository.getImageByProduct(p);
+			if(imList==null) imList = new ArrayList<>();
 			ProductWImageDto pwi = new ProductWImageDto();
 			pwi.setImageList(imList);
 			pwi.setProduct(p);

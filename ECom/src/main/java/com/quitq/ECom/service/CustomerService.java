@@ -274,7 +274,7 @@ public class CustomerService {
 		if(!includeOutOfStock.equals("no") && !includeOutOfStock.equals("") && includeOutOfStock!=null) {
 			prodList = prodList.stream().filter(p-> p.getQuantity()>=0).toList();
 		}
-		return null;
+		return prodList;
 	}
 
 	public void addAddressByUsername(Address address, String name) {

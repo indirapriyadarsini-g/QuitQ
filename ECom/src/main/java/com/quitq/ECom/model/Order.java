@@ -11,7 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -126,7 +126,7 @@ public class Order {
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
-	@OneToOne
+	@ManyToOne
 	private Cart cart;
 
 	public Order(int id, OrderStatus status, LocalDateTime orderPlacedTime, LocalDateTime orderDeliveredTime,
