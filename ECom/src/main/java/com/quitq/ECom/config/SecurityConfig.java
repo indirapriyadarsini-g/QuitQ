@@ -101,13 +101,13 @@ public class SecurityConfig {
 					   .requestMatchers("/orderproduct/vendor/orderReceiveDate/{date}").hasRole("VENDOR")
 					   .requestMatchers("/orderproduct/vendor/noOfProductOrdered/{month}").hasRole("VENDOR")
 					   .requestMatchers("/orderproduct/vendor/productOrdered/{date}").hasRole("VENDOR")
-					   .requestMatchers("/orderproduct/vendor/topSellingProduct/{month}").hasRole("VENDOR")
-               .requestMatchers("/orderproduct/vendor/topOrdered/{month}").hasRole("VENDOR")
+					   .requestMatchers("/orderproduct/vendor/topSellingProduct/{month}").permitAll()
+               .requestMatchers("/orderproduct/vendor/topOrdered/{month}").permitAll()
 
                .requestMatchers("/orderproduct/vendor/returnOrder").permitAll()
                .requestMatchers("/orderproduct/vendor/exchangeOrder").permitAll()
 
-               .requestMatchers("/orderproduct/vendor/productStats/{month}").hasRole("VENDOR")
+               .requestMatchers("/orderproduct/vendor/productStats/{month}").permitAll()
                .requestMatchers("/orderproduct/vendor/returnOrder").hasRole("VENDOR")
                .requestMatchers("/orderproduct/vendor/exchangeOrder").hasRole("VENDOR")
 

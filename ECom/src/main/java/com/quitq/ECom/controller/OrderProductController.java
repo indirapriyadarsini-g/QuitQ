@@ -165,7 +165,22 @@ public class OrderProductController {
 			messageDto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(messageDto);
 		}
-	} 
+	}
+	@GetMapping("/vendor/topSellingProductYear/{year}")
+	public ResponseEntity<?> topSellingProductOfYear(@PathVariable int year,Principal p,MessageDto messageDto)
+	{
+		String userName=p.getName();
+		try {
+			List<TopSellingProductDto> dto=orderProductService.topSellingProductOfYear(userName,year);
+			return ResponseEntity.ok(dto);
+		} catch (InvalidIdException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			messageDto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(messageDto);
+		}
+	}
+	
 	@GetMapping("/vendor/topOrdered/{month}")
 	public ResponseEntity<?> topOrderedProductOfMonth(@PathVariable int month,Principal p,MessageDto messageDto)
 	{
@@ -180,12 +195,40 @@ public class OrderProductController {
 			return ResponseEntity.badRequest().body(messageDto);
 		}
 	} 
+	@GetMapping("/vendor/topOrderedYear/{year}")
+	public ResponseEntity<?> topOrderedProductOfYear(@PathVariable int year,Principal p,MessageDto messageDto)
+	{
+		String userName=p.getName();
+		try {
+			List<MostOrderedProductDto> dto=orderProductService.topOrderedProductOfYear(userName,year);
+			return ResponseEntity.ok(dto);
+		} catch (InvalidIdException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			messageDto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(messageDto);
+		}
+	} 
 	@GetMapping("/vendor/productStats/{month}")
 	public ResponseEntity<?> productStats(@PathVariable int month,Principal p,MessageDto messageDto)
 	{
 		String userName=p.getName();
 		try {
 			List<ProductStatsDto> dto=orderProductService.productStats(userName,month);
+			return ResponseEntity.ok(dto);
+		} catch (InvalidIdException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			messageDto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(messageDto);
+		}
+	}
+	@GetMapping("/vendor/productStatsYear/{year}")
+	public ResponseEntity<?> productStatsYear(@PathVariable int year,Principal p,MessageDto messageDto)
+	{
+		String userName=p.getName();
+		try {
+			List<ProductStatsDto> dto=orderProductService.productStatsYear(userName,year);
 			return ResponseEntity.ok(dto);
 		} catch (InvalidIdException e) {
 			// TODO Auto-generated catch block
