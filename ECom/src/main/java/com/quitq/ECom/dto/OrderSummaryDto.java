@@ -9,7 +9,7 @@ public class OrderSummaryDto {
 	
 	private Order order;
 	
-	private List<OrderProduct> orderProductList;
+	private List<OrderProductWImageDto> opwiList;
 
 	public Order getOrder() {
 		return order;
@@ -19,24 +19,25 @@ public class OrderSummaryDto {
 		this.order = order;
 	}
 
-	public List<OrderProduct> getOrderProductList() {
-		return orderProductList;
+	public List<OrderProductWImageDto> getOpwiList() {
+		return opwiList;
 	}
 
-	public void setOrderProductList(List<OrderProduct> orderProductList) {
-		this.orderProductList = orderProductList;
+	public void setOpwiList(List<OrderProductWImageDto> opwiList) {
+		this.opwiList = opwiList;
 	}
 
-	public OrderSummaryDto(Order order, List<OrderProduct> orderProductList) {
+	public OrderSummaryDto(Order order, List<OrderProductWImageDto> opwiList) {
 		super();
 		this.order = order;
-		this.orderProductList = orderProductList;
+		this.opwiList = opwiList;
 	}
 
 	public OrderSummaryDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	
 	
 }
