@@ -14,14 +14,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 @Configuration
 public class AWESConfig {
 	/*
-	@Value("${aws.region-id}")
-	private String region;
-	@Value("${aws.ses.access-key}")
-
-	private String accessKey;
-	@Value("${aws.ses.secret-key}")
-
-	private String secretKey;
+	
 			
 @Bean
 AmazonSimpleEmailService getSESClient() {
