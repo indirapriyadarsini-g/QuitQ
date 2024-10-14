@@ -2,6 +2,7 @@ package com.quitq.ECom.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,12 +32,11 @@ import com.quitq.ECom.service.VendorService;
 public class VendorController {
 	@Autowired
 	VendorService vendorService;
-<<<<<<< main
+
 	/*
 	@Autowired
 	AmazonSimpleEmailService service;*/
-=======
->>>>>>> a355f71 Email api
+
 	 @Autowired
 		private UserRepository userRepository;
 		
@@ -100,7 +101,7 @@ public class VendorController {
 	public List<Category> getAllCategory(){
 		return List.of(Category.values());
 	}
-<<<<<<< main
+
 	@GetMapping("/getRandomNumber")
 	public Integer getRandomNumber() {
 		Random rand = new Random();
@@ -131,8 +132,7 @@ public class VendorController {
     	userRepository.save(u);	
     	return ResponseEntity.ok(u);
     	}
-=======
->>>>>>> a355f71 Email api
+
 	/*
 	@GetMapping("/product/{id}")
 	public ResponseEntity<?> getVendorByProductName(@PathVariable int id,MessageDto messageDto)
