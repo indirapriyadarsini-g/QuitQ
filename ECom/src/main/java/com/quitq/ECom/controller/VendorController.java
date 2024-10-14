@@ -2,6 +2,7 @@ package com.quitq.ECom.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,10 @@ import com.quitq.ECom.service.VendorService;
 public class VendorController {
 	@Autowired
 	VendorService vendorService;
+
+
+
+
 	 @Autowired
 		private UserRepository userRepository;
 		
@@ -94,6 +100,27 @@ public class VendorController {
 	public List<Category> getAllCategory(){
 		return List.of(Category.values());
 	}
+
+	@GetMapping("/getRandomNumber")
+	public Integer getRandomNumber() {
+		Random rand = new Random();
+		  
+        // Generate random integers in range 0 to 999
+        int rand_int1 = rand.nextInt(1000);
+        return Integer.valueOf(rand_int1);
+	}
+
+	@GetMapping("/resetPassword/{newPassword}")
+	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
+		String userName=p.getName();
+		Vendor v=vendorService.getVendorByUserName(userName);
+
+		User u=v.getUser();
+		u.setPassword(passwordEncoder.encode(newPassword));
+    	userRepository.save(u);	
+    	return ResponseEntity.ok(u);
+    	}
+
 	/*
 	@GetMapping("/product/{id}")
 	public ResponseEntity<?> getVendorByProductName(@PathVariable int id,MessageDto messageDto)
