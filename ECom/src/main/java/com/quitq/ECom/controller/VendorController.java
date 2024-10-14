@@ -32,18 +32,10 @@ import com.quitq.ECom.service.VendorService;
 public class VendorController {
 	@Autowired
 	VendorService vendorService;
-<<<<<<< main
 
-	/*
-=======
->>>>>>> 61dd370 Commit email
-	@Autowired
-<<<<<<< main
-	AmazonSimpleEmailService service;*/
 
-=======
-	AmazonSimpleEmailService service;
->>>>>>> 61dd370 Commit email
+
+
 	 @Autowired
 		private UserRepository userRepository;
 		
@@ -117,16 +109,7 @@ public class VendorController {
         int rand_int1 = rand.nextInt(1000);
         return Integer.valueOf(rand_int1);
 	}
-	@GetMapping("/sendEmail/{number}")
-	public String sendEmail(@PathVariable int number){
-		Content content=new Content("Verification body");
-		Body body=new Body(new Content("This is verification mail body number="+number));
-		Message message=new Message(content,body);
-		SendEmailRequest mail=new SendEmailRequest("shaikhhuda2810@gmail.com",
-				new Destination().withToAddresses("0808cs201091.ies@ipsacademy.org"),message);
-		service.sendEmail(mail);
-		return "Email Sent";
-	}
+
 	@GetMapping("/resetPassword/{newPassword}")
 	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
 		String userName=p.getName();
