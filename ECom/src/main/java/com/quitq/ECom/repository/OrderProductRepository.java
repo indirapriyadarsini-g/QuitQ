@@ -112,6 +112,9 @@ List<Object[]> getSalesByMonth(String username, int year);
 
 List<Object[]> getSalesByDate(String username, int month);
 
+@Query("select op from OrderProduct op where op.order.cart.customer.user.username= ?1")
+List<OrderProduct> getOrderProductByUsername(String name);
+
 
 }
 /*o.id,o.status,op.quantity,op.amountPayable,op.totalAmount,op.discount,p.title,p.price,p.discount,o.orderPlacedTime*/

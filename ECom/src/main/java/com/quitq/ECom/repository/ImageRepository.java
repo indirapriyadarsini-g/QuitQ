@@ -36,6 +36,9 @@ List<Image> getImageByProduct(Product prod);
 @Query("select i from Image i where i.p.v.user.username=?1 and i.p.id=?2 order by i.status limit 1")
 List<Image> getOneImageOfProduct(String username, int pid);
 
+@Query("select i from Image i where i.p.id = ?1")
+List<Image> getImageByProductId(int pId);
+
 
 
 

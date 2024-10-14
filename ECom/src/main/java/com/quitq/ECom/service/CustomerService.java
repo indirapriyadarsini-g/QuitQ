@@ -312,6 +312,12 @@ public class CustomerService {
 		orderProductRepository.save(op);
 	}
 
+	public List<OrderProduct> getOrderProductList(String name) {
+		// TODO Auto-generated method stub
+		List<OrderProduct> opList = orderProductRepository.getOrderProductByUsername(name);
+		return opList;
+	}
+
 	
 
 	

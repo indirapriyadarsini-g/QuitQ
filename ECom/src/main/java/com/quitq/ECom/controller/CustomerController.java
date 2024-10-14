@@ -26,6 +26,7 @@ import com.quitq.ECom.dto.CartProductDto;
 import com.quitq.ECom.dto.ExchangeDto;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.dto.OrderInvoiceDto;
+import com.quitq.ECom.dto.OrderProductWImageDto;
 import com.quitq.ECom.dto.OrderSummaryDto;
 import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.ReturnDto;
@@ -400,17 +401,40 @@ public class CustomerController {
 		return ResponseEntity.ok(order);
 	}
 	
-	@GetMapping("/view-my-order")
-	public ResponseEntity<?> viewOrderList(Principal principal, MessageDto dto){
-		List<Order> orderList = customerService.getOrderList(principal.getName());
-		if(orderList!=null) return ResponseEntity.ok(orderList);
-		dto.setMsg("No orders placed");
-		return ResponseEntity.badRequest().body(dto);
+	@GetMapping("/image-of-prodId/{pId}")
+	public ResponseEntity<?> imageOfProduct(@PathVariable int pId,MessageDto dto){
+		try {
+			List<Image> imList = imageRepository.getImageByProductId(pId);
+			return ResponseEntity.ok(imList);
+		} catch (Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}
 	}
 	
-	@GetMapping("/view-order-details/{oId}")
-	public ResponseEntity<?> viewOrderDetails(@PathVariable int oId,MessageDto dto){
-		OrderProduct orderProduct = customerService.getOrderProductDetailsByOrderId(oId);
+	@GetMapping("/view-my-orders")
+	public ResponseEntity<?> viewOrderList(Principal principal, MessageDto dto){
+		List<OrderProduct> opList = customerService.getOrderProductList(principal.getName());
+		
+		List<OrderProductWImageDto> opwiList = new ArrayList<>();
+		
+		for(OrderProduct op:opList) {
+			OrderProductWImageDto opwi = new OrderProductWImageDto();
+			opwi.setOrderProduct(op);
+			
+			List<Image> imList = imageRepository.getImageByProduct(op.getProduct());
+			opwi.setImageList(imList);
+			
+			opwiList.add(opwi);
+		}
+		
+		return ResponseEntity.ok(opwiList);
+		
+	}
+	
+	@GetMapping("/view-order-details/{opId}")
+	public ResponseEntity<?> viewOrderDetails(@PathVariable int opId,MessageDto dto){
+		OrderProduct orderProduct = orderProductRepository.findById(opId).get();
 		return ResponseEntity.ok(orderProduct);
 	}
 	
