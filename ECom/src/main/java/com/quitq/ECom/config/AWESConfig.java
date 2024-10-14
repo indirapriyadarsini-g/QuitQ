@@ -13,6 +13,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 
 @Configuration
 public class AWESConfig {
+	/*
 	@Value("${aws.region-id}")
 	private String region;
 	@Value("${aws.ses.access-key}")
@@ -36,6 +37,6 @@ AWSCredentialsProvider getCredentials() {
 	return new AWSStaticCredentialsProvider(awsCredentials);
 	
 }
-
+*/
 }
 

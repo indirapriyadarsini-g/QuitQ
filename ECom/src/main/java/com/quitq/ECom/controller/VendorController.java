@@ -39,8 +39,9 @@ import com.quitq.ECom.service.VendorService;
 public class VendorController {
 	@Autowired
 	VendorService vendorService;
+	/*
 	@Autowired
-	AmazonSimpleEmailService service;
+	AmazonSimpleEmailService service;*/
 	 @Autowired
 		private UserRepository userRepository;
 	 @Autowired
@@ -115,6 +116,7 @@ public class VendorController {
         int rand_int1 = rand.nextInt(1000);
         return Integer.valueOf(rand_int1);
 	}
+	/*
 	@GetMapping("/sendEmail/{number}")
 	public String sendEmail(@PathVariable int number){
 		Content content=new Content("Verification body");
@@ -125,6 +127,7 @@ public class VendorController {
 		service.sendEmail(mail);
 		return "Email Sent";
 	}
+	*/
 	@GetMapping("/resetPassword/{newPassword}")
 	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
 		String userName=p.getName();
