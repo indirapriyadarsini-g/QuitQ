@@ -149,6 +149,28 @@ private OrderProductRepository orderProductRepository;
 		}
 		return list;
 	}
+	public List<TopSellingProductDto> topSellingProductOfYear(String userName, int year) throws InvalidIdException {
+		// TODO Auto-generated method stub
+		List<Object[]> dto=orderProductRepository.getTopSellingProductOfYear(userName,year);
+		if(dto.isEmpty())
+		{
+			throw new InvalidIdException("No products ordered uptill now");
+		}
+		List<TopSellingProductDto> list=new ArrayList<>();
+		for(Object[] o:dto)
+		{
+			TopSellingProductDto product=new TopSellingProductDto();
+			product.setId(Integer.parseInt(o[0].toString()));
+			product.setTitle(o[1].toString());
+			product.setPrice(Double.parseDouble(o[2].toString()));
+			product.setDiscount(Double.parseDouble(o[3].toString()));
+			product.setStatus(o[4].toString());
+			product.setNoOfQuantitySold(Double.parseDouble(o[5].toString()));
+		list.add(product);
+
+		}
+		return list;
+	}
 	public List<MostOrderedProductDto> topOrderedProductOfMonth(String userName, int month) throws InvalidIdException {
 		// TODO Auto-generated method stub
 		List<Object[]> dto=orderProductRepository.getMostOrderedProductOfMonth(userName,month);
@@ -170,9 +192,31 @@ private OrderProductRepository orderProductRepository;
 	}
 		return list;
 	}
+	public List<MostOrderedProductDto> topOrderedProductOfYear(String userName, int year) throws InvalidIdException {
+		// TODO Auto-generated method stub
+		List<Object[]> dto=orderProductRepository.getMostOrderedProductOfYear(userName,year);
+		if(dto.isEmpty())
+		{
+			throw new InvalidIdException("No products ordered uptill now");
+		}
+		List<MostOrderedProductDto> list=new ArrayList<>();
+		for(Object[] o:dto)
+		{
+			MostOrderedProductDto product=new MostOrderedProductDto();
+			product.setId(Integer.parseInt(o[0].toString()));
+			product.setTitle(o[1].toString());
+			product.setPrice(Double.parseDouble(o[2].toString()));
+			product.setDiscount(Double.parseDouble(o[3].toString()));
+			product.setStatus(o[4].toString());
+			product.setNoOfTimeOrdered(Double.parseDouble(o[5].toString()));
+		list.add(product);
+	}
+		return list;
+	}
+	
 	public List<ProductStatsDto> productStats(String userName, int month) throws InvalidIdException {
 		// TODO Auto-generated method stub
-		List<Object[]> dto=orderProductRepository.productStas(userName,month);
+		List<Object[]> dto=orderProductRepository.getProductStats(month,userName);
 		if(dto.isEmpty())
 		{
 			throw new InvalidIdException("No product stats avaialble ");
@@ -186,8 +230,65 @@ private OrderProductRepository orderProductRepository;
 			product.setPrice(Double.parseDouble(o[2].toString()));
 			product.setDiscount(Double.parseDouble(o[3].toString()));
 			product.setStatus(o[4].toString());
-			product.setNoOfQuantitySold(Double.parseDouble(o[5].toString()));
-			product.setNoOfTimesOrdered(Double.parseDouble(o[6].toString()));
+			if(o[5]==null) {
+				product.setNoOfQuantitySold(Double.parseDouble("0.00"));
+			}
+			else {
+				product.setNoOfQuantitySold(Double.parseDouble(o[5].toString()));
+
+			}
+			if(o[6]==null) {
+				product.setNoOfTimesOrdered(Double.parseDouble("0.00"));
+
+			}
+			else {
+				product.setNoOfTimesOrdered(Double.parseDouble(o[6].toString()));
+
+			}
+			if(o[7]==null)
+			{
+				product.setAverageRating(Double.parseDouble("0.00"));
+			}
+			else
+			{
+				product.setAverageRating(Double.parseDouble(o[7].toString()));
+
+			}
+		list.add(product);
+	}
+		return list;
+	}
+	public List<ProductStatsDto> productStatsYear(String userName, int year) throws InvalidIdException {
+		// TODO Auto-generated method stub
+		List<Object[]> dto=orderProductRepository.getProductStasYear(year,userName);
+		if(dto.isEmpty())
+		{
+			throw new InvalidIdException("No product stats avaialble ");
+		}
+		List<ProductStatsDto> list=new ArrayList<>();
+		for(Object[] o:dto)
+		{
+			ProductStatsDto product=new ProductStatsDto();
+			product.setId(Integer.parseInt(o[0].toString()));
+			product.setTitle(o[1].toString());
+			product.setPrice(Double.parseDouble(o[2].toString()));
+			product.setDiscount(Double.parseDouble(o[3].toString()));
+			product.setStatus(o[4].toString());
+			if(o[5]==null) {
+				product.setNoOfQuantitySold(Double.parseDouble("0.00"));
+			}
+			else {
+				product.setNoOfQuantitySold(Double.parseDouble(o[5].toString()));
+
+			}
+			if(o[6]==null) {
+				product.setNoOfTimesOrdered(Double.parseDouble("0.00"));
+
+			}
+			else {
+				product.setNoOfTimesOrdered(Double.parseDouble(o[6].toString()));
+
+			}
 			if(o[7]==null)
 			{
 				product.setAverageRating(Double.parseDouble("0.00"));
@@ -360,7 +461,7 @@ private OrderProductRepository orderProductRepository;
 		for(Object[]o:obj) {
 			OrderProductStatsDto dto=new OrderProductStatsDto();
 			dto.setStatus(o[0].toString());
-			dto.setNumber(Integer.parseInt(o[1].toString()));
+			dto.setPrice(Double.parseDouble(o[1].toString()));
 			list.add(dto);
 			
 		}
