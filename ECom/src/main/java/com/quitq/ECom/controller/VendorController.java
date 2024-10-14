@@ -32,7 +32,6 @@ import com.quitq.ECom.service.VendorService;
 public class VendorController {
 	@Autowired
 	VendorService vendorService;
-
 	/*
 	@Autowired
 	AmazonSimpleEmailService service;*/
