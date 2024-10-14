@@ -13,8 +13,19 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 
 @Configuration
 public class AWESConfig {
+<<<<<<< main
 	/*
 	
+=======
+	@Value("${aws.region-id}")
+	private String region;
+	@Value("${aws.ses.access-key}")
+
+	private String accessKey;
+	@Value("${aws.ses.secret-key}")
+
+	private String secretKey;
+>>>>>>> 61dd370 Commit email
 			
 @Bean
 AmazonSimpleEmailService getSESClient() {
@@ -30,6 +41,6 @@ AWSCredentialsProvider getCredentials() {
 	return new AWSStaticCredentialsProvider(awsCredentials);
 	
 }
-*/
+
 }
 
