@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,18 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.amazonaws.services.simpleemail.model.Body;
-import com.amazonaws.services.simpleemail.model.Content;
-import com.amazonaws.services.simpleemail.model.Destination;
-import com.amazonaws.services.simpleemail.model.Message;
-import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.enums.Category;
 import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.service.MyUserDetailsService;
 import com.quitq.ECom.service.VendorService;
 
 @RestController
@@ -49,6 +45,8 @@ AmazonSimpleEmailService service;
 		
 		@Autowired
 		private PasswordEncoder passwordEncoder;
+		@Autowired
+		MyUserDetailsService myUserDetailsService;
 	@PostMapping("/add")
 	public ResponseEntity<?> addVendor(@RequestBody Vendor v,MessageDto messageDto)
 	{
@@ -130,16 +128,26 @@ AmazonSimpleEmailService service;
 	}
 	*/
 
-	@GetMapping("/resetPassword/{newPassword}")
-	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
-		String userName=p.getName();
-		Vendor v=vendorService.getVendorByUserName(userName);
+	@GetMapping("/resetPassword/{email}/{newPassword}")
+	public ResponseEntity<?> getOldPassword(@PathVariable String email,@PathVariable String newPassword){
+		Vendor v=vendorService.getVendorByUserName(email);
 
 		User u=v.getUser();
 		u.setPassword(passwordEncoder.encode(newPassword));
     	userRepository.save(u);	
     	return ResponseEntity.ok(u);
     	}
+	@GetMapping("/confirmEmail/{email}")
+	public String getConfirmEmail(@PathVariable String email,MessageDto dto) throws InvalidIdException{
+		UserDetails userDetails = myUserDetailsService.loadUserByUsername(email);
+		if(userDetails.getUsername()==null) {
+			throw new InvalidIdException("User not found by this email");
+		}
+		else {
+			return userDetails.getUsername();
+		}
+		
+	}
 
 	/*
 	@GetMapping("/product/{id}")
