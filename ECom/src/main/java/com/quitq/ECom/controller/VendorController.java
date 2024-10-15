@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.model.Body;
+import com.amazonaws.services.simpleemail.model.Content;
+import com.amazonaws.services.simpleemail.model.Destination;
+import com.amazonaws.services.simpleemail.model.Message;
+import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.quitq.ECom.Exception.InvalidIdException;
 import com.quitq.ECom.dto.MessageDto;
 import com.quitq.ECom.enums.Category;
@@ -33,8 +39,10 @@ public class VendorController {
 	@Autowired
 	VendorService vendorService;
 
-
-
+/*
+@Autowired
+AmazonSimpleEmailService service;
+*/
 
 	 @Autowired
 		private UserRepository userRepository;
@@ -109,6 +117,18 @@ public class VendorController {
         int rand_int1 = rand.nextInt(1000);
         return Integer.valueOf(rand_int1);
 	}
+	/*
+	@GetMapping("/sendEmail/{number}")
+	public String sendEmail(@PathVariable int number){
+		Content content=new Content("Verification body");
+		Body body=new Body(new Content("This is verification mail body number="+number));
+		Message message=new Message(content,body);
+		SendEmailRequest mail=new SendEmailRequest("shaikhhuda2810@gmail.com",
+				new Destination().withToAddresses("0808cs201091.ies@ipsacademy.org"),message);
+		service.sendEmail(mail);
+		return "Email Sent";
+	}
+	*/
 
 	@GetMapping("/resetPassword/{newPassword}")
 	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
