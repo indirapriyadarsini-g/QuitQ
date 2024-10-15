@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,7 @@ import com.quitq.ECom.enums.Category;
 import com.quitq.ECom.model.User;
 import com.quitq.ECom.model.Vendor;
 import com.quitq.ECom.repository.UserRepository;
+import com.quitq.ECom.service.MyUserDetailsService;
 import com.quitq.ECom.service.VendorService;
 
 @RestController
@@ -33,14 +35,18 @@ public class VendorController {
 	@Autowired
 	VendorService vendorService;
 
-
-
+/*
+@Autowired
+AmazonSimpleEmailService service;
+*/
 
 	 @Autowired
 		private UserRepository userRepository;
 		
 		@Autowired
 		private PasswordEncoder passwordEncoder;
+		@Autowired
+		MyUserDetailsService myUserDetailsService;
 	@PostMapping("/add")
 	public ResponseEntity<?> addVendor(@RequestBody Vendor v,MessageDto messageDto)
 	{
@@ -109,17 +115,39 @@ public class VendorController {
         int rand_int1 = rand.nextInt(1000);
         return Integer.valueOf(rand_int1);
 	}
+	/*
+	@GetMapping("/sendEmail/{number}")
+	public String sendEmail(@PathVariable int number){
+		Content content=new Content("Verification body");
+		Body body=new Body(new Content("This is verification mail body number="+number));
+		Message message=new Message(content,body);
+		SendEmailRequest mail=new SendEmailRequest("shaikhhuda2810@gmail.com",
+				new Destination().withToAddresses("0808cs201091.ies@ipsacademy.org"),message);
+		service.sendEmail(mail);
+		return "Email Sent";
+	}
+	*/
 
-	@GetMapping("/resetPassword/{newPassword}")
-	public ResponseEntity<?> getOldPassword(Principal p,@PathVariable String newPassword){
-		String userName=p.getName();
-		Vendor v=vendorService.getVendorByUserName(userName);
+	@GetMapping("/resetPassword/{email}/{newPassword}")
+	public ResponseEntity<?> getOldPassword(@PathVariable String email,@PathVariable String newPassword){
+		Vendor v=vendorService.getVendorByUserName(email);
 
 		User u=v.getUser();
 		u.setPassword(passwordEncoder.encode(newPassword));
     	userRepository.save(u);	
     	return ResponseEntity.ok(u);
     	}
+	@GetMapping("/confirmEmail/{email}")
+	public String getConfirmEmail(@PathVariable String email,MessageDto dto) throws InvalidIdException{
+		UserDetails userDetails = myUserDetailsService.loadUserByUsername(email);
+		if(userDetails.getUsername()==null) {
+			throw new InvalidIdException("User not found by this email");
+		}
+		else {
+			return userDetails.getUsername();
+		}
+		
+	}
 
 	/*
 	@GetMapping("/product/{id}")
