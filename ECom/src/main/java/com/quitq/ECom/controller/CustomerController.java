@@ -62,6 +62,7 @@ import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.ReturnReasonRepository;
 import com.quitq.ECom.repository.ReturnRepository;
+import com.quitq.ECom.repository.WishlistProductRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
 //import com.quitq.ECom.service.WarehouseManagerService;
@@ -76,6 +77,10 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
+	@Autowired
+	private WishlistProductRepository wishlistProductRepository;
+	
+	
 	
 	@Autowired
 	private ProductRepository productRepository;
@@ -251,7 +256,7 @@ public class CustomerController {
 	}
 	
 	
-	@PostMapping("/add-to-wishlist/{pId}")
+	@PostMapping("/add-to-wishlist")
 	public ResponseEntity<?> addProductToWishlist(@RequestBody Product product,Principal principal, MessageDto dto){
 		try{
 		Customer customer = customerRepository.getCustomerByUsername(principal.getName());
@@ -265,8 +270,9 @@ public class CustomerController {
 		wishlistProduct.setWishlist(wishlist);
 		wishlistProduct.setProduct(product);
 		
-		double q = product.getQuantity();
-		if(q>1) product.setQuantity(q-1);
+		wishlistProductRepository.save(wishlistProduct);
+		
+		
 		
 		return ResponseEntity.ok(wishlistProduct);
 		}catch(Exception e) {
@@ -274,6 +280,18 @@ public class CustomerController {
 			return ResponseEntity.badRequest().body(dto);
 		}
 		
+	}
+	
+	@DeleteMapping("/remove-from-wishlist/{wpId}")
+	public ResponseEntity<?> removeFromWishlist(@PathVariable int wpId, MessageDto dto){
+		try {
+			 wishlistProductRepository.deleteById(wpId);
+			 dto.setMsg("Deleted");
+			return ResponseEntity.ok(dto);
+		}catch(Exception e) {
+			dto.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(dto);
+		}		
 	}
 	
 	
@@ -428,7 +446,11 @@ public class CustomerController {
 	@GetMapping("/view-order-details/{opId}")
 	public ResponseEntity<?> viewOrderDetails(@PathVariable int opId,MessageDto dto){
 		OrderProduct orderProduct = orderProductRepository.findById(opId).get();
-		return ResponseEntity.ok(orderProduct);
+		OrderProductWImageDto opwi = new OrderProductWImageDto();
+		List<Image> imList = imageRepository.getImageByProduct(orderProduct.getProduct());
+		opwi.setImageList(imList);
+		opwi.setOrderProduct(orderProduct);
+		return ResponseEntity.ok(opwi);
 	}
 	
 	@GetMapping("/search")
@@ -571,7 +593,9 @@ public class CustomerController {
 			rr.setReason(rdto.getReturnReason());
 			returnReasonRepository.save(rr);
 			
-			r.setOrderProduct(rdto.getOrderProduct());
+			OrderProduct op = orderProductRepository.findById(rdto.getOpId()).get();
+			
+			r.setOrderProduct(op);
 			r.setReturnAmount(rdto.getReturnAmount());
 			r.setReturnQuantity(rdto.getReturnQuantity());
 			r.setReturnReason(rr);			
@@ -595,7 +619,9 @@ public class CustomerController {
 			er.setExchangeReason(edto.getExchangeReason());
 			exchangeReasonRepository.save(er);
 			
-			e.setOrderProduct(edto.getOrderProduct());
+			OrderProduct op = orderProductRepository.findById(edto.getOpId()).get();
+			
+			e.setOrderProduct(op);
 			e.setExchangeQuantity(edto.getExchangeQuantity());
 			e.setExchangeReason(er);			
 			e.setExchangeStatus(ExchangeStatus.INITIATED);

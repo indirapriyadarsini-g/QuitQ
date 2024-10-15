@@ -27,6 +27,7 @@ import com.quitq.ECom.model.OrderProduct;
 import com.quitq.ECom.model.Product;
 import com.quitq.ECom.model.Review;
 import com.quitq.ECom.model.WishlistProduct;
+import com.quitq.ECom.repository.AddressRepository;
 import com.quitq.ECom.repository.CartProductRepository;
 import com.quitq.ECom.repository.CartRepository;
 import com.quitq.ECom.repository.CustomerAddressRepository;
@@ -70,6 +71,9 @@ public class CustomerService {
 
 	@Autowired
 	private ReviewRepository reviewRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public Customer register(Customer customer) {
 			return customerRepository.save(customer);
@@ -302,6 +306,8 @@ public class CustomerService {
 
 	public void addAddressByUsername(Address address, String name) {
 		// TODO Auto-generated method stub
+		
+		addressRepository.save(address);
 		CustomerAddress customerAddress = new CustomerAddress();
 		Customer customer = customerRepository.getCustomerByUsername(name);
 		customerAddress.setAddress(address);

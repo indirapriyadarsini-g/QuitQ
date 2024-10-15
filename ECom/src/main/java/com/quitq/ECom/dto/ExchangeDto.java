@@ -1,19 +1,29 @@
 package com.quitq.ECom.dto;
 
-import com.quitq.ECom.model.OrderProduct;
 
 public class ExchangeDto {
 
 private String exchangeReason;
 	
-	private OrderProduct orderProduct;
+	private int opId;
 	
 	private int exchangeQuantity;
 
-	@Override
-	public String toString() {
-		return "ExchangeDto [exchangeReason=" + exchangeReason + ", orderProduct=" + orderProduct
-				+ ", exchangeQuantity=" + exchangeQuantity + "]";
+	
+
+	public int getOpId() {
+		return opId;
+	}
+
+	public void setOpId(int opId) {
+		this.opId = opId;
+	}
+
+	public ExchangeDto(String exchangeReason, int opId, int exchangeQuantity) {
+		super();
+		this.exchangeReason = exchangeReason;
+		this.opId = opId;
+		this.exchangeQuantity = exchangeQuantity;
 	}
 
 	public ExchangeDto() {
@@ -29,13 +39,7 @@ private String exchangeReason;
 		this.exchangeReason = exchangeReason;
 	}
 
-	public OrderProduct getOrderProduct() {
-		return orderProduct;
-	}
-
-	public void setOrderProduct(OrderProduct orderProduct) {
-		this.orderProduct = orderProduct;
-	}
+	
 
 	public int getExchangeQuantity() {
 		return exchangeQuantity;

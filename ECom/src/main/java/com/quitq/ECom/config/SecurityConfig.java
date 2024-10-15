@@ -57,6 +57,7 @@ public class SecurityConfig {
             		   .requestMatchers("/customer/view-product-reviews").permitAll()
             		   .requestMatchers("/customer/cart-info").permitAll()
             		   .requestMatchers("/customer/order").permitAll()
+            		   .requestMatchers("customer/remove-from-wishlist/{wpId}").permitAll()
             		   
             		   
                        .requestMatchers("/vendor/get").permitAll()
