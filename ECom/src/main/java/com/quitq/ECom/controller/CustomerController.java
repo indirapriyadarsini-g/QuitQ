@@ -331,23 +331,11 @@ public class CustomerController {
 			cartProdrepo = cartProductRepository.getCartProductsByCart(cart);
 			System.out.println("cartprods received");
 			cart.setCartQuantity(cartProdrepo.get().size());
-			Optional<Order> order = customerService.customerOrder(cart);
+			cartRepository.save(cart);
+			OrderSummaryDto osdto = customerService.customerOrder(cart);
 			
 			System.out.println("order done");
-			if(!order.isEmpty()) {
-				Order custOrder = order.get();
-				orderRepository.save(custOrder);
-				System.out.println(custOrder.toString());
-				orderDto.setOrderId(custOrder.getId());
-				orderDto.setAmount(custOrder.getOrderAmount() - custOrder.getOrderDiscount() + custOrder.getOrderFee());
-				orderDto.setOrderId(custOrder.getId());
-				orderDto.setMsg("Order Placed");
-				return ResponseEntity.ok(orderDto);
-			}
-			else {
-				dto.setMsg("Cart is empty!!");
-				return ResponseEntity.badRequest().body(dto);
-			}
+			return ResponseEntity.ok(osdto);
 		} catch (Exception e) {
 			dto.setMsg(e.getMessage());
 			return ResponseEntity.badRequest().body(dto);
@@ -359,12 +347,9 @@ public class CustomerController {
 		
 		Customer customer = customerRepository.getCustomerByUsername(principal.getName());
 		
-		Optional<Product> product = productRepository.findById(pId);
-		if(product.isEmpty()){
-			dto.setMsg("Product not available");
-			return ResponseEntity.badRequest().body(dto);
-		}	
-		if(product.get().isOutOfStock()) {
+		Product product = productRepository.findById(pId).get();
+		
+		if(product.isOutOfStock()) {
 			dto.setMsg("Product not available");
 			return ResponseEntity.badRequest().body(dto);
 		}
@@ -377,16 +362,16 @@ public class CustomerController {
 		
 		CartProduct cartProduct = new CartProduct();
 		cartProduct.setCart(cart);
-		cartProduct.setProduct(product.get());
+		cartProduct.setProduct(product);
 		
 		Order order = new Order();
 		order.setCart(cart);
 		
 		OrderProduct op = new OrderProduct();
-		op.setAmountPayable((product.get().getPrice()-product.get().getDiscount())*product.get().getQuantity());
-		op.setDiscount(product.get().getDiscount()*product.get().getQuantity());
+		op.setAmountPayable((product.getPrice()-product.getDiscount())*product.getQuantity());
+		op.setDiscount(product.getDiscount()*product.getQuantity());
 		op.setOrder(order);
-		op.setProduct(product.get());
+		op.setProduct(product);
 		
 		
 		order.setOrderAmount(op.getAmountPayable());
@@ -398,7 +383,12 @@ public class CustomerController {
 		
 		order.setOrderFee(fee);
 		
-		return ResponseEntity.ok(order);
+		orderRepository.save(order);
+		
+		orderDto.setOrderId(order.getId());
+		orderDto.setAmount(order.getOrderAmount()+order.getOrderFee());
+		
+		return ResponseEntity.ok(orderDto);
 	}
 	
 	@GetMapping("/image-of-prodId/{pId}")
@@ -431,6 +421,9 @@ public class CustomerController {
 		return ResponseEntity.ok(opwiList);
 		
 	}
+	
+	
+	
 	
 	@GetMapping("/view-order-details/{opId}")
 	public ResponseEntity<?> viewOrderDetails(@PathVariable int opId,MessageDto dto){
@@ -549,7 +542,18 @@ public class CustomerController {
 			Order order = orderRepository.findById(oId).get();
 			List<OrderProduct> opList = orderProductRepository.getOrderProductsByOrder(order);
 			
-			OrderSummaryDto summarydto = new OrderSummaryDto(order,opList);
+			List<OrderProductWImageDto> opwiList = new ArrayList<>();
+			
+			for(OrderProduct op: opList) {
+				OrderProductWImageDto opwi = new OrderProductWImageDto();
+				List<Image> imList = imageRepository.getImageByProduct(op.getProduct());
+				opwi.setImageList(imList);
+				opwi.setOrderProduct(op);
+				
+				opwiList.add(opwi);
+			}
+			
+			OrderSummaryDto summarydto = new OrderSummaryDto(order,opwiList);
 			return ResponseEntity.ok(summarydto);
 		}catch(Exception e) {
 			dto.setMsg(e.getMessage());

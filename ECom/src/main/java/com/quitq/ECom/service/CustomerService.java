@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.quitq.ECom.dto.CartProductDto;
+import com.quitq.ECom.dto.OrderProductWImageDto;
+import com.quitq.ECom.dto.OrderSummaryDto;
 import com.quitq.ECom.dto.ProductWImageDto;
 import com.quitq.ECom.dto.WishlistProductDto;
 import com.quitq.ECom.enums.OrderStatus;
@@ -83,15 +85,44 @@ public class CustomerService {
 		return wishlistProductRepository.getWishlistProductByCustomer(customer);
 	}
 
-	public Optional<Order> customerOrder(Cart cart) {
+	public OrderSummaryDto customerOrder(Cart cart) {
+		
+		List<CartProduct> cpList = cartProductRepository.getCartProductsByCart(cart).get();
 		
 		Order order = new Order();
+		order.setOrderPlacedTime(LocalDateTime.now());
+		orderRepository.save(order);
 		
-		order.setCart(cart);
-		order.setOrderAmount(cart.getCartTotal());
+		List<OrderProductWImageDto> opwiList = new ArrayList<>(); 
+		
+		for(CartProduct cp: cpList) {
+			
+			OrderProductWImageDto opwi = new OrderProductWImageDto();
+			
+			OrderProduct op = new OrderProduct();
+			op.setOrder(order);
+			op.setProduct(cp.getProduct());
+			op.setAmountPayable(cp.getAmountPayable());
+			op.setDiscount(cp.getProductDiscount());
+			op.setTotalAmount(cp.getProductTotalAmount());
+			op.setQuantity(cp.getProductQuantity());
+			
+			orderProductRepository.save(op);
+			
+			opwi.setOrderProduct(op);
+			List<Image> imList = imageRepository.getImageByProduct(op.getProduct());
+			opwi.setImageList(imList);
+			
+			order.setOrderAmount(order.getOrderAmount()+op.getAmountPayable());
+			order.setOrderDiscount(order.getOrderDiscount()+op.getDiscount());		
+			
+			orderRepository.save(order);
+			
+			opwiList.add(opwi);
+		}
 		
 		int fee = 100;
-		if(cart.getCartTotal()>500)	fee = 0;
+		if(order.getOrderAmount()>500) fee=0;
 		
 		order.setOrderFee(fee);
 		order.setOrderPlacedTime(LocalDateTime.now());
@@ -99,19 +130,6 @@ public class CustomerService {
 		
 		orderRepository.save(order);
 		
-		List<CartProduct> cpList = cartProductRepository.getCartProductsByCart(cart).get();
-		
-		for(CartProduct cp : cpList) {
-			OrderProduct op = new OrderProduct();
-			op.setProduct(cp.getProduct());
-			op.setAmountPayable(cp.getAmountPayable());
-			op.setDiscount(cp.getProductDiscount());
-			op.setOrder(order);
-			op.setQuantity(cp.getProductQuantity());
-			op.setTotalAmount(cp.getAmountPayable());
-			
-			orderProductRepository.save(op);
-		}
 
 		cartProductRepository.deleteCartProductsByCart(cart);
 		cart.setCartQuantity(0);
@@ -119,7 +137,12 @@ public class CustomerService {
 		cart.setProductList(null);
 		
 		cartRepository.save(cart);
-		return Optional.of(order);
+		
+		OrderSummaryDto odto = new OrderSummaryDto();
+		odto.setOpwiList(opwiList);
+		odto.setOrder(order);
+		
+		return odto;
 	}
 
 	public Optional<List<CartProduct>> getCartProductByUsername(String username) {
