@@ -1,12 +1,12 @@
 package com.quitq.ECom.dto;
 
-import com.quitq.ECom.model.OrderProduct;
+
 
 public class ReturnDto {
 
 	private String returnReason;
 	
-	private OrderProduct orderProduct;
+	private int opId;
 	
 	private int returnQuantity;
 	
@@ -17,13 +17,29 @@ public class ReturnDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReturnDto(String returnReason, OrderProduct orderProduct, int returnQuantity, int returnAmount) {
+	
+
+	public int getOpId() {
+		return opId;
+	}
+
+
+
+	public void setOpId(int opId) {
+		this.opId = opId;
+	}
+
+
+
+	public ReturnDto(String returnReason, int opId, int returnQuantity, int returnAmount) {
 		super();
 		this.returnReason = returnReason;
-		this.orderProduct = orderProduct;
+		this.opId = opId;
 		this.returnQuantity = returnQuantity;
 		this.returnAmount = returnAmount;
 	}
+
+
 
 	public String getReturnReason() {
 		return returnReason;
@@ -33,13 +49,7 @@ public class ReturnDto {
 		this.returnReason = returnReason;
 	}
 
-	public OrderProduct getOrderProduct() {
-		return orderProduct;
-	}
-
-	public void setOrderProduct(OrderProduct orderProduct) {
-		this.orderProduct = orderProduct;
-	}
+	
 
 	public int getReturnQuantity() {
 		return returnQuantity;
