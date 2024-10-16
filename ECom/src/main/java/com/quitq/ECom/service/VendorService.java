@@ -2,9 +2,10 @@ package com.quitq.ECom.service;
 
 
 import java.util.List;
-
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,12 @@ public class VendorService {
 	UserRepository userRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	Logger log=LoggerFactory.getLogger(this.getClass());
 	public Vendor addVendor(Vendor v)
 	{
+		log.info("Venor about to get saved");
 				return vendorRepository.save(v);
+
 		
 		
 	}
@@ -36,27 +40,41 @@ public class VendorService {
 	}
 	public Vendor findById(int vid) throws InvalidIdException
 	{
+		log.info("Getting vendor from vendor Id");
+
 		Optional<Vendor> optional=vendorRepository.findById(vid);
 		if(optional.isEmpty())
 		{
+			log.warn("Vendor not found");
 			throw new InvalidIdException("Id not valid");
 		}
+		log.info("Vendor id is present");
+
 		Vendor v=optional.get();
 		return v;
 	}
 	public void  delete(String userName) throws InvalidIdException
 	{
+		log.info("Getting vendor from vendor username");
+
 		Vendor vendor=vendorRepository.getVendorByUsername(userName);
 		
 		int uid=vendor.getUser().getId();
+		log.info("Vendor found and vendor gets deleted");
+
 		vendorRepository.deleteById(vendor.getId());
+		log.info("Vendor found and user gets deleted");
+
 		userRepository.deleteById(uid);
 		
 	}
 	public Vendor updateVendor(String username,Vendor v) throws InvalidIdException
 	{
+		log.info("Getting vendor from vendor username");
+
 		Vendor vendor=vendorRepository.getVendorByUsername(username);
-		
+		log.info("Setting the vendor with new request body");
+
 		
 		vendor.setBuisnessName(v.getBuisnessName());
 		vendor.setName(v.getName());
@@ -70,6 +88,7 @@ public class VendorService {
 		userRepository.save(user);
 
 		vendor.setUser(user);
+		log.info("Vendor updated successfully");
 
 		return vendorRepository.save(vendor);
 	}
