@@ -94,6 +94,7 @@ public class CustomerService {
 		List<CartProduct> cpList = cartProductRepository.getCartProductsByCart(cart).get();
 		
 		Order order = new Order();
+		order.setCart(cart);
 		order.setOrderPlacedTime(LocalDateTime.now());
 		orderRepository.save(order);
 		
@@ -110,7 +111,7 @@ public class CustomerService {
 			op.setDiscount(cp.getProductDiscount());
 			op.setTotalAmount(cp.getProductTotalAmount());
 			op.setQuantity(cp.getProductQuantity());
-			
+			System.out.println(op.toString());
 			orderProductRepository.save(op);
 			
 			opwi.setOrderProduct(op);

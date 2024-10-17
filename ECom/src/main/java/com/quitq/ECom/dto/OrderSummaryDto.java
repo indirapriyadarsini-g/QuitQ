@@ -37,6 +37,11 @@ public class OrderSummaryDto {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public String toString() {
+		return "OrderSummaryDto [order=" + order.toString() + ", opwiList=" + opwiList.toString() + "]";
+	}
 	
 	
 	

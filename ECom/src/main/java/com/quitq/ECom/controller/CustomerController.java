@@ -62,6 +62,7 @@ import com.quitq.ECom.repository.OrderRepository;
 import com.quitq.ECom.repository.ProductRepository;
 import com.quitq.ECom.repository.ReturnReasonRepository;
 import com.quitq.ECom.repository.ReturnRepository;
+import com.quitq.ECom.repository.ReviewRepository;
 import com.quitq.ECom.repository.WishlistProductRepository;
 import com.quitq.ECom.repository.WishlistRepository;
 import com.quitq.ECom.service.CustomerService;
@@ -104,7 +105,10 @@ public class CustomerController {
 	@Autowired
 	private OrderProductRepository orderProductRepository;
 	
-
+@Autowired
+private ReviewRepository reviewRepository;
+	
+	
 	@Autowired
 	private OrderRepository orderRepository;
 	
@@ -146,6 +150,7 @@ public class CustomerController {
 	@GetMapping("/view-all-product")
 	public ResponseEntity<?> getAllProduct(MessageDto dto){
 		List<ProductWImageDto> prodList = customerService.getAllProduct();
+		logger.info("Products listed");
 			return ResponseEntity.ok(prodList);
 	}
 	
@@ -155,7 +160,8 @@ public class CustomerController {
 	public ResponseEntity<?> viewCustomerProfile(Principal principal,MessageDto dto){
 		Customer customer = customerService.getProfileDetails(principal.getName());
 		if(customer!=null) return ResponseEntity.ok(customer);
-		else return ResponseEntity.badRequest().body("Customer not registered");
+		logger.info("Profile displayed");
+		 return ResponseEntity.badRequest().body("Customer not registered");
 	}
 	
 	
@@ -163,6 +169,8 @@ public class CustomerController {
 	public ResponseEntity<?> getProductsFromCart(Principal principal,MessageDto dto){
 		
 			List<CartProductDto> cartProdDtoList = customerService.getCartProductDtoByUsername(principal.getName());
+			
+			
 			if(cartProdDtoList!=null) return ResponseEntity.ok(cartProdDtoList);
 		else {
 			dto.setMsg("No products inside the cart");
@@ -331,6 +339,15 @@ public class CustomerController {
 		return customerService.decrementProductCountInOrder(orderProduct);
 	}
 	
+	@GetMapping("/get-pwi-by-pid/{pId}")
+	public ResponseEntity<?> getPwiByProdId(@PathVariable int pId){
+		ProductWImageDto pwi = new ProductWImageDto();
+		Product p = productRepository.findById(pId).get();
+		List<Image> imList = imageRepository.getImageByProduct(p);
+		pwi.setImageList(imList);
+		pwi.setProduct(p);
+		return ResponseEntity.ok(pwi);
+	}
 	
 	
 	
@@ -351,7 +368,7 @@ public class CustomerController {
 			cart.setCartQuantity(cartProdrepo.get().size());
 			cartRepository.save(cart);
 			OrderSummaryDto osdto = customerService.customerOrder(cart);
-			
+			System.out.println(osdto.toString());
 			System.out.println("order done");
 			return ResponseEntity.ok(osdto);
 		} catch (Exception e) {
@@ -423,7 +440,7 @@ public class CustomerController {
 	@GetMapping("/view-my-orders")
 	public ResponseEntity<?> viewOrderList(Principal principal, MessageDto dto){
 		List<OrderProduct> opList = customerService.getOrderProductList(principal.getName());
-		
+		System.out.println(opList.get(0).toString());
 		List<OrderProductWImageDto> opwiList = new ArrayList<>();
 		
 		for(OrderProduct op:opList) {
@@ -635,7 +652,11 @@ public class CustomerController {
 		}
 	}
 	
-	
+	@GetMapping("/my-reviews")
+	public ResponseEntity<?> getMyReviews(Principal principal){
+		List<Review> rList = reviewRepository.getReviewByUsername(principal.getName());
+		return ResponseEntity.ok(rList);
+	}
 	
 	
 	
