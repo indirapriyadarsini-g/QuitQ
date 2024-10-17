@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,14 +35,19 @@ public class ProductService {
 	UserRepository userRepository;
 	@Autowired
 	VendorRepository vendorRepository;
+	Logger log=LoggerFactory.getLogger(this.getClass());
+
 	public Product addProduct(Product p,String username) throws InvalidIdException
 	{
+		log.info("Getting the vendor of product from username");
 		Vendor vendor=vendorRepository.getVendorByUsername(username);
 		
 	
+		log.info("Set the vendor to product");
 
 		p.setV(vendor);
-				
+		log.info("Now vendor is about to get save");
+
 		return productRepository.save(p);
 	}
 	
@@ -62,19 +69,25 @@ public class ProductService {
 		
 	public List<Product> updateProduct(String username,Product newProduct,int pid) throws InvalidIdException
 	{
+		log.info("Getting list of product with vendor name");
 		List<Product> list=productRepository.findByVendorUsrname(username);
+		log.info("Filtering the list obtained with id of product");
+
 		List<Product> streamList=list.stream().filter(p->p.getId()==pid).toList();
 		if(streamList.isEmpty())
 		{
+			log.warn("No product exist with this id");
 			throw new InvalidIdException("No product exist with this id");
 		}
 		for(Product p:streamList)
 		{
+			log.info("Obtaining the product and setting it with request body");
 			p.setTitle(newProduct.getTitle());
 			p.setQuantity(newProduct.getQuantity());
 			p.setPrice(newProduct.getPrice());
 			p.setC(newProduct.getC());
 			p.setDiscount(newProduct.getDiscount());
+			log.info("Product about to get updated");
 		productRepository.save(p);
 			
 		}
@@ -96,13 +109,17 @@ public class ProductService {
 	}
 	public List<Product> findByCategoryName(String username,String cName) throws InvalidIdException
 	{
+		log.info("Finding all product sold by vendor");
 		List<Product> list=productRepository.findByVendorUsrname(username);
+		log.info("Now filter the product based on category");
+
 		List<Product> streamList=list.stream().filter(p->p.getC().equals(Category.valueOf(cName))).toList();
 		if(streamList.isEmpty())
 		{
+			log.warn("No product found of this category");
 			throw new InvalidIdException("No product exist with this category name");
 		}
-		
+		log.info("Product found and list is returned");
 		return streamList;
 	}
 	public List<CategoryStatsDto> findCategorySoldByVendor(String username) throws InvalidIdException
@@ -126,11 +143,14 @@ public class ProductService {
 
 	public Page<Product> findByParticularVendorName(String username, Pageable pageAble) throws InvalidIdException {
 		// TODO Auto-generated method stub
+		log.info("finding product page with pagination criteria and username");
 		Page<Product> p=productRepository.findByVendorUsrnameAndPage(username,pageAble);
 if(p.isEmpty())
 {
+	log.warn("No product found");
 	throw new InvalidIdException("You haven't added any product");
 }
+log.info("Page is returned");
 		return p;
 	
 
